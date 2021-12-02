@@ -1,0 +1,30 @@
+name: Validate Terraform manifests with tfsec
+
+on:
+  pull_request:
+
+jobs:
+  tfsec:
+    name: tfsec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.4
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Run tfsec with reviewdog output on the PR
+        uses: reviewdog/action-tfsec@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: true
+          tfsec_flags: "--exclude-downloaded-modules"

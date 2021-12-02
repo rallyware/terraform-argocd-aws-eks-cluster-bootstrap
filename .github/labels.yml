@@ -1,0 +1,57 @@
+---
+# Default GitHub labels
+- color: d73a4a
+  name: bug
+  description: Something isn't working
+- color: cfd3d7
+  name: duplicate
+  description: This issue or pull request already exists
+- color: a2eeef
+  name: enhancement
+  description: New feature or request
+- color: 7057ff
+  name: good first issue
+  description: Good for newcomers
+- color: 008672
+  name: help wanted
+  description: Extra attention is needed
+- color: e4e669
+  name: invalid
+  description: This doesn't seem right
+- color: d876e3
+  name: question
+  description: Further information is requested
+- color: ffffff
+  name: wontfix
+  description: This will not be worked on
+
+- color: a0040c
+  name: no-pr-activity
+  description: stalled PR
+- color: d93f0b
+  name: no-issue-activity
+  description: stalled issue
+- color: f9dcbd
+  name: build
+  description: Changes that affect the build system or external dependencies
+- color: 63dae2
+  name: ci
+  description: Changes to our CI configuration files and scripts
+- color: 6e93e5
+  name: docs
+  description: Documentation only changes
+- color: 5edb3f
+  name: feat
+  description: A new feature
+- color: 58e8c8
+  name: fix
+  description: A bug fix
+- color: efada0
+  name: refactor
+  description: A code change that neither fixes a bug nor adds a feature
+- color: 1d76db
+  name: test
+  description: Adding missing tests or correcting existing tests
+- color: dfb443
+  name: chore
+  description: Adding missing tests or correcting existing tests
