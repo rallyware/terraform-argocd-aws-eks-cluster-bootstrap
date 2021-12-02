@@ -1,0 +1,29 @@
+name: Validate Terraform manifests with tflint
+
+on:
+  pull_request:
+
+jobs:
+  tflint:
+    name: tflint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.4
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Check with tflint
+        uses: reviewdog/action-tflint@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          fail_on_error: "true"
+          filter_mode: "nofilter"
+          flags: "--module"

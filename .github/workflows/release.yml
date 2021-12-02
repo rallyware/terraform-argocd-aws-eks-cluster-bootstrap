@@ -1,0 +1,20 @@
+
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: release-drafter/release-drafter@v5
+      with:
+        publish: true
+        prerelease: false
+        config-name: auto-release.yml
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
