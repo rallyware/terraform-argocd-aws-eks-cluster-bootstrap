@@ -17,6 +17,7 @@ module "your_aweasome_resource" {
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >= 1.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0 |
+| <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 3.0 |
 | <a name="requirement_utils"></a> [utils](#requirement\_utils) | >= 0.14.0 |
 
 ## Providers
@@ -25,7 +26,7 @@ module "your_aweasome_resource" {
 |------|---------|
 | <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
 | <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
 ## Modules
