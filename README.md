@@ -15,26 +15,58 @@ module "your_aweasome_resource" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >= 1.2 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0 |
+| <a name="requirement_utils"></a> [utils](#requirement\_utils) | >= 0.14.0 |
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 2.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.68.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 3.1.0 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | 0.17.7 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
+| <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [argocd_application.crd_apps](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application) | resource |
+| [argocd_application.helm_apps](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application) | resource |
+| [argocd_cluster.default](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/cluster) | resource |
+| [argocd_project.additional](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
+| [argocd_project.default](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
+| [tls_private_key.linkerd](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
+| [tls_self_signed_cert.linkerd](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert) | resource |
+| [aws_caller_identity.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_eks_cluster.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
+| [aws_iam_policy_document.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_partition.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+| [aws_region.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [utils_deep_merge_yaml.argocd_helm_apps](https://registry.terraform.io/providers/cloudposse/utils/latest/docs/data-sources/deep_merge_yaml) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_argocd_iam_role_arn"></a> [argocd\_iam\_role\_arn](#input\_argocd\_iam\_role\_arn) | IAM role ARN for ArgoCD to authenticate in EKS cluster. | `string` | n/a | yes |
+| <a name="input_eks_cluster_id"></a> [eks\_cluster\_id](#input\_eks\_cluster\_id) | EKS cluster ID. | `string` | n/a | yes |
 | <a name="input_additional_tag_map"></a> [additional\_tag\_map](#input\_additional\_tag\_map) | Additional key-value pairs to add to each map in `tags_as_list_of_maps`. Not added to `tags` or `id`.<br>This is for some rare cases where resources want additional configuration of tags<br>and therefore take a list of maps with tag key, value, and additional configuration. | `map(string)` | `{}` | no |
+| <a name="input_argocd_additional_projects"></a> [argocd\_additional\_projects](#input\_argocd\_additional\_projects) | A list of additional ArgoCD projects to create. | <pre>list(object(<br>    {<br>      name        = string<br>      description = optional(string)<br>    }<br>  ))</pre> | `[]` | no |
+| <a name="input_argocd_app_annotations"></a> [argocd\_app\_annotations](#input\_argocd\_app\_annotations) | An unstructured key value map stored with the config map that may be used to store arbitrary metadata. | `map(string)` | `{}` | no |
+| <a name="input_argocd_crd_apps"></a> [argocd\_crd\_apps](#input\_argocd\_crd\_apps) | n/a | <pre>list(object(<br>    {<br>      name       = string<br>      repository = string<br>      path       = string<br>      version    = string<br><br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "name": "prometheus-operator-crds",<br>    "path": "example/prometheus-operator-crd/",<br>    "repository": "https://github.com/prometheus-operator/prometheus-operator.git",<br>    "version": "v0.52.1"<br>  }<br>]</pre> | no |
+| <a name="input_argocd_helm_app_default_params"></a> [argocd\_helm\_app\_default\_params](#input\_argocd\_helm\_app\_default\_params) | n/a | `map(any)` | <pre>{<br>  "max_history": 10,<br>  "override_values": "",<br>  "sync_wave": 50,<br>  "wait": false<br>}</pre> | no |
+| <a name="input_argocd_helm_apps"></a> [argocd\_helm\_apps](#input\_argocd\_helm\_apps) | n/a | <pre>list(object(<br>    {<br>      name            = string<br>      namespace       = string<br>      repository      = string<br>      chart           = string<br>      version         = string<br>      override_values = optional(string)<br>      max_history     = optional(number)<br>      wait            = optional(bool)<br>      sync_wave       = optional(number)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "chart": "tigera-operator",<br>    "name": "calico",<br>    "namespace": "kube-system",<br>    "repository": "https://docs.projectcalico.org/charts",<br>    "version": "v3.20.2"<br>  },<br>  {<br>    "chart": "argo-rollouts",<br>    "name": "argo-rollouts",<br>    "namespace": "argo",<br>    "repository": "https://argoproj.github.io/argo-helm",<br>    "version": "2.0.1"<br>  },<br>  {<br>    "chart": "node-local-dns",<br>    "name": "node-local-dns",<br>    "namespace": "kube-system",<br>    "repository": "https://sweetops.github.io/helm-charts",<br>    "version": "0.2.0"<br>  },<br>  {<br>    "chart": "cert-manager",<br>    "name": "cert-manager",<br>    "namespace": "cert-manager",<br>    "repository": "https://charts.jetstack.io",<br>    "version": "1.5.0"<br>  },<br>  {<br>    "chart": "cert-manager-issuers",<br>    "name": "cert-manager-issuers",<br>    "namespace": "cert-manager",<br>    "repository": "https://charts.adfinis.com",<br>    "version": "0.2.2"<br>  },<br>  {<br>    "chart": "cluster-autoscaler",<br>    "name": "cluster-autoscaler",<br>    "namespace": "kube-system",<br>    "repository": "https://kubernetes.github.io/autoscaler",<br>    "version": "9.10.5"<br>  },<br>  {<br>    "chart": "aws-ebs-csi-driver",<br>    "name": "ebs-csi",<br>    "namespace": "csi-drivers",<br>    "repository": "https://kubernetes-sigs.github.io/aws-ebs-csi-driver",<br>    "version": "2.1.0"<br>  },<br>  {<br>    "chart": "aws-node-termination-handler",<br>    "name": "aws-node-termination-handler",<br>    "namespace": "node-termination-handler",<br>    "repository": "https://aws.github.io/eks-charts",<br>    "version": "0.15.2"<br>  },<br>  {<br>    "chart": "node-problem-detector",<br>    "name": "node-problem-detector",<br>    "namespace": "node-problem-detector",<br>    "repository": "https://charts.deliveryhero.io",<br>    "version": "2.0.5"<br>  },<br>  {<br>    "chart": "ingress-nginx",<br>    "name": "ingress-nginx",<br>    "namespace": "infra",<br>    "repository": "https://kubernetes.github.io/ingress-nginx",<br>    "version": "4.0.1"<br>  },<br>  {<br>    "chart": "velero",<br>    "name": "velero",<br>    "namespace": "velero",<br>    "repository": "https://vmware-tanzu.github.io/helm-charts",<br>    "version": "2.23.6"<br>  },<br>  {<br>    "chart": "descheduler",<br>    "name": "descheduler",<br>    "namespace": "kube-system",<br>    "repository": "https://kubernetes-sigs.github.io/descheduler",<br>    "version": "0.21.0"<br>  },<br>  {<br>    "chart": "keda",<br>    "name": "keda",<br>    "namespace": "infra",<br>    "repository": "https://kedacore.github.io/charts",<br>    "version": "2.4.0"<br>  },<br>  {<br>    "chart": "falco",<br>    "name": "falco",<br>    "namespace": "falco",<br>    "repository": "https://falcosecurity.github.io/charts",<br>    "version": "1.15.7"<br>  },<br>  {<br>    "chart": "falcosidekick",<br>    "name": "falcosidekick",<br>    "namespace": "falco",<br>    "repository": "https://falcosecurity.github.io/charts",<br>    "version": "0.3.17"<br>  },<br>  {<br>    "chart": "gatekeeper",<br>    "name": "gatekeeper",<br>    "namespace": "infra",<br>    "repository": "https://open-policy-agent.github.io/gatekeeper/charts",<br>    "version": "3.6.0"<br>  },<br>  {<br>    "chart": "victoria-metrics-k8s-stack",<br>    "name": "victoria-metrics",<br>    "namespace": "monitoring",<br>    "repository": "https://victoriametrics.github.io/helm-charts",<br>    "version": "0.5.3"<br>  },<br>  {<br>    "chart": "linkerd2",<br>    "name": "linkerd",<br>    "namespace": "linkerd",<br>    "repository": "https://sweetops.github.io/helm-charts",<br>    "version": "0.1.0"<br>  },<br>  {<br>    "chart": "linkerd-smi",<br>    "name": "linkerd-smi",<br>    "namespace": "linkerd-smi",<br>    "repository": "https://linkerd.github.io/linkerd-smi",<br>    "version": "0.1.0"<br>  },<br>  {<br>    "chart": "linkerd-viz",<br>    "name": "linkerd-viz",<br>    "namespace": "linkerd-viz",<br>    "repository": "https://sweetops.github.io/helm-charts",<br>    "version": "0.1.0"<br>  },<br>  {<br>    "chart": "linkerd-jaeger",<br>    "name": "linkerd-jaeger",<br>    "namespace": "linkerd-jaeger",<br>    "repository": "https://sweetops.github.io/helm-charts",<br>    "version": "0.1.0"<br>  },<br>  {<br>    "chart": "prometheus-blackbox-exporter",<br>    "name": "prometheus-blackbox-exporter",<br>    "namespace": "monitoring",<br>    "repository": "https://prometheus-community.github.io/helm-charts",<br>    "version": "5.0.3"<br>  }<br>]</pre> | no |
+| <a name="input_argocd_namespace"></a> [argocd\_namespace](#input\_argocd\_namespace) | The Kubernetes namespace where ArgoCD installed to. | `string` | `"argo"` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | ID element. Additional attributes (e.g. `workers` or `cluster`) to add to `id`,<br>in the order they appear in the list. New attributes are appended to the<br>end of the list. The elements of the list are joined by the `delimiter`<br>and treated as a single ID element. | `list(string)` | `[]` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "descriptor_formats": {},<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "labels_as_tags": [<br>    "unset"<br>  ],<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {},<br>  "tenant": null<br>}</pre> | no |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |

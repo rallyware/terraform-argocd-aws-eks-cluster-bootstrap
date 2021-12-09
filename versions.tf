@@ -1,3 +1,19 @@
 terraform {
+  experiments      = [module_variable_optional_attrs]
   required_version = ">= 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 3.0"
+    }
+    argocd = {
+      source  = "oboukili/argocd"
+      version = ">= 1.2"
+    }
+    utils = {
+      source  = "cloudposse/utils"
+      version = ">= 0.14.0"
+    }
+  }
 }
