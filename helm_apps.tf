@@ -394,7 +394,7 @@ locals {
         }
         "serviceAccount" = {
           "annotations" = {
-            "eks.amazonaws.com/role-arn" = module.ebs_csi_driver_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/role-arn" = module.ebs_csi_eks_iam_role.service_account_role_arn
           }
         }
       }
@@ -413,7 +413,7 @@ locals {
           "parameters" = {
             "csi.storage.k8s.io/fstype" = "xfs"
             "encrypted"                 = "true"
-            "kmsKeyId"                  = module.ebs_csi_driver_kms_key.key_id
+            "kmsKeyId"                  = module.ebs_csi_kms_key.key_id
             "type"                      = "gp3"
           }
           "provisioner"       = "ebs.csi.aws.com"
