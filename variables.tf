@@ -164,7 +164,7 @@ variable "argocd_helm_apps" {
       namespace  = "velero"
       chart      = "velero"
       repository = "https://vmware-tanzu.github.io/helm-charts"
-      version    = "2.23.6"
+      version    = "2.27.0"
     },
 
     {

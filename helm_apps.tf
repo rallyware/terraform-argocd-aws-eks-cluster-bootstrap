@@ -321,6 +321,107 @@ locals {
         }
       }
     }
+
+    velero = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["velero"]["name"], "")
+      "serviceAccount" = {
+        "annotations" = {
+          "eks.amazonaws.com/role-arn" = module.velero_eks_iam_role.service_account_role_arn
+        }
+      }
+      "configuration" = {
+        "backupStorageLocation" = {
+          "bucket"   = module.velero_s3_bucket.bucket_id
+          "name"     = "default"
+          "prefix"   = format("backups/%s", local.eks_cluster_id)
+          "provider" = "aws"
+          "region"   = local.region
+        }
+        "provider" = "aws"
+        "volumeSnapshotLocation" = {
+          "name"     = "default"
+          "provider" = "aws"
+          "region"   = local.region
+          "kmsKeyId" = module.velero_kms_key.key_id
+        }
+      }
+      "initContainers" = [
+        {
+          "image"           = "velero/velero-plugin-for-aws:v1.2.1"
+          "imagePullPolicy" = "IfNotPresent"
+          "name"            = "velero-plugin-for-aws"
+          "volumeMounts" = [
+            {
+              "mountPath" = "/target"
+              "name"      = "plugins"
+            },
+          ]
+        },
+      ]
+      "metrics" = {
+        "enabled"        = true
+        "scrapeInterval" = "30s"
+        "scrapeTimeout"  = "10s"
+        "serviceMonitor" = {
+          "enabled" = true
+        }
+      }
+      "resources" = {
+        "limits" = {
+          "cpu"    = "1000m"
+          "memory" = "512Mi"
+        }
+        "requests" = {
+          "cpu"    = "500m"
+          "memory" = "128Mi"
+        }
+      }
+    }
+
+    ebs-csi = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["ebs-csi"]["name"], "")
+      "controller" = {
+        "extraCreateMetadata" = true
+        "k8sTagClusterId"     = local.eks_cluster_id
+        "region"              = local.region
+        "tolerateAllTaints"   = true
+        "updateStrategy" = {
+          "rollingUpdate" = {
+            "maxSurge"       = 0
+            "maxUnavailable" = 1
+          }
+          "type" = "RollingUpdate"
+        }
+        "serviceAccount" = {
+          "annotations" = {
+            "eks.amazonaws.com/role-arn" = module.ebs_csi_driver_eks_iam_role.service_account_role_arn
+          }
+        }
+      }
+      "enableVolumeResizing" = true
+      "enableVolumeSnapshot" = true
+      "storageClasses" = [
+        {
+          "allowVolumeExpansion" = true
+          "annotations" = {
+            "storageclass.kubernetes.io/is-default-class" = "true"
+          }
+          "labels" = {
+            "type" = "gp3"
+          }
+          "name" = "ebs-gp3"
+          "parameters" = {
+            "csi.storage.k8s.io/fstype" = "xfs"
+            "encrypted"                 = "true"
+            "kmsKeyId"                  = module.ebs_csi_driver_kms_key.key_id
+            "type"                      = "gp3"
+          }
+          "provisioner"       = "ebs.csi.aws.com"
+          "reclaimPolicy"     = "Delete"
+          "volumeBindingMode" = "WaitForFirstConsumer"
+        },
+      ]
+    }
   }
 }
 
