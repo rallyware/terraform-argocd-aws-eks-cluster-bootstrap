@@ -57,8 +57,7 @@ module "velero_s3_bucket" {
     }
   ]
 
-  context    = module.velero_label.context
-  attributes = [local.velero["name"]]
+  context = module.velero_label.context
 }
 
 data "aws_iam_policy_document" "velero" {
@@ -119,7 +118,7 @@ module "velero_eks_iam_role" {
 
   aws_iam_policy_document     = one(data.aws_iam_policy_document.velero[*].json)
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
-  service_account_name        = ltry(local.argocd_helm_apps_set["velero"]["name"], "")
+  service_account_name        = try(local.argocd_helm_apps_set["velero"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["velero"]["namespace"], "")
 
   context = module.velero_label.context
