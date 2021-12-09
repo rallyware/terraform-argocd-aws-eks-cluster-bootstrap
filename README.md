@@ -23,10 +23,10 @@ module "your_aweasome_resource" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 2.1.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.68.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | 3.1.0 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | 0.17.7 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | n/a |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
 ## Modules
 
