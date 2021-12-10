@@ -81,7 +81,7 @@ variable "argocd_helm_apps" {
   default = [
     {
       name       = "calico"
-      namespace  = "kube-system"
+      namespace  = "calico-system"
       repository = "https://docs.projectcalico.org/charts"
       chart      = "tigera-operator"
       version    = "v3.20.2"

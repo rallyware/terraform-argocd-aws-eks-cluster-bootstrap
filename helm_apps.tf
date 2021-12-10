@@ -23,6 +23,8 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["calico"]["name"], "")
       "installation" = {
         "kubernetesProvider" = "EKS"
+        "nodeMetricsPort"    = 9081
+        "typhaMetricsPort"   = 9091
       }
     }
 
