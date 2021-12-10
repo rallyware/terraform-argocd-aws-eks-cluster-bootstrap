@@ -85,6 +85,7 @@ variable "argocd_helm_apps" {
       repository = "https://docs.projectcalico.org/charts"
       chart      = "tigera-operator"
       version    = "v3.20.2"
+      sync_wave  = -10
     },
 
     {
@@ -101,6 +102,7 @@ variable "argocd_helm_apps" {
       chart      = "node-local-dns"
       repository = "https://sweetops.github.io/helm-charts"
       version    = "0.2.0"
+      sync_wave  = -9
     },
 
     {
@@ -109,6 +111,7 @@ variable "argocd_helm_apps" {
       chart      = "cert-manager"
       repository = "https://charts.jetstack.io"
       version    = "1.5.0"
+      sync_wave  = -7
     },
 
     {
@@ -117,6 +120,7 @@ variable "argocd_helm_apps" {
       chart      = "cert-manager-issuers"
       repository = "https://charts.adfinis.com"
       version    = "0.2.2"
+      sync_wave  = -6
     },
 
     {
@@ -125,6 +129,7 @@ variable "argocd_helm_apps" {
       chart      = "cluster-autoscaler"
       repository = "https://kubernetes.github.io/autoscaler"
       version    = "9.10.5"
+      sync_wave  = -8
     },
 
     {
@@ -133,6 +138,7 @@ variable "argocd_helm_apps" {
       chart      = "aws-ebs-csi-driver"
       repository = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
       version    = "2.1.0"
+      sync_wave  = -5
     },
 
     {
@@ -213,6 +219,7 @@ variable "argocd_helm_apps" {
       chart      = "victoria-metrics-k8s-stack"
       repository = "https://victoriametrics.github.io/helm-charts"
       version    = "0.5.3"
+      sync_wave  = -4
     },
 
     {
@@ -220,7 +227,7 @@ variable "argocd_helm_apps" {
       namespace  = "linkerd"
       chart      = "linkerd2"
       repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.1.0"
+      version    = "0.2.0"
     },
 
     {
@@ -236,7 +243,7 @@ variable "argocd_helm_apps" {
       namespace  = "linkerd-viz"
       chart      = "linkerd-viz"
       repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.1.0"
+      version    = "0.2.0"
     },
 
     {
@@ -244,7 +251,7 @@ variable "argocd_helm_apps" {
       namespace  = "linkerd-jaeger"
       chart      = "linkerd-jaeger"
       repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.1.0"
+      version    = "0.2.0"
     },
 
     {

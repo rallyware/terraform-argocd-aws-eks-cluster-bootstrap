@@ -24,4 +24,3 @@ data "aws_caller_identity" "default" {
 data "aws_region" "default" {
   count = module.this.enabled ? 1 : 0
 }
-

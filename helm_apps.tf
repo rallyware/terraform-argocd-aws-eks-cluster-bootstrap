@@ -250,12 +250,12 @@ locals {
     linkerd = {
       "fullnameOverride"        = try(local.argocd_helm_apps_set["linkerd"]["name"], "")
       "installNamespace"        = true
-      "identityTrustAnchorsPEM" = tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem
+      "identityTrustAnchorsPEM" = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
 
       "certManager" = {
         "enabled" = true
-        "tlsCrt"  = tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem
-        "tlsKey"  = tls_private_key.linkerd["root.linkerd.cluster.local"].private_key_pem
+        "tlsCrt"  = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
+        "tlsKey"  = try(tls_private_key.linkerd["root.linkerd.cluster.local"].private_key_pem, "")
       }
 
       "identity" = {
@@ -265,18 +265,18 @@ locals {
       }
 
       "profileValidator" = {
-        "caBundle"       = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
+        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
       }
 
       "proxyInjector" = {
-        "caBundle"       = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
+        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
 
         "certManager" = {
           "enabled" = true
-          "tlsCrt"  = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
-          "tlsKey"  = tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem
+          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
+          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
         }
       }
       "monitoring" = {
@@ -290,18 +290,18 @@ locals {
       "installNamespace" = true
 
       "tap" = {
-        "caBundle"       = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
+        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
 
         "certManager" = {
           "enabled" = true
-          "tlsCrt"  = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
-          "tlsKey"  = tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem
+          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
+          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
         }
       }
 
       "tapInjector" = {
-        "caBundle"       = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
+        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
       }
     }
@@ -311,13 +311,13 @@ locals {
       "installNamespace" = true
 
       "webhook" = {
-        "caBundle"       = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
+        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
 
         "certManager" = {
           "enabled" = true
-          "tlsCrt"  = tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem
-          "tlsKey"  = tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem
+          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
+          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
         }
       }
     }
