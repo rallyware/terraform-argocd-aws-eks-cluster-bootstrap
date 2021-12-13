@@ -424,6 +424,19 @@ locals {
         },
       ]
     }
+
+    karpenter = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
+      "serviceAccount" = {
+        "annotations" = {
+          "eks.amazonaws.com/role-arn" = module.karpenter_eks_iam_role.service_account_role_arn
+        }
+      }
+      "controller" = {
+        clusterName     = local.eks_cluster_id
+        clusterEndpoint = local.eks_cluster_endpoint
+      }
+    }
   }
 }
 

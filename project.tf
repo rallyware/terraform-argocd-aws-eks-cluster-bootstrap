@@ -6,7 +6,7 @@ locals {
 resource "argocd_cluster" "default" {
   count = module.this.enabled ? 1 : 0
 
-  server = one(data.aws_eks_cluster.default[*].endpoint)
+  server = local.eks_cluster_endpoint
   name   = local.eks_cluster_id
 
   config {
@@ -16,7 +16,7 @@ resource "argocd_cluster" "default" {
     }
 
     tls_client_config {
-      ca_data = one(data.aws_eks_cluster.default[*].certificate_authority[0].data)
+      ca_data = base64decode(one(data.aws_eks_cluster.default[*].certificate_authority[0].data))
     }
   }
 }

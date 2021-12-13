@@ -260,6 +260,14 @@ variable "argocd_helm_apps" {
       chart      = "prometheus-blackbox-exporter"
       repository = "https://prometheus-community.github.io/helm-charts"
       version    = "5.0.3"
+    },
+
+    {
+      name       = "karpenter"
+      namespace  = "karpenter"
+      chart      = "karpenter"
+      repository = "https://charts.karpenter.sh"
+      version    = "0.5.1"
     }
   ]
 }
