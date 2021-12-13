@@ -463,9 +463,9 @@ resource "argocd_application" "helm_apps" {
     project = local.destination_project
 
     source {
-      repo_url        = each.value.repo_url
+      repo_url        = each.value.repository
       chart           = each.value.chart
-      target_revision = each.value.target_revision
+      target_revision = each.value.version
 
       helm {
         values       = data.utils_deep_merge_yaml.argocd_helm_apps[each.key].output
@@ -508,6 +508,8 @@ resource "argocd_application" "helm_apps" {
   }
 
   depends_on = [
-    argocd_application.crd_apps
+    argocd_application.crd_apps,
+    argocd_project.default,
+    argocd_project.additional
   ]
 }

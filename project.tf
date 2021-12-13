@@ -1,6 +1,6 @@
 locals {
   destination_server  = one(argocd_cluster.default[*].server)
-  destination_project = one(argocd_project.default[*].metadata.name)
+  destination_project = format("%s-bootstrap", local.eks_cluster_id)
 }
 
 resource "argocd_cluster" "default" {
@@ -25,7 +25,7 @@ resource "argocd_project" "default" {
   count = module.this.enabled ? 1 : 0
 
   metadata {
-    name      = format("%s-bootstrap", local.eks_cluster_id)
+    name      = local.destination_project
     namespace = var.argocd_namespace
     labels    = module.this.tags
   }

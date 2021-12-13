@@ -7,11 +7,16 @@ output:
     ## Usage
 
     ```hcl
-    module "your_aweasome_resource" {
-      source    = ""
-      namespace = "sweetops"
-      stage     = "production"
-      name      = "aweasome"
+    module "apps" {
+      source              = "git::https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap.git?ref=master"
+      argocd_iam_role_arn = "argocd-role-arn"
+      eks_cluster_id      = "staging-cluster"
+
+      argocd_additional_projects = [
+        {
+          name = "test"
+        }
+      ]
     }
     ```
 

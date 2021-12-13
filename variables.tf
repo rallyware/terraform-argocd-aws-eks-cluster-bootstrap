@@ -32,7 +32,14 @@ variable "argocd_app_annotations" {
 }
 
 variable "argocd_helm_app_default_params" {
-  type = map(any)
+  type = object(
+    {
+      max_history     = number
+      wait            = bool
+      override_values = string
+      sync_wave       = number
+    }
+  )
 
   default = {
     max_history     = 10

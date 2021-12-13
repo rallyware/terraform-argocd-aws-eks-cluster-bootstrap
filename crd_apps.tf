@@ -7,7 +7,7 @@ resource "argocd_application" "crd_apps" {
 
   metadata {
     name      = each.value.name
-    namespace = local.destination_project["namespace"]
+    namespace = local.destination_project
     labels    = module.this.tags
 
     annotations = merge(
@@ -53,4 +53,9 @@ resource "argocd_application" "crd_apps" {
       }
     }
   }
+
+  depends_on = [
+    argocd_project.default,
+    argocd_project.additional
+  ]
 }
