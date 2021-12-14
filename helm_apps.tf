@@ -254,15 +254,14 @@ locals {
       "installNamespace"        = true
       "identityTrustAnchorsPEM" = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
 
-      "certManager" = {
-        "enabled" = true
-        "tlsCrt"  = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
-        "tlsKey"  = try(tls_private_key.linkerd["root.linkerd.cluster.local"].private_key_pem, "")
-      }
-
       "identity" = {
         "issuer" = {
           "scheme" = "kubernetes.io/tls"
+        }
+        "certManager" = {
+          "enabled" = true
+          "tlsCrt"  = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
+          "tlsKey"  = try(tls_private_key.linkerd["root.linkerd.cluster.local"].private_key_pem, "")
         }
       }
 
@@ -283,7 +282,7 @@ locals {
       }
       "monitoring" = {
         "enabled" = true
-        "type"    = "victoria-metrics"
+        "type"    = "prometheus-operator"
       }
     }
 
@@ -444,7 +443,7 @@ data "utils_deep_merge_yaml" "argocd_helm_apps" {
   for_each = local.argocd_helm_apps_set
 
   input = [
-    yamlencode(try(local.argocd_helm_apps_default_values[each.key], "")),
+    yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     each.value.override_values
   ]
 }
@@ -469,12 +468,12 @@ resource "argocd_application" "helm_apps" {
 
       helm {
         values       = data.utils_deep_merge_yaml.argocd_helm_apps[each.key].output
-        release_name = each.value.chart
+        release_name = each.value.name
       }
     }
 
     destination {
-      name      = local.destination_server
+      server    = local.destination_server
       namespace = each.value.namespace
     }
 

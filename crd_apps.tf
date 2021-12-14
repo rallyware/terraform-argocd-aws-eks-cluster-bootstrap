@@ -7,7 +7,7 @@ resource "argocd_application" "crd_apps" {
 
   metadata {
     name      = each.value.name
-    namespace = local.destination_project
+    namespace = var.argocd_namespace
     labels    = module.this.tags
 
     annotations = merge(
@@ -41,7 +41,9 @@ resource "argocd_application" "crd_apps" {
         allow_empty = true
       }
 
-      sync_options = ["Validate=false"]
+      sync_options = [
+        "Replace=true"
+      ]
 
       retry {
         limit = "5"

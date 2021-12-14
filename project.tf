@@ -1,6 +1,7 @@
 locals {
   destination_server  = one(argocd_cluster.default[*].server)
   destination_project = format("%s-bootstrap", local.eks_cluster_id)
+  destination_name    = one(argocd_cluster.default[*].name)
 }
 
 resource "argocd_cluster" "default" {
@@ -39,6 +40,16 @@ resource "argocd_project" "default" {
       namespace = "*"
     }
 
+    namespace_resource_whitelist {
+      group = "*"
+      kind  = "*"
+    }
+
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
+    }
+
     orphaned_resources {
       warn = true
     }
@@ -68,6 +79,16 @@ resource "argocd_project" "additional" {
     destination {
       server    = local.destination_server
       namespace = "*"
+    }
+
+    namespace_resource_whitelist {
+      group = "*"
+      kind  = "*"
+    }
+
+    cluster_resource_whitelist {
+      group = "*"
+      kind  = "*"
     }
 
     orphaned_resources {
