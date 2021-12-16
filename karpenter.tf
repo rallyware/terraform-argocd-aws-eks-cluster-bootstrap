@@ -6,9 +6,10 @@ module "karpenter_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  enabled = local.karpenter_enabled
-  name    = "karpenter"
-  context = module.this.context
+  enabled     = local.karpenter_enabled
+  name        = "karpenter"
+  label_order = ["namespace", "tenant", "environment", "stage", "name", "attributes"]
+  context     = module.this.context
 }
 
 data "aws_iam_policy_document" "karpenter" {

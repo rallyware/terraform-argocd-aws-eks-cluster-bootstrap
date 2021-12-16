@@ -6,8 +6,9 @@ module "cluster_autoscaler_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  enabled = local.cluster_autoscaler_enabled
-  context = module.this.context
+  enabled     = local.cluster_autoscaler_enabled
+  label_order = ["namespace", "tenant", "environment", "stage", "name", "attributes"]
+  context     = module.this.context
 }
 
 data "aws_iam_policy_document" "cluster_autoscaler" {
