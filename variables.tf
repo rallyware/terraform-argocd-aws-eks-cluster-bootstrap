@@ -14,6 +14,12 @@ variable "argocd_iam_role_arn" {
   description = "IAM role ARN for ArgoCD to authenticate in EKS cluster."
 }
 
+variable "argocd_cluster_name" {
+  type        = string
+  default     = "in-cluster"
+  description = "The name of kubernetes cluster where ArgoCD is installed. Check https://YOUR_ARGOCD_HOSTNAME/settings/clusters to verify it."
+}
+
 variable "argocd_namespace" {
   type        = string
   default     = "argo"
@@ -37,11 +43,26 @@ variable "argocd_app_annotations" {
   description = "An unstructured key value map stored with the config map that may be used to store arbitrary metadata."
 }
 
+variable "app_of_apps_helm_chart" {
+  type = object(
+    {
+      chart      = string
+      repository = string
+      version    = string
+    }
+  )
+
+  default = {
+    chart      = "argocd-app-of-apps"
+    repository = "https://sweetops.github.io/helm-charts"
+    version    = "0.1.1"
+  }
+}
+
 variable "argocd_helm_app_default_params" {
   type = object(
     {
       max_history     = number
-      wait            = bool
       override_values = string
       sync_wave       = number
     }
@@ -49,7 +70,6 @@ variable "argocd_helm_app_default_params" {
 
   default = {
     max_history     = 10
-    wait            = false
     override_values = ""
     sync_wave       = 50
   }
@@ -87,7 +107,6 @@ variable "argocd_helm_apps" {
       version         = string
       override_values = optional(string)
       max_history     = optional(number)
-      wait            = optional(bool)
       sync_wave       = optional(number)
     }
   ))
