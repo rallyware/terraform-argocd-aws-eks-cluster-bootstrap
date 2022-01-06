@@ -440,6 +440,7 @@ locals {
       "crd" = {
         "create" = false
       }
+      "originalMatchLabels" = true
       "env" = {
         "ADDITIONAL_ENI_TAGS"                   = "{}"
         "AWS_VPC_CNI_NODE_PORT_SUPPORT"         = true
@@ -464,8 +465,6 @@ locals {
         "ENABLE_IPv6"                           = false
       }
     }
-
-
   }
 }
 
