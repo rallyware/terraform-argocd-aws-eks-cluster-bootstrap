@@ -424,18 +424,48 @@ locals {
       ]
     }
 
-    karpenter = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
-      "serviceAccount" = {
-        "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.karpenter_eks_iam_role.service_account_role_arn
+    aws-vpc-cni = {
+      "fullnameOverride" = "aws-node"
+      "init" = {
+        "image" = {
+          "region" = local.region
         }
       }
-      "controller" = {
-        clusterName     = local.eks_cluster_id
-        clusterEndpoint = local.eks_cluster_endpoint
+      "image" = {
+        "region" = local.region
+      }
+      "eniConfig" = {
+        "region" = local.region
+      }
+      "crd" = {
+        "create" = false
+      }
+      "env" = {
+        "ADDITIONAL_ENI_TAGS"                   = "{}"
+        "AWS_VPC_CNI_NODE_PORT_SUPPORT"         = true
+        "AWS_VPC_ENI_MTU"                       = "9001"
+        "AWS_VPC_K8S_CNI_CONFIGURE_RPFILTER"    = false
+        "AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG"    = false
+        "AWS_VPC_K8S_CNI_EXTERNALSNAT"          = "false"
+        "AWS_VPC_K8S_CNI_LOG_FILE"              = "/host/var/log/aws-routed-eni/ipamd.log"
+        "AWS_VPC_K8S_CNI_LOGLEVEL"              = "DEBUG"
+        "AWS_VPC_K8S_CNI_RANDOMIZESNAT"         = "prng"
+        "AWS_VPC_K8S_CNI_VETHPREFIX"            = "eni"
+        "AWS_VPC_K8S_PLUGIN_LOG_FILE"           = "/var/log/aws-routed-eni/plugin.log"
+        "AWS_VPC_K8S_PLUGIN_LOG_LEVEL"          = "DEBUG"
+        "DISABLE_INTROSPECTION"                 = false
+        "DISABLE_METRICS"                       = false
+        "ENABLE_POD_ENI"                        = false
+        "ENABLE_PREFIX_DELEGATION"              = true
+        "WARM_ENI_TARGET"                       = 1
+        "WARM_PREFIX_TARGET"                    = 1
+        "DISABLE_NETWORK_RESOURCE_PROVISIONING" = false
+        "ENABLE_IPv4"                           = true
+        "ENABLE_IPv6"                           = false
       }
     }
+
+
   }
 }
 
