@@ -87,6 +87,15 @@ variable "argocd_helm_apps" {
   ))
   default = [
     {
+      name       = "aws-vpc-cni"
+      namespace  = "kube-system"
+      repository = "https://aws.github.io/eks-charts"
+      chart      = "aws-vpc-cni"
+      version    = "1.1.12"
+      sync_wave  = -11
+    },
+
+    {
       name       = "calico"
       namespace  = "calico-system"
       repository = "https://docs.projectcalico.org/charts"
