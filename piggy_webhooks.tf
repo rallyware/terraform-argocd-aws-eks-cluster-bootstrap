@@ -1,9 +1,9 @@
 locals {
-  piggy_webhook_enabled = module.this.enabled && contains(local.argocd_helm_apps_enabled, "piggy-webhook")
+  piggy_webhooks_enabled = module.this.enabled && contains(local.argocd_helm_apps_enabled, "piggy-webhooks")
 }
 
 data "aws_iam_policy_document" "piggy_webhook" {
-  count = local.piggy_webhook_enabled ? 1 : 0
+  count = local.piggy_webhooks_enabled ? 1 : 0
 
   statement {
     sid       = "PiggySecretReadOnly"
@@ -32,19 +32,29 @@ data "aws_iam_policy_document" "piggy_webhook" {
       "ecr:GetDownloadUrlForLayer"
     ]
   }
+
+  statement {
+    sid       = "PiggyKMSDecrypt"
+    effect    = "Allow"
+    resources = ["*"]
+
+    actions = [
+      "kms:Decrypt"
+    ]
+  }
 }
 
-module "piggy_webhook_label" {
+module "piggy_webhooks_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
   name       = "piggy"
   attributes = ["webhook"]
-  enabled    = local.piggy_webhook_enabled
+  enabled    = local.piggy_webhooks_enabled
   context    = module.this.context
 }
 
-module "piggy_webhook_eks_iam_role" {
+module "piggy_webhooks_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.1"
 
@@ -53,5 +63,5 @@ module "piggy_webhook_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["piggy-webhook"]["namespace"], "")
 
-  context = module.piggy_webhook_label.context
+  context = module.piggy_webhooks_label.context
 }

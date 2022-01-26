@@ -466,10 +466,11 @@ locals {
       }
     }
 
-    piggy-webhook = {
+    piggy-webhooks = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
       "mutate" = {
         "certificate" = {
+          "useCertManager" = true
           "certManager" = {
             "enabled" = true
           }
@@ -480,7 +481,7 @@ locals {
       }
       "serviceAccount" = {
         "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.piggy_webhook_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/role-arn" = module.piggy_webhooks_eks_iam_role.service_account_role_arn
         }
       }
     }
