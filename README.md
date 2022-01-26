@@ -45,8 +45,8 @@ module "apps" {
 | <a name="module_ebs_csi_label"></a> [ebs\_csi\_label](#module\_ebs\_csi\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_karpenter_eks_iam_role"></a> [karpenter\_eks\_iam\_role](#module\_karpenter\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
 | <a name="module_karpenter_label"></a> [karpenter\_label](#module\_karpenter\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_piggy_webhook_eks_iam_role"></a> [piggy\_webhook\_eks\_iam\_role](#module\_piggy\_webhook\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
-| <a name="module_piggy_webhook_label"></a> [piggy\_webhook\_label](#module\_piggy\_webhook\_label) | cloudposse/label/null | 0.25.0 |
+| <a name="module_piggy_webhooks_eks_iam_role"></a> [piggy\_webhooks\_eks\_iam\_role](#module\_piggy\_webhooks\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
+| <a name="module_piggy_webhooks_label"></a> [piggy\_webhooks\_label](#module\_piggy\_webhooks\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 | <a name="module_velero_eks_iam_role"></a> [velero\_eks\_iam\_role](#module\_velero\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
 | <a name="module_velero_kms_key"></a> [velero\_kms\_key](#module\_velero\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
@@ -112,7 +112,7 @@ module "apps" {
 |------|-------------|
 | <a name="output_ebs_csi_kms_key_arn"></a> [ebs\_csi\_kms\_key\_arn](#output\_ebs\_csi\_kms\_key\_arn) | EBS CSI KMS key ARN |
 | <a name="output_ebs_csi_kms_key_id"></a> [ebs\_csi\_kms\_key\_id](#output\_ebs\_csi\_kms\_key\_id) | EBS CSI KMS key ID |
-| <a name="output_piggy_webhook_role_arn"></a> [piggy\_webhook\_role\_arn](#output\_piggy\_webhook\_role\_arn) | Piggy-Webhook role ARN |
+| <a name="output_piggy_webhooks_role_arn"></a> [piggy\_webhooks\_role\_arn](#output\_piggy\_webhooks\_role\_arn) | Piggy-Webhook role ARN |
 | <a name="output_velero_kms_key_arn"></a> [velero\_kms\_key\_arn](#output\_velero\_kms\_key\_arn) | Velero KMS key ARN |
 | <a name="output_velero_kms_key_id"></a> [velero\_kms\_key\_id](#output\_velero\_kms\_key\_id) | Velero KMS key ID |
 | <a name="output_velero_s3_bucket_arn"></a> [velero\_s3\_bucket\_arn](#output\_velero\_s3\_bucket\_arn) | Velero S3 bucket ARN |
