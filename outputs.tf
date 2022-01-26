@@ -27,3 +27,8 @@ output "ebs_csi_kms_key_id" {
   value       = module.ebs_csi_kms_key.key_id
   description = "EBS CSI KMS key ID"
 }
+
+output "piggy_webhooks_role_arn" {
+  value       = module.piggy_webhooks_eks_iam_role.service_account_role_arn
+  description = "Piggy-Webhook role ARN"
+}

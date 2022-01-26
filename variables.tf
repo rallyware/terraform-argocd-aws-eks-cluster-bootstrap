@@ -158,6 +158,15 @@ variable "argocd_helm_apps" {
     },
 
     {
+      name       = "piggy-webhooks"
+      namespace  = "infra"
+      chart      = "piggy-webhooks"
+      repository = "https://piggysec.com"
+      version    = "0.2.9"
+      sync_wave  = -4
+    },
+
+    {
       name       = "aws-node-termination-handler"
       namespace  = "node-termination-handler"
       chart      = "aws-node-termination-handler"
@@ -235,7 +244,7 @@ variable "argocd_helm_apps" {
       chart      = "victoria-metrics-k8s-stack"
       repository = "https://victoriametrics.github.io/helm-charts"
       version    = "0.5.3"
-      sync_wave  = -4
+      sync_wave  = -3
     },
 
     {
