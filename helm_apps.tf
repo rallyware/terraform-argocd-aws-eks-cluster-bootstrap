@@ -465,6 +465,25 @@ locals {
         "ENABLE_IPv6"                           = false
       }
     }
+
+    piggy-webhook = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
+      "mutate" = {
+        "certificate" = {
+          "certManager" = {
+            "enabled" = true
+          }
+        }
+      }
+      "env" = {
+        "AWS_REGION" = local.region
+      }
+      "serviceAccount" = {
+        "annotations" = {
+          "eks.amazonaws.com/role-arn" = module.piggy_webhook_iam_role.service_account_role_arn
+        }
+      }
+    }
   }
 }
 
