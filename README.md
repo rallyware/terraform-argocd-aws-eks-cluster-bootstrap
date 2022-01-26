@@ -29,10 +29,10 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 2.1.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.71.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | 3.1.0 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | 0.17.10 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
 ## Modules
 
@@ -69,6 +69,7 @@ module "apps" {
 | [aws_iam_policy_document.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.ebs_csi](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.karpenter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.piggy_webhook](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.velero](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_partition.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
@@ -111,6 +112,7 @@ module "apps" {
 |------|-------------|
 | <a name="output_ebs_csi_kms_key_arn"></a> [ebs\_csi\_kms\_key\_arn](#output\_ebs\_csi\_kms\_key\_arn) | EBS CSI KMS key ARN |
 | <a name="output_ebs_csi_kms_key_id"></a> [ebs\_csi\_kms\_key\_id](#output\_ebs\_csi\_kms\_key\_id) | EBS CSI KMS key ID |
+| <a name="output_piggy_webhook_role_arn"></a> [piggy\_webhook\_role\_arn](#output\_piggy\_webhook\_role\_arn) | Piggy-Webhook role ARN |
 | <a name="output_velero_kms_key_arn"></a> [velero\_kms\_key\_arn](#output\_velero\_kms\_key\_arn) | Velero KMS key ARN |
 | <a name="output_velero_kms_key_id"></a> [velero\_kms\_key\_id](#output\_velero\_kms\_key\_id) | Velero KMS key ID |
 | <a name="output_velero_s3_bucket_arn"></a> [velero\_s3\_bucket\_arn](#output\_velero\_s3\_bucket\_arn) | Velero S3 bucket ARN |
