@@ -480,7 +480,7 @@ locals {
       }
       "serviceAccount" = {
         "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.piggy_webhook_iam_role.service_account_role_arn
+          "eks.amazonaws.com/role-arn" = module.piggy_webhook_eks_iam_role.service_account_role_arn
         }
       }
     }
