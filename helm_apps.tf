@@ -53,7 +53,8 @@ locals {
       "rbac" = {
         "serviceAccount" = {
           "annotations" = {
-            "eks.amazonaws.com/role-arn" = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/role-arn"               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
           }
         }
       }
@@ -245,13 +246,13 @@ locals {
 
     linkerd-smi = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-smi"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
       "namespace"        = "linkerd-smi"
     }
 
     linkerd = {
       "fullnameOverride"        = try(local.argocd_helm_apps_set["linkerd"]["name"], "")
-      "installNamespace"        = true
+      "installNamespace"        = false
       "identityTrustAnchorsPEM" = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
 
       "identity" = {
@@ -288,7 +289,7 @@ locals {
 
     linkerd-viz = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-viz"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
 
       "tap" = {
         "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
@@ -309,7 +310,7 @@ locals {
 
     linkerd-jaeger = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-jaeger"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
 
       "webhook" = {
         "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
@@ -327,7 +328,8 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["velero"]["name"], "")
       "serviceAccount" = {
         "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.velero_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/role-arn"               = module.velero_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
         }
       }
       "configuration" = {
@@ -395,7 +397,8 @@ locals {
         }
         "serviceAccount" = {
           "annotations" = {
-            "eks.amazonaws.com/role-arn" = module.ebs_csi_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/role-arn"               = module.ebs_csi_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
           }
         }
       }
@@ -481,7 +484,8 @@ locals {
       }
       "serviceAccount" = {
         "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.piggy_webhooks_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/role-arn"               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
         }
       }
     }
