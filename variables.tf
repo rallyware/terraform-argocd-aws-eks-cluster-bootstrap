@@ -3,6 +3,12 @@ variable "eks_cluster_id" {
   description = "EKS cluster ID."
 }
 
+variable "sts_regional_endpoints_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to use STS regional endpoints for service accounts"
+}
+
 variable "argocd_iam_role_arn" {
   type        = string
   description = "IAM role ARN for ArgoCD to authenticate in EKS cluster."
