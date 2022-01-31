@@ -40,9 +40,11 @@ module "apps" {
 |------|--------|---------|
 | <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
 | <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
+| <a name="module_crd_apps_label"></a> [crd\_apps\_label](#module\_crd\_apps\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_ebs_csi_eks_iam_role"></a> [ebs\_csi\_eks\_iam\_role](#module\_ebs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
 | <a name="module_ebs_csi_kms_key"></a> [ebs\_csi\_kms\_key](#module\_ebs\_csi\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
 | <a name="module_ebs_csi_label"></a> [ebs\_csi\_label](#module\_ebs\_csi\_label) | cloudposse/label/null | 0.25.0 |
+| <a name="module_helm_apps_label"></a> [helm\_apps\_label](#module\_helm\_apps\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_karpenter_eks_iam_role"></a> [karpenter\_eks\_iam\_role](#module\_karpenter\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
 | <a name="module_karpenter_label"></a> [karpenter\_label](#module\_karpenter\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_piggy_webhooks_eks_iam_role"></a> [piggy\_webhooks\_eks\_iam\_role](#module\_piggy\_webhooks\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.1 |
@@ -82,7 +84,7 @@ module "apps" {
 | <a name="input_argocd_iam_role_arn"></a> [argocd\_iam\_role\_arn](#input\_argocd\_iam\_role\_arn) | IAM role ARN for ArgoCD to authenticate in EKS cluster. | `string` | n/a | yes |
 | <a name="input_eks_cluster_id"></a> [eks\_cluster\_id](#input\_eks\_cluster\_id) | EKS cluster ID. | `string` | n/a | yes |
 | <a name="input_additional_tag_map"></a> [additional\_tag\_map](#input\_additional\_tag\_map) | Additional key-value pairs to add to each map in `tags_as_list_of_maps`. Not added to `tags` or `id`.<br>This is for some rare cases where resources want additional configuration of tags<br>and therefore take a list of maps with tag key, value, and additional configuration. | `map(string)` | `{}` | no |
-| <a name="input_app_of_apps_helm_chart"></a> [app\_of\_apps\_helm\_chart](#input\_app\_of\_apps\_helm\_chart) | n/a | <pre>object(<br>    {<br>      chart      = string<br>      repository = string<br>      version    = string<br>    }<br>  )</pre> | <pre>{<br>  "chart": "argocd-app-of-apps",<br>  "repository": "https://sweetops.github.io/helm-charts",<br>  "version": "0.1.1"<br>}</pre> | no |
+| <a name="input_app_of_apps_helm_chart"></a> [app\_of\_apps\_helm\_chart](#input\_app\_of\_apps\_helm\_chart) | n/a | <pre>object(<br>    {<br>      chart      = string<br>      repository = string<br>      version    = string<br>    }<br>  )</pre> | <pre>{<br>  "chart": "argocd-app-of-apps",<br>  "repository": "https://sweetops.github.io/helm-charts",<br>  "version": "0.1.3"<br>}</pre> | no |
 | <a name="input_argocd_additional_projects"></a> [argocd\_additional\_projects](#input\_argocd\_additional\_projects) | A list of additional ArgoCD projects to create. | <pre>list(object(<br>    {<br>      name        = string<br>      description = optional(string)<br>    }<br>  ))</pre> | `[]` | no |
 | <a name="input_argocd_app_annotations"></a> [argocd\_app\_annotations](#input\_argocd\_app\_annotations) | An unstructured key value map stored with the config map that may be used to store arbitrary metadata. | `map(string)` | `{}` | no |
 | <a name="input_argocd_cluster_name"></a> [argocd\_cluster\_name](#input\_argocd\_cluster\_name) | The name of kubernetes cluster where ArgoCD is installed. Check https://YOUR_ARGOCD_HOSTNAME/settings/clusters to verify it. | `string` | `"in-cluster"` | no |
