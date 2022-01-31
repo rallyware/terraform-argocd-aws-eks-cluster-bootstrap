@@ -6,10 +6,9 @@ module "velero_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  enabled     = local.velero_enabled
-  name        = "velero"
-  label_order = ["namespace", "tenant", "environment", "stage", "name", "attributes"]
-  context     = module.this.context
+  enabled = local.velero_enabled
+  name    = "velero"
+  context = module.this.context
 }
 
 module "velero_kms_key" {

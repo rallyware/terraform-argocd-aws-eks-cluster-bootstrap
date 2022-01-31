@@ -53,7 +53,8 @@ locals {
       "rbac" = {
         "serviceAccount" = {
           "annotations" = {
-            "eks.amazonaws.com/role-arn" = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/role-arn"               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
           }
         }
       }
@@ -245,13 +246,13 @@ locals {
 
     linkerd-smi = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-smi"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
       "namespace"        = "linkerd-smi"
     }
 
     linkerd = {
       "fullnameOverride"        = try(local.argocd_helm_apps_set["linkerd"]["name"], "")
-      "installNamespace"        = true
+      "installNamespace"        = false
       "identityTrustAnchorsPEM" = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
 
       "identity" = {
@@ -288,7 +289,7 @@ locals {
 
     linkerd-viz = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-viz"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
 
       "tap" = {
         "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
@@ -309,7 +310,7 @@ locals {
 
     linkerd-jaeger = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-jaeger"]["name"], "")
-      "installNamespace" = true
+      "installNamespace" = false
 
       "webhook" = {
         "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
@@ -327,7 +328,8 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["velero"]["name"], "")
       "serviceAccount" = {
         "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.velero_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/role-arn"               = module.velero_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
         }
       }
       "configuration" = {
@@ -395,7 +397,8 @@ locals {
         }
         "serviceAccount" = {
           "annotations" = {
-            "eks.amazonaws.com/role-arn" = module.ebs_csi_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/role-arn"               = module.ebs_csi_eks_iam_role.service_account_role_arn
+            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
           }
         }
       }
@@ -424,16 +427,66 @@ locals {
       ]
     }
 
-    karpenter = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
-      "serviceAccount" = {
-        "annotations" = {
-          "eks.amazonaws.com/role-arn" = module.karpenter_eks_iam_role.service_account_role_arn
+    aws-vpc-cni = {
+      "fullnameOverride" = "aws-node"
+      "init" = {
+        "image" = {
+          "region" = local.region
         }
       }
-      "controller" = {
-        clusterName     = local.eks_cluster_id
-        clusterEndpoint = local.eks_cluster_endpoint
+      "image" = {
+        "region" = local.region
+      }
+      "eniConfig" = {
+        "region" = local.region
+      }
+      "crd" = {
+        "create" = false
+      }
+      "originalMatchLabels" = true
+      "env" = {
+        "ADDITIONAL_ENI_TAGS"                   = "{}"
+        "AWS_VPC_CNI_NODE_PORT_SUPPORT"         = true
+        "AWS_VPC_ENI_MTU"                       = "9001"
+        "AWS_VPC_K8S_CNI_CONFIGURE_RPFILTER"    = false
+        "AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG"    = false
+        "AWS_VPC_K8S_CNI_EXTERNALSNAT"          = "false"
+        "AWS_VPC_K8S_CNI_LOG_FILE"              = "/host/var/log/aws-routed-eni/ipamd.log"
+        "AWS_VPC_K8S_CNI_LOGLEVEL"              = "DEBUG"
+        "AWS_VPC_K8S_CNI_RANDOMIZESNAT"         = "prng"
+        "AWS_VPC_K8S_CNI_VETHPREFIX"            = "eni"
+        "AWS_VPC_K8S_PLUGIN_LOG_FILE"           = "/var/log/aws-routed-eni/plugin.log"
+        "AWS_VPC_K8S_PLUGIN_LOG_LEVEL"          = "DEBUG"
+        "DISABLE_INTROSPECTION"                 = false
+        "DISABLE_METRICS"                       = false
+        "ENABLE_POD_ENI"                        = false
+        "ENABLE_PREFIX_DELEGATION"              = true
+        "WARM_ENI_TARGET"                       = 1
+        "WARM_PREFIX_TARGET"                    = 1
+        "DISABLE_NETWORK_RESOURCE_PROVISIONING" = false
+        "ENABLE_IPv4"                           = true
+        "ENABLE_IPv6"                           = false
+      }
+    }
+
+    piggy-webhooks = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
+      "mutate" = {
+        "certificate" = {
+          "useCertManager" = true
+          "certManager" = {
+            "enabled" = true
+          }
+        }
+      }
+      "env" = {
+        "AWS_REGION" = local.region
+      }
+      "serviceAccount" = {
+        "annotations" = {
+          "eks.amazonaws.com/role-arn"               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
+          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
+        }
       }
     }
   }

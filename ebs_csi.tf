@@ -6,11 +6,10 @@ module "ebs_csi_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name        = "ebs"
-  attributes  = ["csi"]
-  enabled     = local.ebs_csi_enabled
-  label_order = ["namespace", "tenant", "environment", "stage", "name", "attributes"]
-  context     = module.this.context
+  name       = "ebs"
+  attributes = ["csi"]
+  enabled    = local.ebs_csi_enabled
+  context    = module.this.context
 }
 
 module "ebs_csi_kms_key" {

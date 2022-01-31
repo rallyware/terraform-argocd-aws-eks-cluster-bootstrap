@@ -55,7 +55,7 @@ variable "app_of_apps_helm_chart" {
   default = {
     chart      = "argocd-app-of-apps"
     repository = "https://sweetops.github.io/helm-charts"
-    version    = "0.1.1"
+    version    = "0.1.3"
   }
 }
 

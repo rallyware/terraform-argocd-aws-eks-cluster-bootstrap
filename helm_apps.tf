@@ -17,7 +17,7 @@ locals {
 
     applications = [for app in local.argocd_helm_apps :
       {
-        name           = app.name
+        name           = module.helm_apps_label[app.name].id
         namespace      = app.namespace
         chart          = app.chart
         repoURL        = app.repository
@@ -27,6 +27,16 @@ locals {
       }
     ]
   }
+}
+
+module "helm_apps_label" {
+  for_each = { for app in local.argocd_helm_apps : app.name => app }
+
+  source  = "cloudposse/label/null"
+  version = "0.25.0"
+
+  name    = each.key
+  context = module.this.context
 }
 
 resource "argocd_application" "helm_apps" {

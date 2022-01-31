@@ -2,11 +2,21 @@ locals {
   argocd_crd_apps_set = local.enabled ? { for app in var.argocd_crd_apps : app.name => app } : {}
 }
 
+module "crd_apps_label" {
+  for_each = local.argocd_crd_apps_set
+
+  source  = "cloudposse/label/null"
+  version = "0.25.0"
+
+  name    = each.key
+  context = module.this.context
+}
+
 resource "argocd_application" "crd_apps" {
   for_each = local.argocd_crd_apps_set
 
   metadata {
-    name      = each.value.name
+    name      = module.crd_apps_label[each.key].id
     namespace = var.argocd_namespace
     labels    = module.this.tags
 
