@@ -40,6 +40,11 @@ resource "argocd_project" "default" {
       namespace = "*"
     }
 
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = var.argocd_namespace
+    }
+
     namespace_resource_whitelist {
       group = "*"
       kind  = "*"
