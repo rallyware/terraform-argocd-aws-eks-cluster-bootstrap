@@ -24,6 +24,7 @@ locals {
         targetRevision = app.version
         syncWave       = app.sync_wave
         values         = data.utils_deep_merge_yaml.argocd_helm_apps[app.name].output
+        releaseName    = app.name
       }
     ]
   }
