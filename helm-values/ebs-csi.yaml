@@ -30,6 +30,6 @@ storageClasses:
     volumeBindingMode: WaitForFirstConsumer
     parameters:
       csi.storage.k8s.io/fstype: xfs
-      encrypted: true
+      encrypted: "true"
       kmsKeyId: ${kms_key_id}
       type: gp3
