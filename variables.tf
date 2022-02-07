@@ -3,11 +3,11 @@ variable "eks_cluster_id" {
   description = "EKS cluster ID."
 }
 
-variable "sts_regional_endpoints_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to use STS regional endpoints for service accounts"
-}
+# variable "sts_regional_endpoints_enabled" {
+#   type        = bool
+#   default     = false
+#   description = "Whether to use STS regional endpoints for service accounts"
+# }
 
 variable "argocd_iam_role_arn" {
   type        = string
@@ -59,19 +59,27 @@ variable "app_of_apps_helm_chart" {
   }
 }
 
-variable "argocd_helm_app_default_params" {
+variable "argocd_app_default_params" {
   type = object(
     {
-      max_history     = number
-      override_values = string
-      sync_wave       = number
+      max_history                = number
+      override_values            = string
+      sync_wave                  = number
+      create_default_iam_policy  = bool
+      create_default_iam_role    = bool
+      iam_policy_document        = string
+      use_sts_regional_endpoints = bool
     }
   )
 
   default = {
-    max_history     = 10
-    override_values = ""
-    sync_wave       = 50
+    max_history                = 10
+    override_values            = ""
+    sync_wave                  = 50
+    create_default_iam_policy  = true
+    create_default_iam_role    = true
+    iam_policy_document        = "{}"
+    use_sts_regional_endpoints = false
   }
 }
 
@@ -82,7 +90,6 @@ variable "argocd_crd_apps" {
       repository = string
       path       = string
       version    = string
-
     }
   ))
 
@@ -100,14 +107,18 @@ variable "argocd_crd_apps" {
 variable "argocd_helm_apps" {
   type = list(object(
     {
-      name            = string
-      namespace       = string
-      repository      = string
-      chart           = string
-      version         = string
-      override_values = optional(string)
-      max_history     = optional(number)
-      sync_wave       = optional(number)
+      name                       = string
+      namespace                  = string
+      repository                 = string
+      chart                      = string
+      version                    = string
+      override_values            = optional(string)
+      max_history                = optional(number)
+      sync_wave                  = optional(number)
+      create_default_iam_policy  = optional(bool)
+      create_default_iam_role    = optional(bool)
+      iam_policy_document        = optional(string)
+      use_sts_regional_endpoints = optional(bool)
     }
   ))
   default = [

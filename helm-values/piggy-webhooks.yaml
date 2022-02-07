@@ -1,0 +1,15 @@
+fullnameOverride: ${fullname_override}
+mutate:
+  certificate:
+    useCertManager: true
+    certManager:
+      enabled: true
+env:
+  AWS_REGION: ${region}
+
+%{ if role_enabled }
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+    eks.amazonaws.com/sts-regional-endpoints: ${sts_regional_endpoints}
+%{ endif }

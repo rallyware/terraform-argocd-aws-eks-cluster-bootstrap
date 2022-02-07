@@ -1,13 +1,15 @@
 locals {
-  velero_enabled = module.this.enabled && contains(local.argocd_helm_apps_enabled, "velero")
+  velero_enabled             = module.this.enabled && contains(local.argocd_helm_apps_enabled, "velero")
+  velero_iam_role_enabled    = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_role"] : false
+  velero_iam_policy_enabled  = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_policy"] : false
+  velero_iam_policy_document = local.velero_iam_policy_enabled ? one(data.aws_iam_policy_document.velero[*].json) : local.argocd_helm_apps_set["velero"]["iam_policy_document"]
 }
 
 module "velero_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  enabled = local.velero_enabled
-  name    = "velero"
+  enabled = local.velero_iam_role_enabled
   context = module.this.context
 }
 
@@ -20,6 +22,7 @@ module "velero_kms_key" {
   enable_key_rotation     = true
   alias                   = format("alias/%s/velero", local.eks_cluster_id)
 
+  name    = "velero"
   context = module.velero_label.context
 }
 
@@ -57,11 +60,12 @@ module "velero_s3_bucket" {
     }
   ]
 
+  name    = "velero"
   context = module.velero_label.context
 }
 
 data "aws_iam_policy_document" "velero" {
-  count = local.velero_enabled ? 1 : 0
+  count = local.velero_iam_role_enabled ? (local.velero_iam_policy_enabled ? 1 : 0) : 0
 
   statement {
     effect = "Allow"
@@ -116,7 +120,7 @@ module "velero_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.1"
 
-  aws_iam_policy_document     = one(data.aws_iam_policy_document.velero[*].json)
+  aws_iam_policy_document     = local.velero_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
   service_account_name        = try(local.argocd_helm_apps_set["velero"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["velero"]["namespace"], "")
