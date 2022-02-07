@@ -1,5 +1,5 @@
 locals {
-  argocd_helm_apps         = local.enabled ? [for app in var.argocd_helm_apps : defaults(app, var.argocd_helm_app_default_params)] : []
+  argocd_helm_apps         = local.enabled ? [for app in var.argocd_helm_apps : defaults(app, var.argocd_app_default_params)] : []
   argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_helm_apps : app.name] : []
   argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_helm_apps : app.name => app } : {}
   argocd_helm_apps_default_values = {
@@ -43,22 +43,16 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["cert-manager-issuers"]["name"], "")
     }
 
-    cluster-autoscaler = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
-      "cloudProvider"    = "aws"
-      "awsRegion"        = local.region
-      "autoDiscovery" = {
-        "clusterName" = local.eks_cluster_id
+    cluster-autoscaler = yamldecode(templatefile("${path.module}/helm-values/cluster-autoscaler.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
+        region                 = local.region
+        eks_cluster_id         = local.eks_cluster_id
+        sts_regional_endpoints = local.cluster_autoscaler_use_sts_regional_endpoints
+        role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
+        role_enabled           = local.cluster_autoscaler_iam_role_enabled
       }
-      "rbac" = {
-        "serviceAccount" = {
-          "annotations" = {
-            "eks.amazonaws.com/role-arn"               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
-            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
-          }
-        }
-      }
-    }
+    ))
 
     descheduler = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["descheduler"]["name"], "")
@@ -324,108 +318,30 @@ locals {
       }
     }
 
-    velero = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["velero"]["name"], "")
-      "serviceAccount" = {
-        "annotations" = {
-          "eks.amazonaws.com/role-arn"               = module.velero_eks_iam_role.service_account_role_arn
-          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
-        }
+    velero = yamldecode(templatefile("${path.module}/helm-values/velero.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["velero"]["name"], "")
+        region                 = local.region
+        sts_regional_endpoints = local.velero_use_sts_regional_endpoints
+        role_arn               = module.velero_eks_iam_role.service_account_role_arn
+        role_enabled           = local.velero_iam_role_enabled
+        eks_cluster_id         = local.eks_cluster_id
+        kms_key_id             = module.velero_kms_key.key_id
+        bucket_id              = module.velero_s3_bucket.bucket_id
       }
-      "configuration" = {
-        "backupStorageLocation" = {
-          "bucket"   = module.velero_s3_bucket.bucket_id
-          "name"     = "default"
-          "prefix"   = format("backups/%s", local.eks_cluster_id)
-          "provider" = "aws"
-          "region"   = local.region
-        }
-        "provider" = "aws"
-        "volumeSnapshotLocation" = {
-          "name"     = "default"
-          "provider" = "aws"
-          "region"   = local.region
-          "kmsKeyId" = module.velero_kms_key.key_id
-        }
-      }
-      "initContainers" = [
-        {
-          "image"           = "velero/velero-plugin-for-aws:v1.2.1"
-          "imagePullPolicy" = "IfNotPresent"
-          "name"            = "velero-plugin-for-aws"
-          "volumeMounts" = [
-            {
-              "mountPath" = "/target"
-              "name"      = "plugins"
-            },
-          ]
-        },
-      ]
-      "metrics" = {
-        "enabled"        = true
-        "scrapeInterval" = "30s"
-        "scrapeTimeout"  = "10s"
-        "serviceMonitor" = {
-          "enabled" = true
-        }
-      }
-      "resources" = {
-        "limits" = {
-          "cpu"    = "1000m"
-          "memory" = "512Mi"
-        }
-        "requests" = {
-          "cpu"    = "500m"
-          "memory" = "128Mi"
-        }
-      }
-    }
+    ))
 
-    ebs-csi = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["ebs-csi"]["name"], "")
-      "controller" = {
-        "extraCreateMetadata" = true
-        "k8sTagClusterId"     = local.eks_cluster_id
-        "region"              = local.region
-        "tolerateAllTaints"   = true
-        "updateStrategy" = {
-          "rollingUpdate" = {
-            "maxSurge"       = 0
-            "maxUnavailable" = 1
-          }
-          "type" = "RollingUpdate"
-        }
-        "serviceAccount" = {
-          "annotations" = {
-            "eks.amazonaws.com/role-arn"               = module.ebs_csi_eks_iam_role.service_account_role_arn
-            "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
-          }
-        }
+    ebs-csi = yamldecode(templatefile("${path.module}/helm-values/ebs-csi.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["ebs-csi"]["name"], "")
+        region                 = local.region
+        sts_regional_endpoints = local.ebs_csi_use_sts_regional_endpoints
+        role_arn               = module.ebs_csi_eks_iam_role.service_account_role_arn
+        role_enabled           = local.ebs_csi_iam_role_enabled
+        eks_cluster_id         = local.eks_cluster_id
+        kms_key_id             = module.ebs_csi_kms_key.key_id
       }
-      "enableVolumeResizing" = true
-      "enableVolumeSnapshot" = true
-      "storageClasses" = [
-        {
-          "allowVolumeExpansion" = true
-          "annotations" = {
-            "storageclass.kubernetes.io/is-default-class" = "true"
-          }
-          "labels" = {
-            "type" = "gp3"
-          }
-          "name" = "ebs-gp3"
-          "parameters" = {
-            "csi.storage.k8s.io/fstype" = "xfs"
-            "encrypted"                 = "true"
-            "kmsKeyId"                  = module.ebs_csi_kms_key.key_id
-            "type"                      = "gp3"
-          }
-          "provisioner"       = "ebs.csi.aws.com"
-          "reclaimPolicy"     = "Delete"
-          "volumeBindingMode" = "WaitForFirstConsumer"
-        },
-      ]
-    }
+    ))
 
     aws-vpc-cni = {
       "fullnameOverride" = "aws-node"
@@ -469,26 +385,15 @@ locals {
       }
     }
 
-    piggy-webhooks = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
-      "mutate" = {
-        "certificate" = {
-          "useCertManager" = true
-          "certManager" = {
-            "enabled" = true
-          }
-        }
+    piggy-webhooks = yamldecode(templatefile("${path.module}/helm-values/piggy-webhooks.yaml",
+      {
+        fullname_override      = local.argocd_helm_apps_set["piggy-webhooks"]["name"]
+        region                 = local.region
+        sts_regional_endpoints = local.piggy_webhooks_use_sts_regional_endpoints
+        role_arn               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
+        role_enabled           = local.piggy_webhooks_iam_role_enabled
       }
-      "env" = {
-        "AWS_REGION" = local.region
-      }
-      "serviceAccount" = {
-        "annotations" = {
-          "eks.amazonaws.com/role-arn"               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
-          "eks.amazonaws.com/sts-regional-endpoints" = tostring(var.sts_regional_endpoints_enabled)
-        }
-      }
-    }
+    ))
   }
 }
 
@@ -496,6 +401,7 @@ data "utils_deep_merge_yaml" "argocd_helm_apps" {
   for_each = local.argocd_helm_apps_set
 
   input = [
+    # contains(["ebs-csi", "cluster-autoscaler", "karpenter", "piggy-webhooks", "velero"], each.key) ? try(local.argocd_helm_apps_default_values[each.key], {}) : yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     each.value.override_values
   ]

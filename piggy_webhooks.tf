@@ -1,9 +1,13 @@
 locals {
-  piggy_webhooks_enabled = module.this.enabled && contains(local.argocd_helm_apps_enabled, "piggy-webhooks")
+  piggy_webhooks_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "piggy-webhooks")
+  piggy_webhooks_iam_role_enabled           = local.piggy_webhooks_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["create_default_iam_role"] : false
+  piggy_webhooks_iam_policy_enabled         = local.piggy_webhooks_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["create_default_iam_policy"] : false
+  piggy_webhooks_iam_policy_document        = local.piggy_webhooks_iam_policy_enabled ? one(data.aws_iam_policy_document.piggy_webhooks[*].json) : try(local.argocd_helm_apps_set["piggy-webhooks"]["iam_policy_document"], "{}")
+  piggy_webhooks_use_sts_regional_endpoints = local.velero_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["use_sts_regional_endpoints"] : false
 }
 
-data "aws_iam_policy_document" "piggy_webhook" {
-  count = local.piggy_webhooks_enabled ? 1 : 0
+data "aws_iam_policy_document" "piggy_webhooks" {
+  count = local.piggy_webhooks_iam_role_enabled ? (local.piggy_webhooks_iam_policy_enabled ? 1 : 0) : 0
 
   statement {
     sid       = "PiggySecretReadOnly"
@@ -48,20 +52,18 @@ module "piggy_webhooks_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name       = "piggy"
-  attributes = ["webhook"]
-  enabled    = local.piggy_webhooks_enabled
-  context    = module.this.context
+  enabled = local.piggy_webhooks_iam_role_enabled
+  context = module.this.context
 }
 
 module "piggy_webhooks_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.1"
 
-  aws_iam_policy_document     = one(data.aws_iam_policy_document.piggy_webhook[*].json)
+  aws_iam_policy_document     = local.piggy_webhooks_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
-  service_account_name        = try(local.argocd_helm_apps_set["piggy-webhook"]["name"], "")
-  service_account_namespace   = try(local.argocd_helm_apps_set["piggy-webhook"]["namespace"], "")
+  service_account_name        = try(local.argocd_helm_apps_set["piggy-webhooks"]["name"], "")
+  service_account_namespace   = try(local.argocd_helm_apps_set["piggy-webhooks"]["namespace"], "")
 
   context = module.piggy_webhooks_label.context
 }

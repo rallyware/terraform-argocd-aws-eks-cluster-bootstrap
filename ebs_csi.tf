@@ -1,15 +1,17 @@
 locals {
-  ebs_csi_enabled = module.this.enabled && contains(local.argocd_helm_apps_enabled, "ebs-csi")
+  ebs_csi_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "ebs-csi")
+  ebs_csi_iam_role_enabled           = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_role"] : false
+  ebs_csi_iam_policy_enabled         = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_policy"] : false
+  ebs_csi_iam_policy_document        = local.ebs_csi_iam_policy_enabled ? one(data.aws_iam_policy_document.ebs_csi[*].json) : try(local.argocd_helm_apps_set["ebs-csi"]["iam_policy_document"], "{}")
+  ebs_csi_use_sts_regional_endpoints = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["use_sts_regional_endpoints"] : false
 }
 
 module "ebs_csi_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name       = "ebs"
-  attributes = ["csi"]
-  enabled    = local.ebs_csi_enabled
-  context    = module.this.context
+  enabled = local.ebs_csi_iam_role_enabled
+  context = module.this.context
 }
 
 module "ebs_csi_kms_key" {
@@ -21,11 +23,13 @@ module "ebs_csi_kms_key" {
   enable_key_rotation     = true
   alias                   = format("alias/%s/ebs-csi", local.eks_cluster_id)
 
-  context = module.ebs_csi_label.context
+  name       = "ebs"
+  attributes = ["csi"]
+  context    = module.ebs_csi_label.context
 }
 
 data "aws_iam_policy_document" "ebs_csi" {
-  count = local.ebs_csi_enabled ? 1 : 0
+  count = local.ebs_csi_iam_role_enabled ? (local.ebs_csi_iam_policy_enabled ? 1 : 0) : 0
 
   statement {
     effect    = "Allow"
@@ -213,7 +217,7 @@ module "ebs_csi_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.1"
 
-  aws_iam_policy_document     = one(data.aws_iam_policy_document.ebs_csi[*].json)
+  aws_iam_policy_document     = local.ebs_csi_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
   service_account_name        = "ebs-csi-controller-sa"
   service_account_namespace   = try(local.argocd_helm_apps_set["ebs-csi"]["namespace"], "")

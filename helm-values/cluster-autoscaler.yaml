@@ -1,0 +1,14 @@
+fullnameOverride: ${fullname_override}
+
+cloudProvider: aws
+awsRegion: ${region}
+autoDiscovery:
+  clusterName: ${eks_cluster_id}
+
+%{ if role_enabled }
+rbac:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
+      eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+%{ endif }
