@@ -1,8 +1,9 @@
 locals {
-  ebs_csi_enabled             = module.this.enabled && contains(local.argocd_helm_apps_enabled, "ebs-csi")
-  ebs_csi_iam_role_enabled    = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_role"] : false
-  ebs_csi_iam_policy_enabled  = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_policy"] : false
-  ebs_csi_iam_policy_document = local.ebs_csi_iam_policy_enabled ? one(data.aws_iam_policy_document.ebs_csi[*].json) : local.argocd_helm_apps_set["ebs-csi"]["iam_policy_document"]
+  ebs_csi_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "ebs-csi")
+  ebs_csi_iam_role_enabled           = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_role"] : false
+  ebs_csi_iam_policy_enabled         = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["create_default_iam_policy"] : false
+  ebs_csi_iam_policy_document        = local.ebs_csi_iam_policy_enabled ? one(data.aws_iam_policy_document.ebs_csi[*].json) : try(local.argocd_helm_apps_set["ebs-csi"]["iam_policy_document"], "{}")
+  ebs_csi_use_sts_regional_endpoints = local.ebs_csi_enabled ? local.argocd_helm_apps_set["ebs-csi"]["use_sts_regional_endpoints"] : false
 }
 
 module "ebs_csi_label" {

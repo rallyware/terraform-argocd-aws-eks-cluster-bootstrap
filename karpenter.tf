@@ -1,8 +1,9 @@
 locals {
-  karpenter_enabled             = module.this.enabled && contains(local.argocd_helm_apps_enabled, "karpenter")
-  karpenter_iam_role_enabled    = local.karpenter_enabled ? local.argocd_helm_apps_set["karpenter"]["create_default_iam_role"] : false
-  karpenter_iam_policy_enabled  = local.karpenter_enabled ? local.argocd_helm_apps_set["karpenter"]["create_default_iam_policy"] : false
-  karpenter_iam_policy_document = local.karpenter_iam_policy_enabled ? one(data.aws_iam_policy_document.karpenter[*].json) : local.argocd_helm_apps_set["karpenter"]["iam_policy_document"]
+  karpenter_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "karpenter")
+  karpenter_iam_role_enabled           = local.karpenter_enabled ? local.argocd_helm_apps_set["karpenter"]["create_default_iam_role"] : false
+  karpenter_iam_policy_enabled         = local.karpenter_enabled ? local.argocd_helm_apps_set["karpenter"]["create_default_iam_policy"] : false
+  karpenter_iam_policy_document        = local.karpenter_iam_policy_enabled ? one(data.aws_iam_policy_document.karpenter[*].json) : try(local.argocd_helm_apps_set["karpenter"]["iam_policy_document"], "{}")
+  karpenter_use_sts_regional_endpoints = local.karpenter_enabled ? local.argocd_helm_apps_set["karpenter"]["use_sts_regional_endpoints"] : false
 }
 
 module "karpenter_label" {

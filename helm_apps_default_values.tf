@@ -48,7 +48,7 @@ locals {
         fullname_override      = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
         region                 = local.region
         eks_cluster_id         = local.eks_cluster_id
-        sts_regional_endpoints = local.argocd_helm_apps_set["cluster-autoscaler"]["use_sts_regional_endpoints"]
+        sts_regional_endpoints = local.cluster_autoscaler_use_sts_regional_endpoints
         role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
         role_enabled           = local.cluster_autoscaler_iam_role_enabled
       }
@@ -322,7 +322,7 @@ locals {
       {
         fullname_override      = try(local.argocd_helm_apps_set["velero"]["name"], "")
         region                 = local.region
-        sts_regional_endpoints = local.argocd_helm_apps_set["velero"]["use_sts_regional_endpoints"]
+        sts_regional_endpoints = local.velero_use_sts_regional_endpoints
         role_arn               = module.velero_eks_iam_role.service_account_role_arn
         role_enabled           = local.velero_iam_role_enabled
         eks_cluster_id         = local.eks_cluster_id
@@ -335,7 +335,7 @@ locals {
       {
         fullname_override      = try(local.argocd_helm_apps_set["ebs-csi"]["name"], "")
         region                 = local.region
-        sts_regional_endpoints = local.argocd_helm_apps_set["ebs-csi"]["use_sts_regional_endpoints"]
+        sts_regional_endpoints = local.ebs_csi_use_sts_regional_endpoints
         role_arn               = module.ebs_csi_eks_iam_role.service_account_role_arn
         role_enabled           = local.ebs_csi_iam_role_enabled
         eks_cluster_id         = local.eks_cluster_id
@@ -389,7 +389,7 @@ locals {
       {
         fullname_override      = local.argocd_helm_apps_set["piggy-webhooks"]["name"]
         region                 = local.region
-        sts_regional_endpoints = local.argocd_helm_apps_set["piggy-webhooks"]["use_sts_regional_endpoints"]
+        sts_regional_endpoints = local.piggy_webhooks_use_sts_regional_endpoints
         role_arn               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
         role_enabled           = local.piggy_webhooks_iam_role_enabled
       }

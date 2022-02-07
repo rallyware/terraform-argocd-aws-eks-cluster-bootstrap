@@ -1,8 +1,9 @@
 locals {
-  velero_enabled             = module.this.enabled && contains(local.argocd_helm_apps_enabled, "velero")
-  velero_iam_role_enabled    = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_role"] : false
-  velero_iam_policy_enabled  = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_policy"] : false
-  velero_iam_policy_document = local.velero_iam_policy_enabled ? one(data.aws_iam_policy_document.velero[*].json) : local.argocd_helm_apps_set["velero"]["iam_policy_document"]
+  velero_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "velero")
+  velero_iam_role_enabled           = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_role"] : false
+  velero_iam_policy_enabled         = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["create_default_iam_policy"] : false
+  velero_iam_policy_document        = local.velero_iam_policy_enabled ? one(data.aws_iam_policy_document.velero[*].json) : try(local.argocd_helm_apps_set["velero"]["iam_policy_document"], "{}")
+  velero_use_sts_regional_endpoints = local.velero_enabled ? local.argocd_helm_apps_set["velero"]["use_sts_regional_endpoints"] : false
 }
 
 module "velero_label" {
