@@ -10,5 +10,5 @@ rbac:
   serviceAccount:
     annotations:
       eks.amazonaws.com/role-arn: ${role_arn}
-      eks.amazonaws.com/sts-regional-endpoints: ${sts_regional_endpoints}
+      eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
 %{ endif }

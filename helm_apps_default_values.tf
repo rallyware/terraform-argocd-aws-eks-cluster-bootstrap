@@ -43,7 +43,7 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["cert-manager-issuers"]["name"], "")
     }
 
-    cluster-autoscaler = templatefile("${path.module}/helm-values/cluster-autoscaler.yaml",
+    cluster-autoscaler = yamldecode(templatefile("${path.module}/helm-values/cluster-autoscaler.yaml",
       {
         fullname_override      = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
         region                 = local.region
@@ -52,7 +52,7 @@ locals {
         role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
         role_enabled           = local.cluster_autoscaler_iam_role_enabled
       }
-    )
+    ))
 
     descheduler = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["descheduler"]["name"], "")
@@ -318,7 +318,7 @@ locals {
       }
     }
 
-    velero = templatefile("${path.module}/helm-values/velero.yaml",
+    velero = yamldecode(templatefile("${path.module}/helm-values/velero.yaml",
       {
         fullname_override      = try(local.argocd_helm_apps_set["velero"]["name"], "")
         region                 = local.region
@@ -329,9 +329,9 @@ locals {
         kms_key_id             = module.velero_kms_key.key_id
         bucket_id              = module.velero_s3_bucket.bucket_id
       }
-    )
+    ))
 
-    ebs-csi = templatefile("${path.module}/helm-values/ebs-csi.yaml",
+    ebs-csi = yamldecode(templatefile("${path.module}/helm-values/ebs-csi.yaml",
       {
         fullname_override      = try(local.argocd_helm_apps_set["ebs-csi"]["name"], "")
         region                 = local.region
@@ -341,7 +341,7 @@ locals {
         eks_cluster_id         = local.eks_cluster_id
         kms_key_id             = module.ebs_csi_kms_key.key_id
       }
-    )
+    ))
 
     aws-vpc-cni = {
       "fullnameOverride" = "aws-node"
@@ -385,7 +385,7 @@ locals {
       }
     }
 
-    piggy-webhooks = templatefile("${path.module}/helm-values/piggy-webhooks.yaml",
+    piggy-webhooks = yamldecode(templatefile("${path.module}/helm-values/piggy-webhooks.yaml",
       {
         fullname_override      = local.argocd_helm_apps_set["piggy-webhooks"]["name"]
         region                 = local.region
@@ -393,7 +393,7 @@ locals {
         role_arn               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
         role_enabled           = local.piggy_webhooks_iam_role_enabled
       }
-    )
+    ))
   }
 }
 
@@ -401,6 +401,7 @@ data "utils_deep_merge_yaml" "argocd_helm_apps" {
   for_each = local.argocd_helm_apps_set
 
   input = [
+    # contains(["ebs-csi", "cluster-autoscaler", "karpenter", "piggy-webhooks", "velero"], each.key) ? try(local.argocd_helm_apps_default_values[each.key], {}) : yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     each.value.override_values
   ]
