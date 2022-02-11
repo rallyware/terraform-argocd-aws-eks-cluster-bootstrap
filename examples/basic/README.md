@@ -1,19 +1,3 @@
-## Usage
-
-```hcl
-module "apps" {
-  source              = "git::https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap.git?ref=master"
-  argocd_iam_role_arn = "argocd-role-arn"
-  eks_cluster_id      = "staging-cluster"
-
-  argocd_additional_projects = [
-    {
-      name = "test"
-    }
-  ]
-}
-```
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -47,6 +31,3 @@ No inputs.
 
 No outputs.
 <!-- END_TF_DOCS --> 
-
-## License
-The Apache-2.0 license
