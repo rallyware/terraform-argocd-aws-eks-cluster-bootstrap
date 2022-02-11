@@ -10,6 +10,14 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.ref }}
 
+    - name: Render terraform docs inside the examples/basic/README.md
+      uses: terraform-docs/gh-actions@v0.11.0
+      with:
+        working-dir: ./examples/basic/
+        git-push: "false"
+        output-file: README.md
+        config-file: ".terraform-docs.yml"
+
     - name: Render terraform docs inside the README.md
       uses: terraform-docs/gh-actions@v0.11.0
       with:
