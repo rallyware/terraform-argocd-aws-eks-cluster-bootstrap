@@ -1,7 +1,6 @@
 locals {
-  argocd_helm_apps         = local.enabled ? [for app in var.argocd_helm_apps : defaults(app, var.argocd_app_default_params)] : []
-  argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_helm_apps : app.name] : []
-  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_helm_apps : app.name => app } : {}
+  argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_apps : app.name] : []
+  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if length(app.chart) > 0 } : {}
   argocd_helm_apps_default_values = {
     argo-rollouts = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
@@ -387,7 +386,7 @@ locals {
 
     piggy-webhooks = yamldecode(templatefile("${path.module}/helm-values/piggy-webhooks.yaml",
       {
-        fullname_override      = local.argocd_helm_apps_set["piggy-webhooks"]["name"]
+        fullname_override      = try(local.argocd_helm_apps_set["piggy-webhooks"]["name"], "")
         region                 = local.region
         sts_regional_endpoints = local.piggy_webhooks_use_sts_regional_endpoints
         role_arn               = module.piggy_webhooks_eks_iam_role.service_account_role_arn
@@ -401,7 +400,6 @@ data "utils_deep_merge_yaml" "argocd_helm_apps" {
   for_each = local.argocd_helm_apps_set
 
   input = [
-    # contains(["ebs-csi", "cluster-autoscaler", "karpenter", "piggy-webhooks", "velero"], each.key) ? try(local.argocd_helm_apps_default_values[each.key], {}) : yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
     each.value.override_values
   ]

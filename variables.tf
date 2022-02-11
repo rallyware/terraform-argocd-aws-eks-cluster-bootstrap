@@ -3,21 +3,22 @@ variable "eks_cluster_id" {
   description = "EKS cluster ID."
 }
 
-# variable "sts_regional_endpoints_enabled" {
-#   type        = bool
-#   default     = false
-#   description = "Whether to use STS regional endpoints for service accounts"
-# }
-
 variable "argocd_iam_role_arn" {
   type        = string
+  default     = ""
   description = "IAM role ARN for ArgoCD to authenticate in EKS cluster."
 }
 
-variable "argocd_cluster_name" {
-  type        = string
-  default     = "in-cluster"
-  description = "The name of kubernetes cluster where ArgoCD is installed. Check https://YOUR_ARGOCD_HOSTNAME/settings/clusters to verify it."
+variable "argocd_cluster_default_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether to create ArgoCD cluster resource. Requires: argocd_iam_role_arn"
+}
+
+variable "argocd_project_default_enabled" {
+  type        = bool
+  default     = true
+  description = "Whether to create default ArgoCD project."
 }
 
 variable "argocd_namespace" {
@@ -40,7 +41,7 @@ variable "argocd_additional_projects" {
 variable "argocd_app_annotations" {
   type        = map(string)
   default     = {}
-  description = "An unstructured key value map stored with the config map that may be used to store arbitrary metadata."
+  description = "A map of annotations which we be applied to the parent app."
 }
 
 variable "app_of_apps_helm_chart" {
@@ -54,9 +55,22 @@ variable "app_of_apps_helm_chart" {
 
   default = {
     chart      = "argocd-app-of-apps"
-    repository = "https://sweetops.github.io/helm-charts"
-    version    = "0.1.5"
+    repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
+    version    = "0.2.0"
   }
+}
+
+variable "argocd_app_config" {
+  type = object(
+    {
+      name         = optional(string)
+      project      = optional(string)
+      cluster_name = optional(string)
+      cluster_addr = optional(string)
+    }
+  )
+  default     = {}
+  description = "A parent app configuration. Required when `argocd_cluster_default_enabled` is `false`"
 }
 
 variable "argocd_app_default_params" {
@@ -69,6 +83,11 @@ variable "argocd_app_default_params" {
       create_default_iam_role    = bool
       iam_policy_document        = string
       use_sts_regional_endpoints = bool
+      namespace                  = string
+      chart                      = string
+      path                       = string
+      cluster                    = string
+      project                    = string
     }
   )
 
@@ -80,41 +99,36 @@ variable "argocd_app_default_params" {
     create_default_iam_role    = true
     iam_policy_document        = "{}"
     use_sts_regional_endpoints = false
+    namespace                  = "default"
+    chart                      = ""
+    path                       = ""
+    cluster                    = "in-cluster"
+    project                    = ""
   }
 }
 
-variable "argocd_crd_apps" {
+variable "argocd_apps" {
   type = list(object(
     {
-      name       = string
-      repository = string
-      path       = string
-      version    = string
-    }
-  ))
-
-  default = [
-    {
-      name       = "prometheus-operator-crds"
-      repository = "https://github.com/prometheus-operator/prometheus-operator.git"
-      path       = "example/prometheus-operator-crd/"
-      version    = "v0.52.1"
-    }
-  ]
-}
-
-
-variable "argocd_helm_apps" {
-  type = list(object(
-    {
-      name                       = string
-      namespace                  = string
-      repository                 = string
-      chart                      = string
-      version                    = string
-      override_values            = optional(string)
-      max_history                = optional(number)
-      sync_wave                  = optional(number)
+      name            = string
+      repository      = string
+      version         = string
+      cluster         = optional(string)
+      project         = optional(string)
+      namespace       = optional(string)
+      chart           = optional(string)
+      path            = optional(string)
+      override_values = optional(string)
+      max_history     = optional(number)
+      sync_wave       = optional(number)
+      annotations     = optional(map(string))
+      ignore_differences = optional(list(object(
+        {
+          group               = string
+          kind                = string
+          jq_path_expressions = list(string)
+        }
+      )))
       create_default_iam_policy  = optional(bool)
       create_default_iam_role    = optional(bool)
       iam_policy_document        = optional(string)
@@ -122,6 +136,15 @@ variable "argocd_helm_apps" {
     }
   ))
   default = [
+    {
+      name       = "prometheus-operator-crds"
+      repository = "https://github.com/prometheus-operator/prometheus-operator.git"
+      namespace  = "default"
+      path       = "example/prometheus-operator-crd/"
+      version    = "v0.52.1"
+      sync_wave  = -25
+    },
+
     {
       name       = "aws-vpc-cni"
       namespace  = "kube-system"

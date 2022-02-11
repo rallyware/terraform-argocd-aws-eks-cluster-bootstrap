@@ -1,0 +1,52 @@
+{{- range .Values.applications }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncWave | quote }} 
+    {{- with .annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "argocd-app-of-apps.labels" $ | nindent 4 }}
+spec:
+  {{- with .ignoreDifferences }}
+  ignoreDifferences:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  destination:
+    name: {{ .clusterName }}
+    namespace: {{ .namespace }}
+  project: {{ .projectName }}
+  source:
+{{- if .chart }}
+    chart: {{ .chart }}
+{{- end }}
+    repoURL: {{ .repoURL }}
+    targetRevision: {{ .targetRevision }}
+    path: {{ .path }}
+{{- if .chart }}
+    helm:
+      releaseName: {{ .releaseName }}
+{{- if .values }}
+      values: |
+        {{ .values | nindent 8 }}
+{{- end }}
+{{- end }}
+{{- if $.Values.syncPolicy }}
+  syncPolicy:
+    automated:
+      {{- with $.Values.syncPolicy }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+{{- end }}
+{{- if and $.Values.syncOptions $.Values.syncPolicy }}
+    syncOptions:
+{{- range $name, $value := $.Values.syncOptions }}
+      - {{ $name }}={{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
