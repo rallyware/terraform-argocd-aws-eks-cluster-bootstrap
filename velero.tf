@@ -31,11 +31,14 @@ module "velero_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
   version = "0.44.1"
 
-  acl                = "private"
-  user_enabled       = false
-  versioning_enabled = false
-  sse_algorithm      = "aws:kms"
-  kms_master_key_arn = module.velero_kms_key.key_arn
+  acl                 = "private"
+  block_public_acls   = true
+  block_public_policy = true
+  ignore_public_acls  = true
+  user_enabled        = false
+  versioning_enabled  = false
+  sse_algorithm       = "aws:kms"
+  kms_master_key_arn  = module.velero_kms_key.key_arn
 
   lifecycle_rules = [
     {

@@ -1,11 +1,13 @@
 locals {
-  destination_server  = one(argocd_cluster.default[*].server)
-  destination_project = format("%s-bootstrap", local.eks_cluster_id)
-  destination_name    = one(argocd_cluster.default[*].name)
+  argocd_cluster_default_enabled    = module.this.enabled && var.argocd_cluster_default_enabled
+  argocd_project_default_enabled    = local.argocd_cluster_default_enabled && var.argocd_project_default_enabled
+  argocd_destination_project        = local.argocd_project_default_enabled ? format("%s-bootstrap", local.eks_cluster_id) : local.argocd_app_config["project"]
+  argocd_cluster_destination_server = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].server) : local.argocd_app_config["cluster_addr"]
+  argocd_cluster_destination_name   = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : local.argocd_app_config["cluster_name"]
 }
 
 resource "argocd_cluster" "default" {
-  count = module.this.enabled ? 1 : 0
+  count = local.argocd_cluster_default_enabled ? 1 : 0
 
   server = local.eks_cluster_endpoint
   name   = local.eks_cluster_id
@@ -23,10 +25,10 @@ resource "argocd_cluster" "default" {
 }
 
 resource "argocd_project" "default" {
-  count = module.this.enabled ? 1 : 0
+  count = local.argocd_project_default_enabled ? 1 : 0
 
   metadata {
-    name      = local.destination_project
+    name      = local.argocd_destination_project
     namespace = var.argocd_namespace
     labels    = module.this.tags
   }
@@ -36,7 +38,8 @@ resource "argocd_project" "default" {
     source_repos = ["*"]
 
     destination {
-      server    = local.destination_server
+      name      = local.argocd_cluster_destination_name
+      server    = local.argocd_cluster_destination_server
       namespace = "*"
     }
 
@@ -82,8 +85,13 @@ resource "argocd_project" "additional" {
     source_repos = ["*"]
 
     destination {
-      server    = local.destination_server
+      server    = local.argocd_cluster_destination_server
       namespace = "*"
+    }
+
+    destination {
+      server    = "https://kubernetes.default.svc"
+      namespace = var.argocd_namespace
     }
 
     namespace_resource_whitelist {

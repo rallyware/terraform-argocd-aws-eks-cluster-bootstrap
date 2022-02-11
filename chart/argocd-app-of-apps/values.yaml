@@ -1,0 +1,22 @@
+nameOverride: ""
+fullnameOverride: ""
+
+syncOptions: {}
+  # CreateNamespace: true
+  # Replace: false
+
+syncPolicy:
+  prune: true
+  selfHeal: true
+  # allowEmpty: true
+
+applications: []
+  # - name: prometheus
+  #   namespace: monitoring
+  #   chart: prometheus-community
+  #   repoURL: https://prometheus-community.github.io/helm-charts
+  #   targetRevision: 15.0.1
+  #   annotations: {}
+  #   syncWave: 10
+  #   values: |
+  #     fullnameOverride: prometheus
