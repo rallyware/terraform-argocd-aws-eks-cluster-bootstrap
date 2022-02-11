@@ -6,7 +6,7 @@ locals {
     {
       name         = ""
       project      = ""
-      cluster_name = ""
+      cluster_name = "in-cluster"
       cluster_addr = ""
     }
   )
@@ -78,7 +78,7 @@ resource "argocd_application" "apps" {
     }
 
     destination {
-      name      = local.argocd_cluster_destination_name
+      name      = local.argocd_app_config["cluster_name"]
       namespace = var.argocd_namespace
     }
 
