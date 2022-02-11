@@ -2,7 +2,7 @@ apiVersion: v2
 name: argocd-app-of-apps
 description: A Helm chart to deploy ArgoCD app in app of apps pattern
 type: application
-version: 0.2.0
+version: 0.2.1
 appVersion: 0.1.0
 maintainers:
   - name: SweetOps
