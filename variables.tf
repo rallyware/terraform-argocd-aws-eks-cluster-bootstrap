@@ -69,7 +69,9 @@ variable "argocd_app_config" {
       cluster_addr = optional(string)
     }
   )
-  default     = {}
+  default = {
+    cluster_name = "in-cluster"
+  }
   description = "A parent app configuration. Required when `argocd_cluster_default_enabled` is `false`"
 }
 
@@ -102,7 +104,7 @@ variable "argocd_app_default_params" {
     namespace                  = "default"
     chart                      = ""
     path                       = ""
-    cluster                    = "in-cluster"
+    cluster                    = ""
     project                    = ""
   }
 }
@@ -124,9 +126,9 @@ variable "argocd_apps" {
       annotations     = optional(map(string))
       ignore_differences = optional(list(object(
         {
-          group               = string
-          kind                = string
-          jq_path_expressions = list(string)
+          group             = string
+          kind              = string
+          jqPathExpressions = list(string)
         }
       )))
       create_default_iam_policy  = optional(bool)

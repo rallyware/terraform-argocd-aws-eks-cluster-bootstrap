@@ -62,9 +62,9 @@ module "apps" {
       version    = "2.0.1"
       ignore_differences = [
         {
-          group               = "apps"
-          kind                = "Deployment"
-          jq_path_expressions = [".spec.replicas"]
+          group             = "apps"
+          kind              = "Deployment"
+          jqPathExpressions = [".spec.replicas"]
         }
       ]
     },
