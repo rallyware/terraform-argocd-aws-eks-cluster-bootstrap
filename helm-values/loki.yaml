@@ -139,7 +139,7 @@ loki:
       cache_location: /var/loki/cache
       cache_ttl: 168h
     aws:
-      bucketnames: ${bucket}
+      bucketnames: ${bucket_id}
       region: ${region}
 
 serviceAccount:

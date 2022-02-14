@@ -93,28 +93,28 @@ output "cluster_autoscaler_service_account_policy_id" {
   description = "Cluster-Autoscaler IAM policy ID"
 }
 
-output "ebs_csi_driver_service_account_role_name" {
-  value       = module.ebs_csi_driver_eks_iam_role.service_account_role_name
+output "ebs_csi_service_account_role_name" {
+  value       = module.ebs_csi_eks_iam_role.service_account_role_name
   description = "EBS CSI driver IAM role name"
 }
 
-output "ebs_csi_driver_service_account_role_unique_id" {
-  value       = module.ebs_csi_driver_eks_iam_role.service_account_role_unique_id
+output "ebs_csi_service_account_role_unique_id" {
+  value       = module.ebs_csi_eks_iam_role.service_account_role_unique_id
   description = "EBS CSI driver IAM role unique ID"
 }
 
-output "ebs_csi_driver_service_account_role_arn" {
-  value       = module.ebs_csi_driver_eks_iam_role.service_account_role_arn
+output "ebs_csi_service_account_role_arn" {
+  value       = module.ebs_csi_eks_iam_role.service_account_role_arn
   description = "EBS CSI driver IAM role ARN"
 }
 
-output "ebs_csi_driver_service_account_policy_name" {
-  value       = module.ebs_csi_driver_eks_iam_role.service_account_policy_name
+output "ebs_csi_service_account_policy_name" {
+  value       = module.ebs_csi_eks_iam_role.service_account_policy_name
   description = "EBS CSI driver IAM policy name"
 }
 
-output "ebs_csi_driver_service_account_policy_id" {
-  value       = module.ebs_csi_driver_eks_iam_role.service_account_policy_id
+output "ebs_csi_service_account_policy_id" {
+  value       = module.ebs_csi_eks_iam_role.service_account_policy_id
   description = "EBS CSI driver IAM policy ID"
 }
 
