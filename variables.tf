@@ -354,6 +354,22 @@ variable "argocd_apps" {
       chart      = "karpenter"
       repository = "https://charts.karpenter.sh"
       version    = "0.5.1"
+    },
+
+    {
+      name       = "loki"
+      namespace  = "logging"
+      repository = "https://grafana.github.io/helm-charts"
+      chart      = "loki-distributed"
+      version    = "0.43.0"
+    },
+
+    {
+      name       = "tempo"
+      namespace  = "tracing"
+      repository = "https://grafana.github.io/helm-charts"
+      chart      = "tempo-distributed"
+      version    = "0.15.3"
     }
   ]
 }

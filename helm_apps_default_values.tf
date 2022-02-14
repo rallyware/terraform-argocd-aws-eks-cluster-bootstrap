@@ -393,6 +393,31 @@ locals {
         role_enabled           = local.piggy_webhooks_iam_role_enabled
       }
     ))
+
+    loki = yamldecode(templatefile("${path.module}/helm-values/loki.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["loki"]["name"], "")
+        region                 = local.region
+        sts_regional_endpoints = local.loki_use_sts_regional_endpoints
+        role_arn               = module.loki_eks_iam_role.service_account_role_arn
+        compactor_role_arn     = module.loki_compactor_eks_iam_role.service_account_role_arn
+        role_enabled           = local.loki_iam_role_enabled
+        region                 = local.region
+        bucket_id              = module.loki_s3_bucket.bucket_id
+      }
+    ))
+
+    tempo = yamldecode(templatefile("${path.module}/helm-values/tempo.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["tempo"]["name"], "")
+        region                 = local.region
+        sts_regional_endpoints = local.tempo_use_sts_regional_endpoints
+        role_arn               = module.tempo_eks_iam_role.service_account_role_arn
+        role_enabled           = local.tempo_iam_role_enabled
+        region                 = local.region
+        bucket_id              = module.tempo_s3_bucket.bucket_id
+      }
+    ))
   }
 }
 

@@ -1,0 +1,160 @@
+fullnameOverride: ${fullname_override}
+
+compactor:
+  enabled: true
+  %{ if role_enabled }
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${compactor_role_arn}
+      eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+  %{ endif }
+
+gateway:
+  enabled: true
+  nginxConfig:
+    httpSnippet: client_max_body_size 100m;
+    serverSnippet: client_max_body_size 100m;
+
+loki:
+  config: |
+    auth_enabled: true
+
+    server:
+      http_listen_port: 3100
+
+    distributor:
+      ring:
+        kvstore:
+          store: memberlist
+
+    memberlist:
+      join_members:
+        - {{ include "loki.fullname" . }}-memberlist
+
+    ingester:
+      lifecycler:
+        ring:
+          kvstore:
+            store: memberlist
+          replication_factor: 1
+      max_chunk_age: 1h
+      chunk_idle_period: 1h
+      chunk_block_size: 262144
+      chunk_target_size: 1536000
+      chunk_encoding: snappy
+      chunk_retain_period: 1m
+      max_transfer_retries: 0
+      wal:
+        dir: /var/loki/wal
+
+    limits_config:
+      ingestion_rate_mb: 10
+      ingestion_burst_size_mb: 20
+      enforce_metric_name: false
+      reject_old_samples: true
+      reject_old_samples_max_age: 168h
+      max_cache_freshness_per_query: 10m
+      max_concurrent_tail_requests: 20
+
+    {{- if .Values.loki.schemaConfig}}
+    schema_config:
+    {{- toYaml .Values.loki.schemaConfig | nindent 2}}
+    {{- end}}
+    {{- if .Values.loki.storageConfig}}
+    storage_config:
+    {{- toYaml .Values.loki.storageConfig | nindent 2}}
+    {{- if .Values.indexGateway.enabled}}
+      index_gateway_client:
+        server_address: dns:///{{ include "loki.indexGatewayFullname" . }}:9095
+    {{- end}}
+    {{- end}}
+
+    chunk_store_config:
+      max_look_back_period: 0s
+
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 2160h
+      creation_grace_period: 10m
+      poll_interval: 2m
+
+    query_range:
+      align_queries_with_step: true
+      max_retries: 5
+      split_queries_by_interval: 15m
+      cache_results: true
+      results_cache:
+        cache:
+          enable_fifocache: true
+          fifocache:
+            max_size_items: 1024
+            validity: 24h
+
+    frontend_worker:
+      frontend_address: {{ include "loki.queryFrontendFullname" . }}:9095
+
+    frontend:
+      log_queries_longer_than: 5s
+      compress_responses: true
+      max_outstanding_per_tenant: 300
+      tail_proxy_url: http://{{ include "loki.querierFullname" . }}:3100
+
+%{ if role_enabled }
+    compactor:
+      shared_store: s3
+      working_directory: /loki/compactor
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 2160h
+      retention_delete_worker_count: 150
+      delete_request_cancel_period: 24h
+      max_compaction_parallelism: 1
+%{ endif }
+
+    ruler:
+      storage:
+        type: local
+        local:
+          directory: /var/loki/rules
+      ring:
+        kvstore:
+          store: memberlist
+      rule_path: /tmp/loki/scratch
+
+%{ if role_enabled }
+  schemaConfig:
+    configs:
+      - from: 2022-01-04
+        store: boltdb-shipper
+        object_store: s3
+        schema: v11
+        index:
+          prefix: loki_index_
+          period: 24h
+
+  storageConfig:
+    boltdb_shipper:
+      shared_store: s3
+      active_index_directory: /var/loki/index
+      cache_location: /var/loki/cache
+      cache_ttl: 168h
+    aws:
+      bucketnames: ${bucket}
+      region: ${region}
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+    eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+%{ endif }
+
+memcachedExporter:
+  enabled: true
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+
+tableManager:
+  enabled: true
