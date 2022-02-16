@@ -1,0 +1,17 @@
+fullnameOverride: ${fullname_override}
+
+%{ if role_enabled }
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+    eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+
+env:
+  open:
+    STORAGE: amazon
+    STORAGE_AMAZON_BUCKET: ${bucket_id}
+    STORAGE_AMAZON_REGION: ${region}
+    STORAGE_AMAZON_SSE: AES256
+    AWS_SDK_LOAD_CONFIG: true
+%{ endif }

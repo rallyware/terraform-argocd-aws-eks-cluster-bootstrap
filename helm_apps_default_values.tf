@@ -404,6 +404,7 @@ locals {
         role_enabled           = local.loki_iam_role_enabled
         region                 = local.region
         bucket_id              = module.loki_s3_bucket.bucket_id
+        currnet_time_rfc3339   = local.currnet_time_rfc3339
       }
     ))
 
@@ -414,8 +415,87 @@ locals {
         sts_regional_endpoints = local.tempo_use_sts_regional_endpoints
         role_arn               = module.tempo_eks_iam_role.service_account_role_arn
         role_enabled           = local.tempo_iam_role_enabled
-        region                 = local.region
         bucket_id              = module.tempo_s3_bucket.bucket_id
+      }
+    ))
+
+    external-dns = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["external-dns"]["name"], "")
+      "txtSuffix"        = local.eks_cluster_id
+    }
+
+    gha-controller = {
+      "fullnameOverride"       = try(local.argocd_helm_apps_set["gha-controller"]["name"], "")
+      "dockerRegistryMirror"   = "mirror.gcr.io"
+      "githubAPICacheDuration" = "60s"
+      "metrics" = {
+        "serviceMonitor" = "enabled"
+      }
+      "resources" = {
+        "limits" = {
+          "cpu"    = "100m"
+          "memory" = "128Mi"
+        }
+        "requests" = {
+          "cpu"    = "100m"
+          "memory" = "128Mi"
+        }
+      }
+      "syncPeriod" = "30s"
+    }
+
+    gha-runners = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["gha-runners"]["name"], "")
+    }
+
+    argo-events = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-events"]["name"], "")
+    }
+
+    argo-workflows = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-workflows"]["name"], "")
+    }
+
+    argocd-notifications = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["argocd-notifications"]["name"], "")
+    }
+
+    oauth2-proxy = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["oauth2-proxy"]["name"], "")
+      "metrics" = {
+        "enabled" = true
+        "port"    = 44180
+        "servicemonitor" = {
+          "enabled"            = true
+          "interval"           = "30s"
+          "namespace"          = "monitoring"
+          "prometheusInstance" = "default"
+          "scrapeTimeout"      = "10s"
+        }
+      }
+      "resources" = {
+        "limits" = {
+          "cpu"    = "100m"
+          "memory" = "100Mi"
+        }
+        "requests" = {
+          "cpu"    = "50m"
+          "memory" = "50Mi"
+        }
+      }
+      "sessionStorage" = {
+        "type" = "cookie"
+      }
+    }
+
+    chartmuseum = yamldecode(templatefile("${path.module}/helm-values/chartmuseum.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["chartmuseum"]["name"], "")
+        region                 = local.region
+        sts_regional_endpoints = local.chartmuseum_use_sts_regional_endpoints
+        role_arn               = module.chartmuseum_eks_iam_role.service_account_role_arn
+        role_enabled           = local.chartmuseum_iam_role_enabled
+        bucket_id              = module.chartmuseum_s3_bucket.bucket_id
       }
     ))
   }

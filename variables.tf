@@ -370,6 +370,64 @@ variable "argocd_apps" {
       repository = "https://grafana.github.io/helm-charts"
       chart      = "tempo-distributed"
       version    = "0.15.3"
-    }
+    },
+
+    {
+      name       = "external-dns"
+      namespace  = "infra"
+      chart      = "external-dns"
+      repository = "https://charts.bitnami.com/bitnami"
+      version    = "5.4.4"
+    },
+
+    {
+      name       = "gha-controller"
+      namespace  = "cicd"
+      repository = "https://actions-runner-controller.github.io/actions-runner-controller"
+      chart      = "actions-runner-controller"
+      version    = "0.15.1"
+      sync_wave  = 20
+    },
+
+    {
+      name       = "gha-runners"
+      namespace  = "cicd"
+      repository = "https://sweetops.github.io/helm-charts"
+      chart      = "github-actions-runners"
+      version    = "0.2.0"
+      sync_wave  = 25
+    },
+
+    {
+      name       = "argo-events"
+      namespace  = "argo"
+      repository = "https://argoproj.github.io/argo-helm"
+      chart      = "argo-events"
+      version    = "1.7.0"
+    },
+
+    {
+      name       = "argo-workflows"
+      namespace  = "argo"
+      repository = "https://argoproj.github.io/argo-helm"
+      chart      = "argo-workflows"
+      version    = "0.5.2"
+    },
+
+    {
+      name       = "argocd-notifications"
+      namespace  = "argo"
+      repository = "https://argoproj.github.io/argo-helm"
+      chart      = "argocd-notifications"
+      version    = "1.6.0"
+    },
+
+    {
+      name       = "oauth2-proxy"
+      namespace  = "infra"
+      repository = "https://oauth2-proxy.github.io/manifests"
+      chart      = "oauth2-proxy"
+      version    = "4.2.0"
+    },
   ]
 }

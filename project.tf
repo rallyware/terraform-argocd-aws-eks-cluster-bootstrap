@@ -1,6 +1,6 @@
 locals {
-  argocd_cluster_default_enabled    = module.this.enabled && var.argocd_cluster_default_enabled
-  argocd_project_default_enabled    = local.argocd_cluster_default_enabled && var.argocd_project_default_enabled
+  argocd_cluster_default_enabled    = local.enabled && var.argocd_cluster_default_enabled
+  argocd_project_default_enabled    = local.enabled && var.argocd_project_default_enabled
   argocd_destination_project        = local.argocd_project_default_enabled ? format("%s-bootstrap", local.eks_cluster_id) : local.argocd_app_config["project"]
   argocd_cluster_destination_server = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].server) : local.argocd_app_config["cluster_addr"]
   argocd_cluster_destination_name   = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : local.argocd_app_config["cluster_name"]
