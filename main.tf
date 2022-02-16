@@ -6,6 +6,7 @@ locals {
   partition                   = one(data.aws_partition.default[*].partition)
   account_id                  = one(data.aws_caller_identity.default[*].account_id)
   region                      = one(data.aws_region.default[*].name)
+  currnet_time_rfc3339        = one(time_static.default[*].rfc3339)
 }
 
 data "aws_partition" "default" {
@@ -23,5 +24,9 @@ data "aws_caller_identity" "default" {
 }
 
 data "aws_region" "default" {
+  count = local.enabled ? 1 : 0
+}
+
+resource "time_static" "default" {
   count = local.enabled ? 1 : 0
 }

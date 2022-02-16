@@ -7,7 +7,7 @@ locals {
       name         = ""
       project      = ""
       cluster_name = "in-cluster"
-      cluster_addr = ""
+      cluster_addr = "https://kubernetes.default.svc"
     }
   )
 
