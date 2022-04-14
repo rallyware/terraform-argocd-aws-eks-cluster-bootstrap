@@ -17,7 +17,7 @@ module "chartmuseum_label" {
 
 module "chartmuseum_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
-  version = "0.46.0"
+  version = "0.49.0"
 
   acl                 = "private"
   block_public_acls   = true
@@ -25,30 +25,6 @@ module "chartmuseum_s3_bucket" {
   ignore_public_acls  = true
   user_enabled        = false
   versioning_enabled  = false
-
-  lifecycle_rules = [
-    {
-      enabled = false
-      prefix  = ""
-      tags    = {}
-
-      enable_glacier_transition            = false
-      enable_deeparchive_transition        = false
-      enable_standard_ia_transition        = false
-      enable_current_object_expiration     = false
-      enable_noncurrent_version_expiration = false
-
-      abort_incomplete_multipart_upload_days         = 90
-      noncurrent_version_glacier_transition_days     = 30
-      noncurrent_version_deeparchive_transition_days = 60
-      noncurrent_version_expiration_days             = 90
-
-      standard_transition_days    = 30
-      glacier_transition_days     = 60
-      deeparchive_transition_days = 90
-      expiration_days             = 90
-    }
-  ]
 
   name    = "chartmuseum"
   context = module.chartmuseum_label.context
