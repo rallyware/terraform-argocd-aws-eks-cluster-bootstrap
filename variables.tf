@@ -376,8 +376,8 @@ variable "argocd_apps" {
       name       = "external-dns"
       namespace  = "infra"
       chart      = "external-dns"
-      repository = "https://charts.bitnami.com/bitnami"
-      version    = "5.4.4"
+      repository = "https://kubernetes-sigs.github.io/external-dns"
+      version    = "1.9.0"
     },
 
     {
