@@ -498,6 +498,17 @@ locals {
         bucket_id              = module.chartmuseum_s3_bucket.bucket_id
       }
     ))
+
+    karpenter = yamldecode(templatefile("${path.module}/helm-values/karpenter.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
+        sts_regional_endpoints = local.karpenter_use_sts_regional_endpoints
+        role_arn               = module.karpenter_eks_iam_role.service_account_role_arn
+        role_enabled           = local.karpenter_iam_role_enabled
+        cluster_name           = local.eks_cluster_id
+        cluster_endpoint       = local.eks_cluster_endpoint
+      }
+    ))
   }
 }
 

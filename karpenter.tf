@@ -29,7 +29,6 @@ data "aws_iam_policy_document" "karpenter" {
       "ec2:CreateFleet",
       "ec2:RunInstances",
       "ec2:CreateTags",
-      "iam:PassRole",
       "ec2:TerminateInstances",
       "ec2:DescribeLaunchTemplates",
       "ec2:DescribeInstances",
@@ -38,7 +37,8 @@ data "aws_iam_policy_document" "karpenter" {
       "ec2:DescribeInstanceTypes",
       "ec2:DescribeInstanceTypeOfferings",
       "ec2:DescribeAvailabilityZones",
-      "ssm:GetParameter"
+      "ssm:GetParameter",
+      "iam:PassRole",
     ]
   }
 }

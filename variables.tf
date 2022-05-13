@@ -353,7 +353,7 @@ variable "argocd_apps" {
       namespace  = "karpenter"
       chart      = "karpenter"
       repository = "https://charts.karpenter.sh"
-      version    = "0.5.1"
+      version    = "0.10.0"
     },
 
     {
