@@ -18,9 +18,9 @@ data "aws_iam_policy_document" "yace" {
   count = local.yace_iam_role_enabled ? (local.yace_iam_policy_enabled ? 1 : 0) : 0
 
   statement {
-    resources = [ "*" ]
-    effect = "Allow"
-    actions = [ 
+    resources = ["*"]
+    effect    = "Allow"
+    actions = [
       "tag:GetResources",
       "cloudwatch:GetMetricData",
       "cloudwatch:GetMetricStatistics",
