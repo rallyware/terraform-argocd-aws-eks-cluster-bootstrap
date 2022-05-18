@@ -365,6 +365,14 @@ variable "argocd_apps" {
     },
 
     {
+      name       = "yace"
+      namespace  = "monitoring"
+      repository = "https://mogaal.github.io/helm-charts"
+      chart      = "prometheus-yace-exporter"
+      version    = "0.5.0"
+    },
+
+    {
       name       = "tempo"
       namespace  = "tracing"
       repository = "https://grafana.github.io/helm-charts"

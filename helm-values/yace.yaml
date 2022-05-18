@@ -1,0 +1,126 @@
+fullnameOverride: ${fullname_override}
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+%{ if role_enabled }
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: ${role_arn}
+    eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+%{ endif }
+
+config: |-
+  discovery:
+    exportedTagsOnMetrics:
+      ec2:
+        - Name
+      ebs:
+        - VolumeId
+    jobs:
+    - region: ${region}
+      type: "es"
+      searchTags:
+        - Key: type
+          Value: ^(easteregg|k8s)$
+      metrics:
+        - name: FreeStorageSpace
+          statistics:
+          - 'Sum'
+          period: 600
+          length: 60
+        - name: ClusterStatus.green
+          statistics:
+          - 'Minimum'
+          period: 600
+          length: 60
+        - name: ClusterStatus.yellow
+          statistics:
+          - 'Maximum'
+          period: 600
+          length: 60
+        - name: ClusterStatus.red
+          statistics:
+          - 'Maximum'
+          period: 600
+          length: 60
+    - type: "elb"
+      region: ${region}
+      searchTags:
+        - Key: KubernetesCluster
+          Value: production-19
+      metrics:
+        - name: HealthyHostCount
+          statistics:
+          - 'Minimum'
+          period: 600
+          length: 600
+        - name: HTTPCode_Backend_4XX
+          statistics:
+          - 'Sum'
+          period: 60
+          length: 900
+          delay: 300
+          nilToZero: true
+    - type: "alb"
+      region: ${region}
+      searchTags:
+        - Key: kubernetes.io/service-name
+          Value: .*
+      metrics:
+        - name: UnHealthyHostCount
+          statistics: [Maximum]
+          period: 60
+          length: 600
+    - type: "s3"
+      region: ${region}
+      searchTags:
+        - Key: type
+          Value: public
+      additionalDimensions:
+        - name: StorageType
+          value: StandardStorage
+      metrics:
+        - name: NumberOfObjects
+          statistics:
+            - Average
+          period: 86400
+          length: 172800
+          addCloudwatchTimestamp: true
+        - name: BucketSizeBytes
+          statistics:
+            - Average
+          period: 86400
+          length: 172800
+          addCloudwatchTimestamp: true
+    - type: "ebs"
+      region: ${region}
+      searchTags:
+        - Key: type
+          Value: public
+      metrics:
+        - name: BurstBalance
+          statistics:
+          - 'Minimum'
+          period: 600
+          length: 600
+  static:
+    - namespace: AWS/AutoScaling
+      region: ${region}
+      dimensions:
+      - name: AutoScalingGroupName
+        value: Test
+      customTags:
+        - Key: CustomTag
+          Value: CustomValue
+      metrics:
+        - name: GroupInServiceInstances
+          statistics:
+          - 'Minimum'
+          period: 60
+          length: 300
