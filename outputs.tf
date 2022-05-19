@@ -163,6 +163,31 @@ output "tempo_service_account_policy_id" {
   description = "Grafana Tempo IAM policy ID"
 }
 
+output "yace_service_account_role_name" {
+  value       = module.yace_eks_iam_role.service_account_role_name
+  description = "prometheus-yace-exporter IAM role name"
+}
+
+output "yace_service_account_role_unique_id" {
+  value       = module.yace_eks_iam_role.service_account_role_unique_id
+  description = "prometheus-yace-exporter IAM role unique ID"
+}
+
+output "yace_service_account_role_arn" {
+  value       = module.yace_eks_iam_role.service_account_role_arn
+  description = "prometheus-yace-exporter IAM role ARN"
+}
+
+output "yace_service_account_policy_name" {
+  value       = module.yace_eks_iam_role.service_account_policy_name
+  description = "prometheus-yace-exporter IAM policy name"
+}
+
+output "yace_service_account_policy_id" {
+  value       = module.yace_eks_iam_role.service_account_policy_id
+  description = "prometheus-yace-exporter IAM policy ID"
+}
+
 output "loki_s3_bucket_id" {
   value       = module.loki_s3_bucket.bucket_id
   description = "Grafana Loki S3 bucket name"
