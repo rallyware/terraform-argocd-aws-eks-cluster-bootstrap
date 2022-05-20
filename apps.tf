@@ -8,6 +8,10 @@ locals {
       project      = ""
       cluster_name = "in-cluster"
       cluster_addr = "https://kubernetes.default.svc"
+      wait         = false
+      create       = "60m"
+      update       = "60m"
+      delete       = "60m"
     }
   )
 
@@ -63,6 +67,8 @@ resource "argocd_application" "apps" {
     labels    = module.this.tags
   }
 
+  wait = var.argocd_app_config["wait"]
+
   spec {
     project = local.argocd_destination_project
 
@@ -106,9 +112,9 @@ resource "argocd_application" "apps" {
   }
 
   timeouts {
-    create = "15m"
-    update = "15m"
-    delete = "5m"
+    create = local.argocd_app_config["create"]
+    update = local.argocd_app_config["update"]
+    delete = local.argocd_app_config["delete"]
   }
 
   depends_on = [

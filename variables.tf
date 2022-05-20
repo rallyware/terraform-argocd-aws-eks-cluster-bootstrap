@@ -67,10 +67,18 @@ variable "argocd_app_config" {
       project      = optional(string)
       cluster_name = optional(string)
       cluster_addr = optional(string)
+      wait         = optional(bool)
+      create       = optional(string)
+      update       = optional(string)
+      delete       = optional(string)
     }
   )
   default = {
     cluster_name = "in-cluster"
+    create       = "60m"
+    update       = "60m"
+    delete       = "60m"
+    wait         = false
   }
   description = "A parent app configuration. Required when `argocd_cluster_default_enabled` is `false`"
 }
