@@ -134,7 +134,7 @@ variable "argocd_apps" {
       annotations     = optional(map(string))
       ignore_differences = optional(list(object(
         {
-          group             = string
+          group             = optional(string)
           kind              = string
           jqPathExpressions = optional(list(string))
           jsonPointers      = optional(list(string))
@@ -365,6 +365,14 @@ variable "argocd_apps" {
       chart      = "karpenter"
       repository = "https://charts.karpenter.sh"
       version    = "0.10.0"
+      ignore_differences = [
+        {
+          kind = "Secret"
+          jsonPointers = [
+            "/data"
+          ]
+        }
+      ]
     },
 
     {
