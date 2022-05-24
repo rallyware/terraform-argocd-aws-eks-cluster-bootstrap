@@ -1,8 +1,8 @@
 nameOverride: ""
 fullnameOverride: ""
 
-syncOptions: {}
-  # CreateNamespace: true
+syncOptions:
+  CreateNamespace: true
   # Replace: false
 
 syncPolicy:
@@ -10,7 +10,8 @@ syncPolicy:
   selfHeal: true
   # allowEmpty: true
 
-applications: []
+applications:
+  []
   # - name: prometheus
   #   namespace: monitoring
   #   chart: prometheus-community
@@ -20,3 +21,7 @@ applications: []
   #   syncWave: 10
   #   values: |
   #     fullnameOverride: prometheus
+  #   syncOptions:
+  #     Replace: true
+  #   syncPolicy:
+  #     prune: false

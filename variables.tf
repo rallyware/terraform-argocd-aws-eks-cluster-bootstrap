@@ -56,7 +56,7 @@ variable "app_of_apps_helm_chart" {
   default = {
     chart      = "argocd-app-of-apps"
     repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-    version    = "0.2.1"
+    version    = "0.3.0"
   }
 }
 
@@ -136,9 +136,12 @@ variable "argocd_apps" {
         {
           group             = string
           kind              = string
-          jqPathExpressions = list(string)
+          jqPathExpressions = optional(list(string))
+          jsonPointers      = optional(list(string))
         }
       )))
+      sync_policy                = optional(map(string))
+      sync_options               = optional(map(string))
       create_default_iam_policy  = optional(bool)
       create_default_iam_role    = optional(bool)
       iam_policy_document        = optional(string)
