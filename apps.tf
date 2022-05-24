@@ -43,6 +43,8 @@ locals {
         ignoreDifferences = app.ignore_differences
         clusterName       = length(app.cluster) > 0 ? app.cluster : local.argocd_cluster_destination_name
         projectName       = length(app.project) > 0 ? app.project : local.argocd_destination_project
+        syncPolicy        = app.sync_policy
+        syncOptions       = app.sync_options
       }
     ]
   }

@@ -36,16 +36,16 @@ spec:
         {{ .values | nindent 8 }}
 {{- end }}
 {{- end }}
-{{- if $.Values.syncPolicy }}
+{{- if or .syncPolicy $.Values.syncPolicy }}
   syncPolicy:
     automated:
-      {{- with $.Values.syncPolicy }}
+      {{- with (.syncPolicy | default $.Values.syncPolicy) }}
       {{- toYaml . | nindent 6 }}
       {{- end }}
 {{- end }}
-{{- if and $.Values.syncOptions $.Values.syncPolicy }}
+{{- if or (.syncOptions | default $.Values.syncOptions) (.syncPolicy | default $.Values.syncPolicy) }}
     syncOptions:
-{{- range $name, $value := $.Values.syncOptions }}
+{{- range $name, $value := (.syncOptions | default $.Values.syncOptions) }}
       - {{ $name }}={{ $value }}
 {{- end }}
 {{- end }}
