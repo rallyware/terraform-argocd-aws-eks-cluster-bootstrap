@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "loki" {
 
 module "loki_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.1"
+  version = "0.1.2"
 
   aws_iam_policy_document     = one(data.aws_iam_policy_document.loki[*].json)
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
@@ -66,7 +66,7 @@ module "loki_eks_iam_role" {
 
 module "loki_compactor_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.1"
+  version = "0.1.2"
 
   aws_iam_policy_document     = one(data.aws_iam_policy_document.loki[*].json)
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
