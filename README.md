@@ -30,11 +30,11 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
-| <a name="provider_time"></a> [time](#provider\_time) | >= 0.7 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 3.0.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.13.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.7.2 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 3.3.0 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | 0.17.23 |
 
 ## Modules
 
@@ -43,7 +43,7 @@ module "apps" {
 | <a name="module_apps_label"></a> [apps\_label](#module\_apps\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_chartmuseum_eks_iam_role"></a> [chartmuseum\_eks\_iam\_role](#module\_chartmuseum\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_chartmuseum_label"></a> [chartmuseum\_label](#module\_chartmuseum\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_chartmuseum_s3_bucket"></a> [chartmuseum\_s3\_bucket](#module\_chartmuseum\_s3\_bucket) | cloudposse/s3-bucket/aws | 0.49.0 |
+| <a name="module_chartmuseum_s3_bucket"></a> [chartmuseum\_s3\_bucket](#module\_chartmuseum\_s3\_bucket) | cloudposse/s3-bucket/aws | 2.0.1 |
 | <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_ebs_csi_eks_iam_role"></a> [ebs\_csi\_eks\_iam\_role](#module\_ebs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
@@ -54,17 +54,17 @@ module "apps" {
 | <a name="module_loki_compactor_eks_iam_role"></a> [loki\_compactor\_eks\_iam\_role](#module\_loki\_compactor\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_loki_eks_iam_role"></a> [loki\_eks\_iam\_role](#module\_loki\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_loki_label"></a> [loki\_label](#module\_loki\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_loki_s3_bucket"></a> [loki\_s3\_bucket](#module\_loki\_s3\_bucket) | cloudposse/s3-bucket/aws | 0.49.0 |
+| <a name="module_loki_s3_bucket"></a> [loki\_s3\_bucket](#module\_loki\_s3\_bucket) | cloudposse/s3-bucket/aws | 2.0.1 |
 | <a name="module_piggy_webhooks_eks_iam_role"></a> [piggy\_webhooks\_eks\_iam\_role](#module\_piggy\_webhooks\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_piggy_webhooks_label"></a> [piggy\_webhooks\_label](#module\_piggy\_webhooks\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_tempo_eks_iam_role"></a> [tempo\_eks\_iam\_role](#module\_tempo\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_tempo_label"></a> [tempo\_label](#module\_tempo\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_tempo_s3_bucket"></a> [tempo\_s3\_bucket](#module\_tempo\_s3\_bucket) | cloudposse/s3-bucket/aws | 0.49.0 |
+| <a name="module_tempo_s3_bucket"></a> [tempo\_s3\_bucket](#module\_tempo\_s3\_bucket) | cloudposse/s3-bucket/aws | 2.0.1 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 | <a name="module_velero_eks_iam_role"></a> [velero\_eks\_iam\_role](#module\_velero\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_velero_kms_key"></a> [velero\_kms\_key](#module\_velero\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
 | <a name="module_velero_label"></a> [velero\_label](#module\_velero\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_velero_s3_bucket"></a> [velero\_s3\_bucket](#module\_velero\_s3\_bucket) | cloudposse/s3-bucket/aws | 0.49.0 |
+| <a name="module_velero_s3_bucket"></a> [velero\_s3\_bucket](#module\_velero\_s3\_bucket) | cloudposse/s3-bucket/aws | 2.0.1 |
 | <a name="module_yace_eks_iam_role"></a> [yace\_eks\_iam\_role](#module\_yace\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_yace_label"></a> [yace\_label](#module\_yace\_label) | cloudposse/label/null | 0.25.0 |
 

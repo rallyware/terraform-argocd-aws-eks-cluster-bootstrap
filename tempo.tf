@@ -16,7 +16,7 @@ module "tempo_label" {
 
 module "tempo_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
-  version = "0.49.0"
+  version = "2.0.1"
 
   acl                 = "private"
   block_public_acls   = true
