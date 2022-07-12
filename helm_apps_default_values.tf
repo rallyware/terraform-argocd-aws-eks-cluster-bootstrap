@@ -419,13 +419,13 @@ locals {
       }
     ))
 
-    yace = yamldecode(templatefile("${path.module}/helm-values/yace.yaml",
+    prometheus-yace-exporter = yamldecode(templatefile("${path.module}/helm-values/yace.yaml",
       {
-        fullname_override      = try(local.argocd_helm_apps_set["yace"]["name"], "")
+        fullname_override      = try(local.argocd_helm_apps_set["prometheus-yace-exporter"]["name"], "")
         region                 = local.region
-        sts_regional_endpoints = local.yace_use_sts_regional_endpoints
-        role_arn               = module.yace_eks_iam_role.service_account_role_arn
-        role_enabled           = local.yace_iam_role_enabled
+        sts_regional_endpoints = local.prometheus_yace_exporter_use_sts_regional_endpoints
+        role_arn               = module.prometheus_yace_exporter_eks_iam_role.service_account_role_arn
+        role_enabled           = local.prometheus_yace_exporter_iam_role_enabled
       }
     ))
 
