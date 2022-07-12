@@ -384,7 +384,7 @@ variable "argocd_apps" {
     },
 
     {
-      name       = "yace"
+      name       = "prometheus-yace-exporter"
       namespace  = "monitoring"
       repository = "https://mogaal.github.io/helm-charts"
       chart      = "prometheus-yace-exporter"
