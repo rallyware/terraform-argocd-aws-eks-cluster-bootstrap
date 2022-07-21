@@ -56,7 +56,7 @@ variable "app_of_apps_helm_chart" {
   default = {
     chart      = "argocd-app-of-apps"
     repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-    version    = "0.3.0"
+    version    = "0.4.0"
   }
 }
 

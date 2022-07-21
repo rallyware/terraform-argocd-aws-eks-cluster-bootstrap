@@ -5,6 +5,8 @@ kind: Application
 metadata:
   name: {{ .name }}
   namespace: {{ $.Release.Namespace }}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd.argoproj.io/sync-wave: {{ .syncWave | quote }} 
     {{- with .annotations }}
