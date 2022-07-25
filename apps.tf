@@ -26,8 +26,6 @@ locals {
       allowEmpty = true
     }
 
-    annotations = var.argocd_app_annotations
-
     applications = [for app in local.argocd_apps :
       {
         name              = module.apps_label[app.name].id
@@ -64,9 +62,10 @@ resource "argocd_application" "apps" {
   count = local.enabled ? 1 : 0
 
   metadata {
-    name      = local.argocd_app_name
-    namespace = var.argocd_namespace
-    labels    = module.this.tags
+    name        = local.argocd_app_name
+    namespace   = var.argocd_namespace
+    labels      = module.this.tags
+    annotations = var.argocd_app_annotations
   }
 
   wait = var.argocd_app_config["wait"]
