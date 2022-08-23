@@ -108,7 +108,7 @@ resource "argocd_application" "apps" {
       sync_options = length(lookup(local.argocd_app_config, "sync_options", [])) > 0 ? local.argocd_app_config["sync_options"] : ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"]
 
       dynamic "retry" {
-        for_each = local.argocd_app_config["retry_limit"] == 0 ? [1] : []
+        for_each = local.argocd_app_config["retry_limit"] > 0 ? [1] : []
 
         content {
           limit = local.argocd_app_config["retry_limit"]
