@@ -33,6 +33,8 @@ spec:
 {{- if .chart }}
     helm:
       releaseName: {{ .releaseName }}
+      skipCrds: {{ .skipCrds }}
+      valueFiles: {{ .valueFiles }}
 {{- if .values }}
       values: |
         {{ .values | nindent 8 }}

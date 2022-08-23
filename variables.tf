@@ -56,29 +56,44 @@ variable "app_of_apps_helm_chart" {
   default = {
     chart      = "argocd-app-of-apps"
     repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-    version    = "0.4.0"
+    version    = "0.5.0"
   }
 }
 
 variable "argocd_app_config" {
   type = object(
     {
-      name         = optional(string)
-      project      = optional(string)
-      cluster_name = optional(string)
-      cluster_addr = optional(string)
-      wait         = optional(bool)
-      create       = optional(string)
-      update       = optional(string)
-      delete       = optional(string)
+      name                       = optional(string)
+      project                    = optional(string)
+      cluster_name               = optional(string)
+      cluster_addr               = optional(string)
+      wait                       = optional(bool)
+      create                     = optional(string)
+      update                     = optional(string)
+      delete                     = optional(string)
+      sync_options               = optional(list(string))
+      automated_prune            = optional(bool)
+      automated_self_heal        = optional(bool)
+      automated_allow_empty      = optional(bool)
+      retry_limit                = optional(number)
+      retry_backoff_duration     = optional(string)
+      retry_backoff_max_duration = optional(string)
+      retry_backoff_factor       = optional(number)
     }
   )
   default = {
-    cluster_name = "in-cluster"
-    create       = "60m"
-    update       = "60m"
-    delete       = "60m"
-    wait         = false
+    cluster_name               = "in-cluster"
+    create                     = "60m"
+    update                     = "60m"
+    delete                     = "60m"
+    wait                       = false
+    automated_prune            = true
+    automated_self_heal        = true
+    automated_allow_empty      = true
+    retry_limit                = 2
+    retry_backoff_duration     = "30s"
+    retry_backoff_max_duration = "1m"
+    retry_backoff_factor       = 2
   }
   description = "A parent app configuration. Required when `argocd_cluster_default_enabled` is `false`"
 }
@@ -98,6 +113,7 @@ variable "argocd_app_default_params" {
       path                       = string
       cluster                    = string
       project                    = string
+      skip_crds                  = bool
     }
   )
 
@@ -114,6 +130,7 @@ variable "argocd_app_default_params" {
     path                       = ""
     cluster                    = ""
     project                    = ""
+    skip_crds                  = false
   }
 }
 
@@ -129,6 +146,8 @@ variable "argocd_apps" {
       chart           = optional(string)
       path            = optional(string)
       override_values = optional(string)
+      skip_crds       = optional(bool)
+      value_files     = optional(list(string))
       max_history     = optional(number)
       sync_wave       = optional(number)
       annotations     = optional(map(string))
