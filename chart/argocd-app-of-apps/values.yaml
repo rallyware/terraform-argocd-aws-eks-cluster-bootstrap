@@ -19,8 +19,10 @@ applications:
   #   targetRevision: 15.0.1
   #   annotations: {}
   #   syncWave: 10
+  #   skipCrds: false
   #   values: |
   #     fullnameOverride: prometheus
+  #   valueFiles: []
   #   syncOptions:
   #     Replace: true
   #   syncPolicy:
