@@ -30,11 +30,11 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 3.0.1 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.13.0 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.7.2 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | 3.3.0 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | 0.17.23 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | >= 0.7 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
 ## Modules
 
