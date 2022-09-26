@@ -1,26 +1,6 @@
 locals {
-  argocd_apps     = local.enabled ? [for app in var.argocd_apps : defaults(app, var.argocd_app_default_params)] : []
-  argocd_app_name = length(local.argocd_app_config["name"]) > 0 ? local.argocd_app_config["name"] : local.argocd_destination_project
-
-  argocd_app_config = defaults(var.argocd_app_config,
-    {
-      name                       = ""
-      project                    = ""
-      cluster_name               = "in-cluster"
-      cluster_addr               = "https://kubernetes.default.svc"
-      wait                       = false
-      create                     = "60m"
-      update                     = "60m"
-      delete                     = "60m"
-      automated_prune            = true
-      automated_self_heal        = true
-      automated_allow_empty      = true
-      retry_limit                = 2
-      retry_backoff_duration     = "30s"
-      retry_backoff_max_duration = "1m"
-      retry_backoff_factor       = 2
-    }
-  )
+  argocd_apps     = local.enabled ? var.argocd_apps : []
+  argocd_app_name = can(var.argocd_app_config["name"]) ? var.argocd_app_config["name"] : local.argocd_destination_project
 
   argocd_helm_apps_value = {
     syncOptions = {
@@ -42,16 +22,16 @@ locals {
         path              = app.path
         targetRevision    = app.version
         syncWave          = app.sync_wave
-        values            = try(data.utils_deep_merge_yaml.argocd_helm_apps[app.name].output, "")
+        values            = data.utils_deep_merge_yaml.argocd_helm_apps[app.name].output
         releaseName       = app.name
         annotations       = app.annotations
-        ignoreDifferences = app.ignore_differences
-        clusterName       = length(app.cluster) > 0 ? app.cluster : local.argocd_cluster_destination_name
-        projectName       = length(app.project) > 0 ? app.project : local.argocd_destination_project
+        ignoreDifferences = app.ignore_differences != null ? app.ignore_differences : []
+        clusterName       = app.cluster != null ? app.cluster : local.argocd_cluster_destination_name
+        projectName       = app.project != null ? app.project : local.argocd_destination_project
         syncPolicy        = app.sync_policy
         syncOptions       = app.sync_options
         skipCrds          = app.skip_crds
-        valueFiles        = lookup(app, "value_files", [])
+        valueFiles        = app.value_files
       }
     ]
   }
@@ -77,7 +57,7 @@ resource "argocd_application" "apps" {
     annotations = var.argocd_app_annotations
   }
 
-  wait = local.argocd_app_config["wait"]
+  wait = var.argocd_app_config["wait"]
 
   spec {
     project = local.argocd_destination_project
@@ -94,29 +74,29 @@ resource "argocd_application" "apps" {
     }
 
     destination {
-      name      = local.argocd_app_config["cluster_name"]
+      name      = var.argocd_app_config["cluster_name"]
       namespace = var.argocd_namespace
     }
 
     sync_policy {
       automated = {
-        prune       = local.argocd_app_config["automated_prune"]
-        self_heal   = local.argocd_app_config["automated_self_heal"]
-        allow_empty = local.argocd_app_config["automated_allow_empty"]
+        prune       = var.argocd_app_config["automated_prune"]
+        self_heal   = var.argocd_app_config["automated_self_heal"]
+        allow_empty = var.argocd_app_config["automated_allow_empty"]
       }
 
-      sync_options = length(lookup(local.argocd_app_config, "sync_options", [])) > 0 ? local.argocd_app_config["sync_options"] : ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"]
+      sync_options = var.argocd_app_config["sync_options"]
 
       dynamic "retry" {
-        for_each = local.argocd_app_config["retry_limit"] > 0 ? [1] : []
+        for_each = var.argocd_app_config["retry_limit"] > 0 ? [1] : []
 
         content {
-          limit = local.argocd_app_config["retry_limit"]
+          limit = var.argocd_app_config["retry_limit"]
 
           backoff = {
-            duration     = local.argocd_app_config["retry_backoff_duration"]
-            max_duration = local.argocd_app_config["retry_backoff_max_duration"]
-            factor       = local.argocd_app_config["retry_backoff_factor"]
+            duration     = var.argocd_app_config["retry_backoff_duration"]
+            max_duration = var.argocd_app_config["retry_backoff_max_duration"]
+            factor       = var.argocd_app_config["retry_backoff_factor"]
           }
         }
       }
@@ -124,9 +104,9 @@ resource "argocd_application" "apps" {
   }
 
   timeouts {
-    create = local.argocd_app_config["create"]
-    update = local.argocd_app_config["update"]
-    delete = local.argocd_app_config["delete"]
+    create = var.argocd_app_config["create"]
+    update = var.argocd_app_config["update"]
+    delete = var.argocd_app_config["delete"]
   }
 
   depends_on = [

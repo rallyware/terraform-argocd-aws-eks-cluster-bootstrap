@@ -1,9 +1,9 @@
 locals {
   argocd_cluster_default_enabled    = local.enabled && var.argocd_cluster_default_enabled
   argocd_project_default_enabled    = local.enabled && var.argocd_project_default_enabled
-  argocd_destination_project        = local.argocd_project_default_enabled ? format("%s-bootstrap", local.eks_cluster_id) : local.argocd_app_config["project"]
-  argocd_cluster_destination_server = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].server) : local.argocd_app_config["cluster_addr"]
-  argocd_cluster_destination_name   = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : local.argocd_app_config["cluster_name"]
+  argocd_destination_project        = local.argocd_project_default_enabled ? format("%s-bootstrap", local.eks_cluster_id) : var.argocd_app_config["project"]
+  argocd_cluster_destination_server = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].server) : var.argocd_app_config["cluster_addr"]
+  argocd_cluster_destination_name   = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : var.argocd_app_config["cluster_name"]
 }
 
 resource "argocd_cluster" "default" {
@@ -67,11 +67,7 @@ resource "argocd_project" "default" {
 
 resource "argocd_project" "additional" {
   for_each = { for project in var.argocd_additional_projects :
-    project.name => defaults(project,
-      {
-        description = "Managed by Terraform"
-      }
-    )
+    project.name => project
   }
 
   metadata {

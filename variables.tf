@@ -31,7 +31,7 @@ variable "argocd_additional_projects" {
   type = list(object(
     {
       name        = string
-      description = optional(string)
+      description = optional(string, "Managed by Terraform")
     }
   ))
   default     = []
@@ -65,73 +65,24 @@ variable "argocd_app_config" {
     {
       name                       = optional(string)
       project                    = optional(string)
-      cluster_name               = optional(string)
-      cluster_addr               = optional(string)
-      wait                       = optional(bool)
-      create                     = optional(string)
-      update                     = optional(string)
-      delete                     = optional(string)
-      sync_options               = optional(list(string))
-      automated_prune            = optional(bool)
-      automated_self_heal        = optional(bool)
-      automated_allow_empty      = optional(bool)
-      retry_limit                = optional(number)
-      retry_backoff_duration     = optional(string)
-      retry_backoff_max_duration = optional(string)
-      retry_backoff_factor       = optional(number)
+      cluster_name               = optional(string, "in-cluster")
+      cluster_addr               = optional(string, "https://kubernetes.default.svc")
+      wait                       = optional(bool, false)
+      create                     = optional(string, "60m")
+      update                     = optional(string, "60m")
+      delete                     = optional(string, "60m")
+      sync_options               = optional(list(string), ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"])
+      automated_prune            = optional(bool, true)
+      automated_self_heal        = optional(bool, true)
+      automated_allow_empty      = optional(bool, true)
+      retry_limit                = optional(number, 2)
+      retry_backoff_duration     = optional(string, "30s")
+      retry_backoff_max_duration = optional(string, "1m")
+      retry_backoff_factor       = optional(number, 2)
     }
   )
-  default = {
-    cluster_name               = "in-cluster"
-    create                     = "60m"
-    update                     = "60m"
-    delete                     = "60m"
-    wait                       = false
-    automated_prune            = true
-    automated_self_heal        = true
-    automated_allow_empty      = true
-    retry_limit                = 2
-    retry_backoff_duration     = "30s"
-    retry_backoff_max_duration = "1m"
-    retry_backoff_factor       = 2
-  }
+  default     = {}
   description = "A parent app configuration. Required when `argocd_cluster_default_enabled` is `false`"
-}
-
-variable "argocd_app_default_params" {
-  type = object(
-    {
-      max_history                = number
-      override_values            = string
-      sync_wave                  = number
-      create_default_iam_policy  = bool
-      create_default_iam_role    = bool
-      iam_policy_document        = string
-      use_sts_regional_endpoints = bool
-      namespace                  = string
-      chart                      = string
-      path                       = string
-      cluster                    = string
-      project                    = string
-      skip_crds                  = bool
-    }
-  )
-
-  default = {
-    max_history                = 10
-    override_values            = ""
-    sync_wave                  = 50
-    create_default_iam_policy  = true
-    create_default_iam_role    = true
-    iam_policy_document        = "{}"
-    use_sts_regional_endpoints = false
-    namespace                  = "default"
-    chart                      = ""
-    path                       = ""
-    cluster                    = ""
-    project                    = ""
-    skip_crds                  = false
-  }
 }
 
 variable "argocd_apps" {
@@ -142,29 +93,31 @@ variable "argocd_apps" {
       version         = string
       cluster         = optional(string)
       project         = optional(string)
-      namespace       = optional(string)
-      chart           = optional(string)
-      path            = optional(string)
+      namespace       = optional(string, "default")
+      chart           = optional(string, "")
+      path            = optional(string, "")
       override_values = optional(string)
-      skip_crds       = optional(bool)
-      value_files     = optional(list(string))
-      max_history     = optional(number)
-      sync_wave       = optional(number)
-      annotations     = optional(map(string))
-      ignore_differences = optional(list(object(
-        {
-          group             = optional(string)
-          kind              = string
-          jqPathExpressions = optional(list(string))
-          jsonPointers      = optional(list(string))
-        }
-      )))
-      sync_policy                = optional(map(string))
-      sync_options               = optional(map(string))
-      create_default_iam_policy  = optional(bool)
-      create_default_iam_role    = optional(bool)
-      iam_policy_document        = optional(string)
-      use_sts_regional_endpoints = optional(bool)
+      skip_crds       = optional(bool, false)
+      value_files     = optional(list(string), [])
+      max_history     = optional(number, 10)
+      sync_wave       = optional(number, 50)
+      annotations     = optional(map(string), {})
+      ignore_differences = optional(
+        list(object(
+          {
+            group             = optional(string)
+            kind              = optional(string)
+            jqPathExpressions = optional(list(string))
+            jsonPointers      = optional(list(string))
+          }
+        ))
+      )
+      sync_policy                = optional(map(string), {})
+      sync_options               = optional(map(string), {})
+      create_default_iam_policy  = optional(bool, true)
+      create_default_iam_role    = optional(bool, true)
+      iam_policy_document        = optional(string, "{}")
+      use_sts_regional_endpoints = optional(bool, false)
     }
   ))
   default = [
