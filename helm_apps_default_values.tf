@@ -1,6 +1,6 @@
 locals {
   argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_apps : app.name] : []
-  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if can(app.chart) } : {}
+  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if app.chart != null } : {}
   argocd_helm_apps_default_values = {
     argo-rollouts = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
