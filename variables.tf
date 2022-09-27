@@ -96,7 +96,7 @@ variable "argocd_apps" {
       namespace       = optional(string, "default")
       chart           = optional(string, "")
       path            = optional(string, "")
-      override_values = optional(string)
+      override_values = optional(string, "")
       skip_crds       = optional(bool, false)
       value_files     = optional(list(string), [])
       max_history     = optional(number, 10)
