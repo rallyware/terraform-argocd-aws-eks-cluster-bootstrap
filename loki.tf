@@ -56,7 +56,7 @@ module "loki_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.2"
 
-  aws_iam_policy_document     = one(data.aws_iam_policy_document.loki[*].json)
+  aws_iam_policy_document     = local.loki_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
   service_account_name        = try(local.argocd_helm_apps_set["loki"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["loki"]["namespace"], "")
@@ -68,7 +68,7 @@ module "loki_compactor_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
   version = "0.1.2"
 
-  aws_iam_policy_document     = one(data.aws_iam_policy_document.loki[*].json)
+  aws_iam_policy_document     = local.loki_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
   service_account_name        = format("%s-%s", try(local.argocd_helm_apps_set["loki"]["name"], ""), "compactor")
   service_account_namespace   = try(local.argocd_helm_apps_set["loki"]["namespace"], "")

@@ -1,6 +1,6 @@
 locals {
   argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_apps : app.name] : []
-  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if length(app.chart) > 0 } : {}
+  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if app.chart != null } : {}
   argocd_helm_apps_default_values = {
     argo-rollouts = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
@@ -527,6 +527,6 @@ data "utils_deep_merge_yaml" "argocd_helm_apps" {
 
   input = [
     yamlencode(try(local.argocd_helm_apps_default_values[each.key], {})),
-    each.value.override_values
+    each.value.override_values != null ? each.value.override_values : ""
   ]
 }
