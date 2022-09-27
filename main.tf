@@ -18,10 +18,6 @@ data "aws_eks_cluster" "default" {
   name = var.eks_cluster_id
 }
 
-data "aws_caller_identity" "default" {
-  count = local.enabled ? 1 : 0
-}
-
 data "aws_region" "default" {
   count = local.enabled ? 1 : 0
 }
