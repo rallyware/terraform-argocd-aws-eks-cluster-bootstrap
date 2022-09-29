@@ -26,6 +26,7 @@ module "apps" {
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
 | <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >= 1.2 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.2.0 |
+| <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.7 |
 | <a name="requirement_tls"></a> [tls](#requirement\_tls) | >= 3.0 |
 | <a name="requirement_utils"></a> [utils](#requirement\_utils) | >= 0.14.0 |
@@ -36,7 +37,7 @@ module "apps" {
 |------|---------|
 | <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2 |
 | <a name="provider_time"></a> [time](#provider\_time) | >= 0.7 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
 | <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
@@ -82,7 +83,11 @@ module "apps" {
 | [argocd_project.additional](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
 | [argocd_project.default](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
 | [kubernetes_namespace.linkerd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
+| [kubernetes_namespace.linkerd_jaeger](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
+| [kubernetes_namespace.linkerd_viz](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
 | [kubernetes_secret.linkerd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
+| [kubernetes_secret.linkerd_jaeger_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
+| [kubernetes_secret.linkerd_viz_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.linkerd_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [time_static.default](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 | [tls_private_key.linkerd](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
