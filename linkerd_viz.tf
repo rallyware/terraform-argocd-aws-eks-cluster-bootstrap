@@ -12,17 +12,12 @@ resource "kubernetes_namespace" "linkerd_viz" {
     }
 
     annotations = {
-      name = try(local.argocd_helm_apps_set["linkerd-viz"]["namespace"], "")
+      name                = try(local.argocd_helm_apps_set["linkerd-viz"]["namespace"], "")
+      "linkerd.io/inject" = "enabled"
     }
 
     name = try(local.argocd_helm_apps_set["linkerd-viz"]["namespace"], "")
 
-  }
-
-  lifecycle {
-    ignore_changes = [
-      metadata[0].annotations
-    ]
   }
 }
 

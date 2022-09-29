@@ -12,7 +12,8 @@ resource "kubernetes_namespace" "linkerd_jaeger" {
     }
 
     annotations = {
-      name = try(local.argocd_helm_apps_set["linkerd-jaeger"]["namespace"], "")
+      name                = try(local.argocd_helm_apps_set["linkerd-jaeger"]["namespace"], "")
+      "linkerd.io/inject" = "enabled"
     }
 
     name = try(local.argocd_helm_apps_set["linkerd-jaeger"]["namespace"], "")
