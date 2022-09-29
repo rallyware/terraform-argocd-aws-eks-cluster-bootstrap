@@ -245,9 +245,6 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-helpers"]["name"], "")
       linkerd = {
         enabled = local.linkerd_enabled
-        # monitoring = {
-        #   enabled = false
-        # }
       }
       linkerdViz = {
         enabled = local.linkerd_viz_enabled
