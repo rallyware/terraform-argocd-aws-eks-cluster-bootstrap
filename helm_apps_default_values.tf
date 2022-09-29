@@ -237,10 +237,27 @@ locals {
       }
     }
 
+    linkerd-crds = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-crds"]["name"], "")
+    }
+
+    linkerd-helpers = {
+      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-helpers"]["name"], "")
+      linkerd = {
+        enabled = local.linkerd_enabled
+      }
+      linkerdViz = {
+        enabled = local.linkerd_viz_enabled
+      }
+      linkerdJaeger = {
+        enabled = local.linkerd_jaeger_enabled
+      }
+    }
+
     linkerd-smi = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-smi"]["name"], "")
       "installNamespace" = false
-      "namespace"        = "linkerd-smi"
+      "namespace"        = try(local.argocd_helm_apps_set["linkerd-smi"]["namespace"], "")
     }
 
     linkerd = {
@@ -252,31 +269,21 @@ locals {
         "issuer" = {
           "scheme" = "kubernetes.io/tls"
         }
-        "certManager" = {
-          "enabled" = true
-          "tlsCrt"  = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
-          "tlsKey"  = try(tls_private_key.linkerd["root.linkerd.cluster.local"].private_key_pem, "")
-        }
       }
 
       "profileValidator" = {
-        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
+        "injectCaFrom"   = format("%s/linkerd-sp-validator", local.linkerd_namepsace)
       }
 
       "proxyInjector" = {
-        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
-
-        "certManager" = {
-          "enabled" = true
-          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
-          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
-        }
+        "injectCaFrom"   = format("%s/linkerd-proxy-injector", local.linkerd_namepsace)
       }
-      "monitoring" = {
-        "enabled" = true
-        "type"    = "prometheus-operator"
+
+      "policyValidator" = {
+        "externalSecret" = true
+        "injectCaFrom"   = format("%s/linkerd-policy-validator", local.linkerd_namepsace)
       }
     }
 
@@ -285,19 +292,13 @@ locals {
       "installNamespace" = false
 
       "tap" = {
-        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
-
-        "certManager" = {
-          "enabled" = true
-          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
-          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
-        }
+        "injectCaFrom"   = format("%s/linkerd-tap-injector", local.linkerd_viz_namepsace)
       }
 
       "tapInjector" = {
-        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
+        "injectCaFrom"   = format("%s/tap-k8s-tls", local.linkerd_viz_namepsace)
       }
     }
 
@@ -306,14 +307,8 @@ locals {
       "installNamespace" = false
 
       "webhook" = {
-        "caBundle"       = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
         "externalSecret" = true
-
-        "certManager" = {
-          "enabled" = true
-          "tlsCrt"  = try(tls_self_signed_cert.linkerd["webhook.linkerd.cluster.local"].cert_pem, "")
-          "tlsKey"  = try(tls_private_key.linkerd["webhook.linkerd.cluster.local"].private_key_pem, "")
-        }
+        "injectCaFrom"   = format("%s/jaeger-injector", local.linkerd_jaeger_namepsace)
       }
     }
 
