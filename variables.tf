@@ -292,11 +292,39 @@ variable "argocd_apps" {
     },
 
     {
+      name       = "linkerd-crds"
+      namespace  = "linkerd"
+      chart      = "linkerd-crds"
+      repository = "https://helm.linkerd.io/stable"
+      version    = "1.4.0"
+      sync_wave  = -20
+      ignore_differences = [
+        {
+          group = "apiextensions.k8s.io"
+          kind  = "CustomResourceDefinition"
+          jsonPointers = [
+            "/spec/names"
+          ]
+        }
+      ]
+    },
+
+    {
+      name       = "linkerd-helpers"
+      namespace  = "linkerd"
+      repository = "https://sweetops.github.io/helm-charts"
+      chart      = "linkerd-helpers"
+      version    = "0.1.1"
+      sync_wave  = 3
+    },
+
+    {
       name       = "linkerd"
       namespace  = "linkerd"
-      chart      = "linkerd2"
-      repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.2.0"
+      chart      = "linkerd-control-plane"
+      repository = "https://helm.linkerd.io/stable"
+      version    = "1.9.3"
+      sync_wave  = 4
     },
 
     {
@@ -304,23 +332,23 @@ variable "argocd_apps" {
       namespace  = "linkerd-smi"
       chart      = "linkerd-smi"
       repository = "https://linkerd.github.io/linkerd-smi"
-      version    = "0.1.0"
+      version    = "0.2.0"
     },
 
     {
       name       = "linkerd-viz"
       namespace  = "linkerd-viz"
       chart      = "linkerd-viz"
-      repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.2.0"
+      repository = "https://helm.linkerd.io/stable"
+      version    = "30.3.3"
     },
 
     {
       name       = "linkerd-jaeger"
       namespace  = "linkerd-jaeger"
       chart      = "linkerd-jaeger"
-      repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.2.0"
+      repository = "https://helm.linkerd.io/stable"
+      version    = "30.4.3"
     },
 
     {
