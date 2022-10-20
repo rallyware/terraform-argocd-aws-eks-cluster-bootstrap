@@ -149,6 +149,15 @@ variable "argocd_apps" {
     },
 
     {
+      name       = "argo-ecr-auth"
+      namespace  = "argo"
+      repository = "https://sarmad-abualkaz.github.io/my-helm-charts"
+      chart      = "argo-ecr-auth"
+      version    = "0.1.5"
+      sync_wave  = -9
+    },
+
+    {
       name       = "argo-rollouts"
       namespace  = "argo"
       chart      = "argo-rollouts"
