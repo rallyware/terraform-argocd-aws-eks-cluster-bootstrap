@@ -237,3 +237,18 @@ output "karpenter_service_account_policy_id" {
   value       = module.karpenter_eks_iam_role.service_account_policy_id
   description = "AWS Karpenter IAM policy ID"
 }
+
+output "argo_ecr_auth_service_account_role_arn" {
+  value       = module.argo_ecr_auth_eks_iam_role.service_account_role_arn
+  description = "argo-ecr-auth IAM role ARN"
+}
+
+output "argo_ecr_auth_service_account_role_name" {
+  value       = module.argo_ecr_auth_eks_iam_role.service_account_role_name
+  description = "argo-ecr-auth IAM role name"
+}
+
+output "argo_ecr_auth_service_account_role_unique_id" {
+  value       = module.argo_ecr_auth_eks_iam_role.service_account_role_unique_id
+  description = "argo-ecr-auth IAM role unique ID"
+}
