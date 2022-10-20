@@ -2,7 +2,7 @@ locals {
   argo_ecr_auth_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "argo-ecr-auth")
   argo_ecr_auth_iam_role_enabled           = local.argo_ecr_auth_enabled ? local.argocd_helm_apps_set["argo-ecr-auth"]["create_default_iam_role"] : false
   argo_ecr_auth_iam_policy_enabled         = local.argo_ecr_auth_enabled ? local.argocd_helm_apps_set["argo-ecr-auth"]["create_default_iam_policy"] : false
-  argo_ecr_auth_iam_policy_document        = local.argo_ecr_auth_iam_policy_enabled ? one(data.aws_iam_policy_document.chartmuseum[*].json) : try(local.argocd_helm_apps_set["argo-ecr-auth"]["iam_policy_document"], "{}")
+  argo_ecr_auth_iam_policy_document        = local.argo_ecr_auth_iam_policy_enabled ? one(data.aws_iam_policy_document.argo_ecr_auth[*].json) : try(local.argocd_helm_apps_set["argo-ecr-auth"]["iam_policy_document"], "{}")
   argo_ecr_auth_use_sts_regional_endpoints = local.argo_ecr_auth_enabled ? local.argocd_helm_apps_set["argo-ecr-auth"]["use_sts_regional_endpoints"] : false
 }
 
