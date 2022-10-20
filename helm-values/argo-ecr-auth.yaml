@@ -1,0 +1,15 @@
+fullnameOverride: ${fullname_override}
+
+%{ if role_enabled }
+rbac:
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: ${role_arn}
+      eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+%{ endif }
+
+args:
+  - "-sleep-between-checks=120"
+  - "-namespace=${namespace}"
+  - "-aws-region=${region}"
+  - "-ecr-registry=${account_id}.dkr.ecr.${region}.amazonaws.com"
