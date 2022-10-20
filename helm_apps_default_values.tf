@@ -10,6 +10,7 @@ locals {
       "fullnameOverride"     = try(local.argocd_helm_apps_set["argo-ecr-auth"]["name"], "")
       namespace              = try(local.argocd_helm_apps_set["argo-ecr-auth"]["namespace"], "")
       region                 = local.region
+      account_id             = local.account_id
       sts_regional_endpoints = local.argo_ecr_auth_use_sts_regional_endpoints
       role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
       role_enabled           = local.argo_ecr_auth_iam_role_enabled
