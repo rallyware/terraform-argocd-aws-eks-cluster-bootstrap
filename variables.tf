@@ -193,6 +193,15 @@ variable "argocd_apps" {
     },
 
     {
+      name       = "aws-lb-controller"
+      namespace  = "kube-system"
+      chart      = "aws-load-balancer-controller"
+      repository = "https://aws.github.io/eks-charts"
+      version    = "1.4.6"
+      sync_wave  = -5
+    },
+
+    {
       name       = "cluster-autoscaler"
       namespace  = "kube-system"
       chart      = "cluster-autoscaler"
