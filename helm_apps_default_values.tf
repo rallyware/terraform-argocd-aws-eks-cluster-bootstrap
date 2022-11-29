@@ -524,6 +524,16 @@ locals {
         cluster_endpoint       = local.eks_cluster_endpoint
       }
     ))
+
+    aws-lb-controller = yamldecode(templatefile("${path.module}/helm-values/aws-lb-controller.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["aws-lb-controller"]["name"], "")
+        sts_regional_endpoints = local.aws_lb_controller_use_sts_regional_endpoints
+        role_arn               = module.aws_lb_controller_eks_iam_role.service_account_role_arn
+        role_enabled           = local.aws_lb_controller_enabled
+        cluster_name           = local.eks_cluster_id
+      }
+    ))
   }
 }
 
