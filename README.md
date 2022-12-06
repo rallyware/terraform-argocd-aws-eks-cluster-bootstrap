@@ -38,7 +38,6 @@ module "apps" {
 | <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2 |
-| <a name="provider_time"></a> [time](#provider\_time) | >= 0.7 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
 | <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
@@ -92,7 +91,6 @@ module "apps" {
 | [kubernetes_secret.linkerd_jaeger_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.linkerd_viz_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
 | [kubernetes_secret.linkerd_webhook](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret) | resource |
-| [time_static.default](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) | resource |
 | [tls_private_key.linkerd](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key) | resource |
 | [tls_self_signed_cert.linkerd](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert) | resource |
 | [aws_caller_identity.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
