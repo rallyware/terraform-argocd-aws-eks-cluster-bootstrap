@@ -23,6 +23,7 @@ module "loki_s3_bucket" {
   block_public_acls   = true
   block_public_policy = true
   ignore_public_acls  = true
+  force_destroy       = true
   user_enabled        = false
   versioning_enabled  = false
   sse_algorithm       = "AES256"
@@ -59,18 +60,6 @@ module "loki_eks_iam_role" {
   aws_iam_policy_document     = local.loki_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
   service_account_name        = try(local.argocd_helm_apps_set["loki"]["name"], "")
-  service_account_namespace   = try(local.argocd_helm_apps_set["loki"]["namespace"], "")
-
-  context = module.loki_label.context
-}
-
-module "loki_compactor_eks_iam_role" {
-  source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.2"
-
-  aws_iam_policy_document     = local.loki_iam_policy_document
-  eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
-  service_account_name        = format("%s-%s", try(local.argocd_helm_apps_set["loki"]["name"], ""), "compactor")
   service_account_namespace   = try(local.argocd_helm_apps_set["loki"]["namespace"], "")
 
   context = module.loki_label.context

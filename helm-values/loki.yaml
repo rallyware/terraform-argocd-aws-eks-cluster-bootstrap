@@ -1,56 +1,18 @@
 fullnameOverride: ${fullname_override}
 
-compactor:
-  enabled: true
-  %{ if role_enabled }
-  serviceAccount:
-    annotations:
-      eks.amazonaws.com/role-arn: ${compactor_role_arn}
-      eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
-  %{ endif }
-
 gateway:
-  enabled: true
-  nginxConfig:
-    httpSnippet: client_max_body_size 100m;
-    serverSnippet: client_max_body_size 100m;
+  enabled: false
 
 %{ if role_enabled }
 loki:
-  structuredConfig:
-    compactor:
-      shared_store: s3
-      working_directory: /loki/compactor
-      compaction_interval: 10m
-      retention_enabled: true
-      retention_delete_delay: 2160h
-      retention_delete_worker_count: 150
-      delete_request_cancel_period: 24h
-      max_compaction_parallelism: 1
-    table_manager:
-      retention_deletes_enabled: true
-      retention_period: 2160h
-      creation_grace_period: 10m
-      poll_interval: 2m
-
-  schemaConfig:
-    configs:
-      - from: "${formatdate("YYYY-MM-DD", currnet_time_rfc3339)}"
-        store: boltdb-shipper
-        object_store: s3
-        schema: v11
-        index:
-          prefix: loki_index_
-          period: 24h
-
-  storageConfig:
-    boltdb_shipper:
-      shared_store: s3
-      active_index_directory: /var/loki/index
-      cache_location: /var/loki/cache
-      cache_ttl: 168h
-    aws:
-      bucketnames: ${bucket_id}
+  storage:
+    bucketNames:
+      chunks: ${bucket_id}
+      ruler: ${bucket_id}
+      admin: ${bucket_id}
+    type: s3
+    s3:
+      s3: ${bucket_id}
       region: ${region}
 
 serviceAccount:
@@ -59,10 +21,15 @@ serviceAccount:
     eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
 %{ endif }
 
-memcachedExporter:
-  enabled: true
+test:
+  enabled: false
 
-serviceMonitor:
-  enabled: true
-  interval: 30s
-  scrapeTimeout: 10s
+monitoring:
+  dashboards:
+    enabled: true
+    namespace: monitoring
+  rules:
+    enabled: true
+    alerting: true
+  serviceMonitor:
+    enabled: true

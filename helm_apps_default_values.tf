@@ -405,11 +405,9 @@ locals {
         region                 = local.region
         sts_regional_endpoints = local.loki_use_sts_regional_endpoints
         role_arn               = module.loki_eks_iam_role.service_account_role_arn
-        compactor_role_arn     = module.loki_compactor_eks_iam_role.service_account_role_arn
         role_enabled           = local.loki_iam_role_enabled
         region                 = local.region
         bucket_id              = module.loki_s3_bucket.bucket_id
-        currnet_time_rfc3339   = local.currnet_time_rfc3339
       }
     ))
 

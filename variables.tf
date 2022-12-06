@@ -397,8 +397,15 @@ variable "argocd_apps" {
       name       = "loki"
       namespace  = "logging"
       repository = "https://grafana.github.io/helm-charts"
-      chart      = "loki-distributed"
-      version    = "0.43.0"
+      chart      = "loki"
+      version    = "3.6.0"
+      ignore_differences = [
+        {
+          group             = "apps"
+          kind              = "StatefulSet"
+          jqPathExpressions = [".spec.persistentVolumeClaimRetentionPolicy"]
+        }
+      ]
     },
 
     {
