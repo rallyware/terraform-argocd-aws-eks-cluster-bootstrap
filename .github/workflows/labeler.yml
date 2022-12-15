@@ -8,7 +8,7 @@ jobs:
     name: Auto Label
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v1.5.0 
+      - uses: fuxingloh/multi-labeler@v2.0.2 
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           config-path: .github/labeler.yml
