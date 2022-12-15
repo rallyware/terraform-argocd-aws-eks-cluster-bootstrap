@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Lint PR
-        uses: aslafy-z/conventional-pr-title-action@v2.4.1
+        uses: aslafy-z/conventional-pr-title-action@v3.0.0
         with:
           preset: conventional-changelog-angular@^5.0.6
         env:
@@ -17,7 +17,7 @@ jobs:
 
       - name: Comment for PR title conformance
         if: failure()
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         with:
           issue-number: ${{tojson(github.event.number)}}
           body: |
