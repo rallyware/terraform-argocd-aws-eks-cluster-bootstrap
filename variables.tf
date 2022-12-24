@@ -202,15 +202,6 @@ variable "argocd_apps" {
     },
 
     {
-      name       = "cluster-autoscaler"
-      namespace  = "kube-system"
-      chart      = "cluster-autoscaler"
-      repository = "https://kubernetes.github.io/autoscaler"
-      version    = "9.10.5"
-      sync_wave  = -8
-    },
-
-    {
       name       = "ebs-csi"
       namespace  = "csi-drivers"
       chart      = "aws-ebs-csi-driver"
@@ -226,22 +217,6 @@ variable "argocd_apps" {
       repository = "https://piggysec.com"
       version    = "0.2.9"
       sync_wave  = -4
-    },
-
-    {
-      name       = "aws-node-termination-handler"
-      namespace  = "node-termination-handler"
-      chart      = "aws-node-termination-handler"
-      repository = "https://aws.github.io/eks-charts"
-      version    = "0.15.2"
-    },
-
-    {
-      name       = "node-problem-detector"
-      namespace  = "node-problem-detector"
-      chart      = "node-problem-detector"
-      repository = "https://charts.deliveryhero.io"
-      version    = "2.0.5"
     },
 
     {
@@ -261,35 +236,11 @@ variable "argocd_apps" {
     },
 
     {
-      name       = "descheduler"
-      namespace  = "kube-system"
-      chart      = "descheduler"
-      repository = "https://kubernetes-sigs.github.io/descheduler"
-      version    = "0.21.0"
-    },
-
-    {
       name       = "keda"
       namespace  = "infra"
       chart      = "keda"
       repository = "https://kedacore.github.io/charts"
       version    = "2.4.0"
-    },
-
-    {
-      name       = "falco"
-      namespace  = "falco"
-      chart      = "falco"
-      repository = "https://falcosecurity.github.io/charts"
-      version    = "1.15.7"
-    },
-
-    {
-      name       = "falcosidekick"
-      namespace  = "falco"
-      chart      = "falcosidekick"
-      repository = "https://falcosecurity.github.io/charts"
-      version    = "0.3.17"
     },
 
     {
@@ -425,53 +376,12 @@ variable "argocd_apps" {
     },
 
     {
-      name       = "external-dns"
-      namespace  = "infra"
-      chart      = "external-dns"
-      repository = "https://kubernetes-sigs.github.io/external-dns"
-      version    = "1.9.0"
-    },
-
-    {
       name       = "gha-controller"
       namespace  = "cicd"
       repository = "https://actions-runner-controller.github.io/actions-runner-controller"
       chart      = "actions-runner-controller"
       version    = "0.15.1"
       sync_wave  = 20
-    },
-
-    {
-      name       = "gha-runners"
-      namespace  = "cicd"
-      repository = "https://sweetops.github.io/helm-charts"
-      chart      = "github-actions-runners"
-      version    = "0.2.0"
-      sync_wave  = 25
-    },
-
-    {
-      name       = "argo-events"
-      namespace  = "argo"
-      repository = "https://argoproj.github.io/argo-helm"
-      chart      = "argo-events"
-      version    = "1.7.0"
-    },
-
-    {
-      name       = "argo-workflows"
-      namespace  = "argo"
-      repository = "https://argoproj.github.io/argo-helm"
-      chart      = "argo-workflows"
-      version    = "0.5.2"
-    },
-
-    {
-      name       = "argocd-notifications"
-      namespace  = "argo"
-      repository = "https://argoproj.github.io/argo-helm"
-      chart      = "argocd-notifications"
-      version    = "1.6.0"
     },
 
     {

@@ -68,31 +68,6 @@ output "piggy_webhooks_service_account_policy_id" {
   description = "Piggy webhooks IAM policy ID"
 }
 
-output "cluster_autoscaler_service_account_role_name" {
-  value       = module.cluster_autoscaler_eks_iam_role.service_account_role_name
-  description = "Cluster-Autoscaler IAM role name"
-}
-
-output "cluster_autoscaler_service_account_role_unique_id" {
-  value       = module.cluster_autoscaler_eks_iam_role.service_account_role_unique_id
-  description = "Cluster-Autoscaler IAM role unique ID"
-}
-
-output "cluster_autoscaler_service_account_role_arn" {
-  value       = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
-  description = "Cluster-Autoscaler IAM role ARN"
-}
-
-output "cluster_autoscaler_service_account_policy_name" {
-  value       = module.cluster_autoscaler_eks_iam_role.service_account_policy_name
-  description = "Cluster-Autoscaler IAM policy name"
-}
-
-output "cluster_autoscaler_service_account_policy_id" {
-  value       = module.cluster_autoscaler_eks_iam_role.service_account_policy_id
-  description = "Cluster-Autoscaler IAM policy ID"
-}
-
 output "ebs_csi_service_account_role_name" {
   value       = module.ebs_csi_eks_iam_role.service_account_role_name
   description = "EBS CSI driver IAM role name"

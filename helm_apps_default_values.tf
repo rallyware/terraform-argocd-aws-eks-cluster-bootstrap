@@ -16,18 +16,6 @@ locals {
       role_enabled           = local.argo_ecr_auth_iam_role_enabled
     }
 
-    aws-node-termination-handler = {
-      "fullnameOverride"           = try(local.argocd_helm_apps_set["aws-node-termination-handler"]["name"], "")
-      "enablePrometheusServer"     = false
-      "host_networking"            = true
-      "nodeTerminationGracePeriod" = 240
-      "podMonitor" = {
-        "create" = false
-      }
-      "podTerminationGracePeriod" = 60
-      "taintNode"                 = true
-    }
-
     calico = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["calico"]["name"], "")
       "installation" = {
@@ -52,21 +40,6 @@ locals {
       "fullnameOverride" = try(local.argocd_helm_apps_set["cert-manager-issuers"]["name"], "")
     }
 
-    cluster-autoscaler = yamldecode(templatefile("${path.module}/helm-values/cluster-autoscaler.yaml",
-      {
-        fullname_override      = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
-        region                 = local.region
-        eks_cluster_id         = local.eks_cluster_id
-        sts_regional_endpoints = local.cluster_autoscaler_use_sts_regional_endpoints
-        role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
-        role_enabled           = local.cluster_autoscaler_iam_role_enabled
-      }
-    ))
-
-    descheduler = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["descheduler"]["name"], "")
-    }
-
     gatekeeper = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["gatekeeper"]["name"], "")
     }
@@ -85,34 +58,6 @@ locals {
 
     victoria-metrics = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["victoria-metrics"]["name"], "")
-    }
-
-    node-problem-detector = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["node-problem-detector"]["name"], "")
-      "metrics" = {
-        "enabled" = true
-        "serviceMonitor" = {
-          "enabled" = true
-        }
-      }
-      "resources" = {
-        "limits" = {
-          "cpu"    = "100m"
-          "memory" = "100Mi"
-        }
-        "requests" = {
-          "cpu"    = "50m"
-          "memory" = "50Mi"
-        }
-      }
-      "settings" = {
-        "log_monitors" = [
-          "/config/kernel-monitor.json",
-          "/config/docker-monitor.json",
-          "/config/kernel-monitor-filelog.json",
-          "/config/systemd-monitor-counter.json",
-        ]
-      }
     }
 
     node-local-dns = {
@@ -432,11 +377,6 @@ locals {
       }
     ))
 
-    external-dns = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["external-dns"]["name"], "")
-      "txtSuffix"        = local.eks_cluster_id
-    }
-
     gha-controller = {
       "fullnameOverride"       = try(local.argocd_helm_apps_set["gha-controller"]["name"], "")
       "dockerRegistryMirror"   = "mirror.gcr.io"
@@ -455,22 +395,6 @@ locals {
         }
       }
       "syncPeriod" = "30s"
-    }
-
-    gha-runners = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["gha-runners"]["name"], "")
-    }
-
-    argo-events = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-events"]["name"], "")
-    }
-
-    argo-workflows = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-workflows"]["name"], "")
-    }
-
-    argocd-notifications = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argocd-notifications"]["name"], "")
     }
 
     oauth2-proxy = {
@@ -500,17 +424,6 @@ locals {
         "type" = "cookie"
       }
     }
-
-    chartmuseum = yamldecode(templatefile("${path.module}/helm-values/chartmuseum.yaml",
-      {
-        fullname_override      = try(local.argocd_helm_apps_set["chartmuseum"]["name"], "")
-        region                 = local.region
-        sts_regional_endpoints = local.chartmuseum_use_sts_regional_endpoints
-        role_arn               = module.chartmuseum_eks_iam_role.service_account_role_arn
-        role_enabled           = local.chartmuseum_iam_role_enabled
-        bucket_id              = module.chartmuseum_s3_bucket.bucket_id
-      }
-    ))
 
     karpenter = yamldecode(templatefile("${path.module}/helm-values/karpenter.yaml",
       {
