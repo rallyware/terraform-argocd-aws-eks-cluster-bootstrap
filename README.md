@@ -35,11 +35,11 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 4.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.42.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.0 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | 1.5.0 |
 
 ## Modules
 
@@ -50,8 +50,6 @@ module "apps" {
 | <a name="module_argo_ecr_auth_label"></a> [argo\_ecr\_auth\_label](#module\_argo\_ecr\_auth\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_aws_lb_controller_eks_iam_role"></a> [aws\_lb\_controller\_eks\_iam\_role](#module\_aws\_lb\_controller\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_aws_lb_controller_label"></a> [aws\_lb\_controller\_label](#module\_aws\_lb\_controller\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
-| <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_ebs_csi_eks_iam_role"></a> [ebs\_csi\_eks\_iam\_role](#module\_ebs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_ebs_csi_kms_key"></a> [ebs\_csi\_kms\_key](#module\_ebs\_csi\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
 | <a name="module_ebs_csi_label"></a> [ebs\_csi\_label](#module\_ebs\_csi\_label) | cloudposse/label/null | 0.25.0 |
@@ -94,7 +92,6 @@ module "apps" {
 | [aws_eks_cluster.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
 | [aws_iam_policy_document.argo_ecr_auth](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.aws_lb_controller](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.cluster_autoscaler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.ebs_csi](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.karpenter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.loki](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
