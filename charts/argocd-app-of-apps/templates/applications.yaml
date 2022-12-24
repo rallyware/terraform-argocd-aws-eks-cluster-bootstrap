@@ -22,7 +22,9 @@ spec:
   destination:
     name: {{ .clusterName }}
     namespace: {{ .namespace }}
+{{- if .projectName }}
   project: {{ .projectName }}
+{{- end }}
   source:
 {{- if .chart }}
     chart: {{ .chart }}
@@ -33,8 +35,12 @@ spec:
 {{- if .chart }}
     helm:
       releaseName: {{ .releaseName }}
+{{- if .skipCrds }}
       skipCrds: {{ .skipCrds }}
+{{- end }}
+{{- if .valueFiles }}
       valueFiles: {{ .valueFiles }}
+{{- end }}
 {{- if .values }}
       values: |
         {{ .values | nindent 8 }}

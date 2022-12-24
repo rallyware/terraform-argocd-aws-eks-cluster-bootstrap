@@ -17,6 +17,7 @@ applications:
   #   chart: prometheus-community
   #   repoURL: https://prometheus-community.github.io/helm-charts
   #   targetRevision: 15.0.1
+  #   clusterName: prod
   #   annotations: {}
   #   syncWave: 10
   #   skipCrds: false
