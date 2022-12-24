@@ -35,11 +35,11 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | 4.1.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.42.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.0 |
-| <a name="provider_tls"></a> [tls](#provider\_tls) | 4.0.4 |
-| <a name="provider_utils"></a> [utils](#provider\_utils) | 1.5.0 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 1.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2 |
+| <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
+| <a name="provider_utils"></a> [utils](#provider\_utils) | >= 0.14.0 |
 
 ## Modules
 
