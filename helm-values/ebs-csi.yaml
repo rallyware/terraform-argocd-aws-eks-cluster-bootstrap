@@ -4,7 +4,10 @@ controller:
   extraCreateMetadata: true
   k8sTagClusterId: ${eks_cluster_id}
   region: ${region}
-  tolerateAllTaints: true
+  enableMetrics: true
+  serviceMonitor:
+    forceEnable: true
+
   updateStrategy:
     rollingUpdate:
       maxSurge: 0
