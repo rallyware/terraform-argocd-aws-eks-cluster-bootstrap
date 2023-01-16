@@ -1,0 +1,8 @@
+apiVersion: v2
+name: iam-identity-mappings
+description: A Helm chart to provision IAMIdentityMapping resources
+type: application
+version: 0.1.0
+appVersion: "v0.1.7"
+maintainers:
+  - name: SweetOps

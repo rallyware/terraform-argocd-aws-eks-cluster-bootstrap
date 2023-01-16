@@ -1,0 +1,14 @@
+nameOverride: ""
+fullnameOverride: ""
+
+nodes:
+  []
+  # - name: infra
+  #   arn: arn:aws:iam::999999999999:role/your-ec2-node-role-name-here
+
+users:
+  []
+  # - name: kubernetes-admin
+  #   arn: arn:aws:iam::999999999999:user/KubernetesAdmin
+  #   groups:
+  #     - system:masters

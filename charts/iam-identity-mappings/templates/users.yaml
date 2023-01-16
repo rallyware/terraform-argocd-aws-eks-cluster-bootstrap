@@ -1,0 +1,17 @@
+{{- range .Values.users }}
+---
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: {{ .name }}
+  labels:
+    name: {{ .name }}
+    {{- include "iam-identity-mappings.labels" $ | nindent 4 }}
+spec:
+  arn: {{ .arn }}
+  username: {{ .name }}
+{{- with .groups }}
+  groups:
+  {{- toYaml . | nindent 4 }}
+{{- end }}
+{{- end }}

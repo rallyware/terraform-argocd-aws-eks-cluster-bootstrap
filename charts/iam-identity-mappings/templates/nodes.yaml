@@ -1,0 +1,16 @@
+{{- range .Values.nodes }}
+---
+apiVersion: iamauthenticator.k8s.aws/v1alpha1
+kind: IAMIdentityMapping
+metadata:
+  name: {{ .name }}
+  labels:
+    name: {{ .name }}
+    {{- include "iam-identity-mappings.labels" $ | nindent 4 }}
+spec:
+  arn: {{ .arn }}
+  username: "system:node:{{`{{EC2PrivateDNSName}}`}}"
+  groups:
+    - system:bootstrappers
+    - system:nodes
+{{- end }}
