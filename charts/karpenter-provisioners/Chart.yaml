@@ -1,0 +1,8 @@
+apiVersion: v2
+name: karpenter-provisioner
+description: A Helm chart for Kubernetes to deploy Karpenter provisioners
+type: application
+version: 0.1.0
+appVersion: "v0.22.1"
+maintainers:
+  - name: SweetOps
