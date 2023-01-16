@@ -261,35 +261,11 @@ variable "argocd_apps" {
     },
 
     {
-      name       = "descheduler"
-      namespace  = "kube-system"
-      chart      = "descheduler"
-      repository = "https://kubernetes-sigs.github.io/descheduler"
-      version    = "0.21.0"
-    },
-
-    {
       name       = "keda"
       namespace  = "infra"
       chart      = "keda"
       repository = "https://kedacore.github.io/charts"
       version    = "2.4.0"
-    },
-
-    {
-      name       = "falco"
-      namespace  = "falco"
-      chart      = "falco"
-      repository = "https://falcosecurity.github.io/charts"
-      version    = "1.15.7"
-    },
-
-    {
-      name       = "falcosidekick"
-      namespace  = "falco"
-      chart      = "falcosidekick"
-      repository = "https://falcosecurity.github.io/charts"
-      version    = "0.3.17"
     },
 
     {
@@ -464,14 +440,6 @@ variable "argocd_apps" {
       repository = "https://argoproj.github.io/argo-helm"
       chart      = "argo-workflows"
       version    = "0.5.2"
-    },
-
-    {
-      name       = "argocd-notifications"
-      namespace  = "argo"
-      repository = "https://argoproj.github.io/argo-helm"
-      chart      = "argocd-notifications"
-      version    = "1.6.0"
     },
 
     {
