@@ -61,4 +61,17 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/argocd-app-of-apps-0.2.1/argocd-app-of-apps-0.2.1.tgz
     version: 0.2.1
-generated: "2023-01-16T16:02:21.929767836Z"
+  karpenter-provisioner:
+  - apiVersion: v2
+    appVersion: v0.22.1
+    created: "2023-01-16T16:08:59.216890195Z"
+    description: A Helm chart for Kubernetes to deploy Karpenter provisioners
+    digest: ae91a4411d88af3872ad3952122b0547507bcc2c6825f33ab3bcffc3c282fb0a
+    maintainers:
+    - name: SweetOps
+    name: karpenter-provisioner
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-01-16T16:08:59.216901295Z"
