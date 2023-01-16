@@ -61,6 +61,19 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/argocd-app-of-apps-0.2.1/argocd-app-of-apps-0.2.1.tgz
     version: 0.2.1
+  iam-identity-mappings:
+  - apiVersion: v2
+    appVersion: v0.1.7
+    created: "2023-01-16T16:48:58.687758148Z"
+    description: A Helm chart to provision IAMIdentityMapping resources
+    digest: 96fc0a40e971c46159aa2aad680ec738567d2b6c2418cc9461411ed3eb1b1716
+    maintainers:
+    - name: SweetOps
+    name: iam-identity-mappings
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/iam-identity-mappings-0.1.0/iam-identity-mappings-0.1.0.tgz
+    version: 0.1.0
   karpenter-provisioner:
   - apiVersion: v2
     appVersion: v0.22.1
@@ -74,4 +87,4 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
     version: 0.1.0
-generated: "2023-01-16T16:08:59.216901295Z"
+generated: "2023-01-16T16:48:58.687771549Z"
