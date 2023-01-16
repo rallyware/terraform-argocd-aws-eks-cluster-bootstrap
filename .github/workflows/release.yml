@@ -1,20 +1,20 @@
-
 name: Release Drafter
 
 on:
   push:
-    branches:
-      - master
-      - main
+    tags:
+      - "v*"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: release-drafter/release-drafter@v5
-      with:
-        publish: true
-        prerelease: false
-        config-name: auto-release.yml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Release Notary Action
+        uses: docker://aevea/release-notary:0.9.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,4 @@
+owner: rallyware
+git-repo: terraform-argocd-aws-eks-cluster-bootstrap
+git-base-url: https://api.github.com/
+git-upload-url: https://uploads.github.com/
