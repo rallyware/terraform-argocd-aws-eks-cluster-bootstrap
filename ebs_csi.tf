@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "ebs_csi" {
       "ec2:DescribeSnapshots",
       "ec2:DescribeTags",
       "ec2:DescribeVolumes",
-      "ec2:DescribeVolumesModifications",
+      "ec2:DescribeVolumesModifications"
     ]
   }
 

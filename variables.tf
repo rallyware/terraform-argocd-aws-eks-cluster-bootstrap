@@ -123,10 +123,10 @@ variable "argocd_apps" {
   default = [
     {
       name       = "prometheus-operator-crds"
-      repository = "https://github.com/prometheus-operator/prometheus-operator.git"
+      repository = "https://prometheus-community.github.io/helm-charts"
+      chart      = "prometheus-operator-crds"
       namespace  = "default"
-      path       = "example/prometheus-operator-crd/"
-      version    = "v0.52.1"
+      version    = "0.1.1"
       sync_wave  = -25
     },
 
@@ -215,7 +215,7 @@ variable "argocd_apps" {
       namespace  = "csi-drivers"
       chart      = "aws-ebs-csi-driver"
       repository = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
-      version    = "2.1.0"
+      version    = "2.16.0"
       sync_wave  = -5
     },
 
