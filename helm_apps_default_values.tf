@@ -63,10 +63,6 @@ locals {
       }
     ))
 
-    descheduler = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["descheduler"]["name"], "")
-    }
-
     gatekeeper = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["gatekeeper"]["name"], "")
     }
@@ -467,10 +463,6 @@ locals {
 
     argo-workflows = {
       "fullnameOverride" = try(local.argocd_helm_apps_set["argo-workflows"]["name"], "")
-    }
-
-    argocd-notifications = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argocd-notifications"]["name"], "")
     }
 
     oauth2-proxy = {
