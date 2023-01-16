@@ -32,5 +32,4 @@ jobs:
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --config ct.yaml
-
+        run: ct lint --config .github/ct.yaml
