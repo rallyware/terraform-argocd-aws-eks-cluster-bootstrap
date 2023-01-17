@@ -15,6 +15,10 @@ serviceAccount:
     eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
 %{ endif }
 
+serviceMonitor:
+  enabled: ${prometheus_enabled}
+  interval: 60s
+
 config: |-
   discovery:
     exportedTagsOnMetrics:

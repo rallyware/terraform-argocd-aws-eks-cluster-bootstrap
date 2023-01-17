@@ -1,13 +1,24 @@
 locals {
-  argocd_helm_apps_enabled = local.enabled ? [for app in local.argocd_apps : app.name] : []
-  argocd_helm_apps_set     = local.enabled ? { for app in local.argocd_apps : app.name => app if app.chart != null } : {}
+  argocd_helm_apps_enabled    = local.enabled ? [for app in local.argocd_apps : app.name] : []
+  argocd_helm_apps_set        = local.enabled ? { for app in local.argocd_apps : app.name => app if app.chart != null } : {}
+  prometheus_operator_enabled = local.enabled && contains(local.argocd_helm_apps_enabled, "prometheus-operator-crds")
+  cert_manager_enabled        = local.enabled && contains(local.argocd_helm_apps_enabled, "cert-manager")
+
   argocd_helm_apps_default_values = {
     argo-rollouts = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
+      controller = {
+        metrics = {
+          enabled = local.prometheus_operator_enabled
+          serviceMonitor = {
+            enabled = local.prometheus_operator_enabled
+          }
+        }
+      }
     }
 
     argo-ecr-auth = {
-      "fullnameOverride"     = try(local.argocd_helm_apps_set["argo-ecr-auth"]["name"], "")
+      fullnameOverride       = try(local.argocd_helm_apps_set["argo-ecr-auth"]["name"], "")
       namespace              = try(local.argocd_helm_apps_set["argo-ecr-auth"]["namespace"], "")
       region                 = local.region
       account_id             = local.account_id
@@ -17,39 +28,39 @@ locals {
     }
 
     aws-node-termination-handler = {
-      "fullnameOverride"           = try(local.argocd_helm_apps_set["aws-node-termination-handler"]["name"], "")
-      "enablePrometheusServer"     = false
-      "host_networking"            = true
-      "nodeTerminationGracePeriod" = 240
-      "podMonitor" = {
-        "create" = false
+      fullnameOverride           = try(local.argocd_helm_apps_set["aws-node-termination-handler"]["name"], "")
+      enablePrometheusServer     = false
+      host_networking            = true
+      nodeTerminationGracePeriod = 240
+      podTerminationGracePeriod  = 60
+      taintNode                  = true
+      podMonitor = {
+        create = false
       }
-      "podTerminationGracePeriod" = 60
-      "taintNode"                 = true
     }
 
     calico = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["calico"]["name"], "")
-      "installation" = {
-        "kubernetesProvider" = "EKS"
-        "nodeMetricsPort"    = 9081
-        "typhaMetricsPort"   = 9091
+      fullnameOverride = try(local.argocd_helm_apps_set["calico"]["name"], "")
+      installation = {
+        kubernetesProvider = "EKS"
+        nodeMetricsPort    = 9081
+        typhaMetricsPort   = 9091
       }
     }
 
     cert-manager = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["cert-manager"]["name"], "")
-      "installCRDs"      = true
-      "prometheus" = {
-        "enabled" = true
-        "servicemonitor" = {
-          "enabled" = true
+      fullnameOverride = try(local.argocd_helm_apps_set["cert-manager"]["name"], "")
+      installCRDs      = true
+      prometheus = {
+        enabled = local.prometheus_operator_enabled
+        servicemonitor = {
+          enabled = local.prometheus_operator_enabled
         }
       }
     }
 
     cert-manager-issuers = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["cert-manager-issuers"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["cert-manager-issuers"]["name"], "")
     }
 
     cluster-autoscaler = yamldecode(templatefile("${path.module}/helm-values/cluster-autoscaler.yaml",
@@ -60,49 +71,72 @@ locals {
         sts_regional_endpoints = local.cluster_autoscaler_use_sts_regional_endpoints
         role_arn               = module.cluster_autoscaler_eks_iam_role.service_account_role_arn
         role_enabled           = local.cluster_autoscaler_iam_role_enabled
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
     gatekeeper = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["gatekeeper"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["gatekeeper"]["name"], "")
     }
 
     ingress-nginx = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["ingress-nginx"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["ingress-nginx"]["name"], "")
+      controller = {
+        metrics = {
+          enabled = local.prometheus_operator_enabled
+          serviceMonitor = {
+            enabled = local.prometheus_operator_enabled
+          }
+        }
+        certManager = {
+          enabled = local.cert_manager_enabled
+        }
+      }
     }
 
     keda = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["keda"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["keda"]["name"], "")
+      prometheus = {
+        metricServer = {
+          enabled = local.prometheus_operator_enabled
+          serviceMonitor = {
+            enabled = local.prometheus_operator_enabled
+          }
+        }
+        operator = {
+          enabled = local.prometheus_operator_enabled
+          serviceMonitor = {
+            enabled = local.prometheus_operator_enabled
+          }
+        }
+        webhooks = {
+          enabled = local.prometheus_operator_enabled
+          serviceMonitor = {
+            enabled = local.prometheus_operator_enabled
+          }
+        }
+      }
     }
 
     prometheus-blackbox-exporter = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["prometheus-blackbox-exporter"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["prometheus-blackbox-exporter"]["name"], "")
     }
 
     victoria-metrics = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["victoria-metrics"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["victoria-metrics"]["name"], "")
     }
 
     node-problem-detector = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["node-problem-detector"]["name"], "")
-      "metrics" = {
-        "enabled" = true
-        "serviceMonitor" = {
-          "enabled" = true
+      fullnameOverride = try(local.argocd_helm_apps_set["node-problem-detector"]["name"], "")
+      metrics = {
+        enabled = local.prometheus_operator_enabled
+        serviceMonitor = {
+          enabled = local.prometheus_operator_enabled
         }
       }
-      "resources" = {
-        "limits" = {
-          "cpu"    = "100m"
-          "memory" = "100Mi"
-        }
-        "requests" = {
-          "cpu"    = "50m"
-          "memory" = "50Mi"
-        }
-      }
-      "settings" = {
-        "log_monitors" = [
+
+      settings = {
+        log_monitors = [
           "/config/kernel-monitor.json",
           "/config/docker-monitor.json",
           "/config/kernel-monitor-filelog.json",
@@ -112,143 +146,18 @@ locals {
     }
 
     node-local-dns = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["node-local-dns"]["name"], "")
-      "config" = {
-        "localDnsIp" = "169.254.20.10"
-        "kubeDnsIp"  = "172.20.0.10"
-        "zones" = [
-          {
-            "plugins" = {
-              "cache" = {
-                "denial" = {
-                  "size" = 0
-                  "ttl"  = 1
-                }
-                "parameters"  = 30
-                "prefetch"    = {}
-                "serve_stale" = false
-                "success" = {
-                  "size" = 9984
-                  "ttl"  = 30
-                }
-              }
-              "debug"  = false
-              "errors" = true
-              "forward" = {
-                "expire"       = ""
-                "force_tcp"    = false
-                "health_check" = ""
-                "max_fails"    = ""
-                "parameters"   = "__PILLAR__CLUSTER__DNS__"
-                "policy"       = ""
-                "prefer_udp"   = false
-              }
-              "health" = {
-                "port" = 8080
-              }
-              "log" = {
-                "classes" = "all"
-                "format"  = "combined"
-              }
-              "prometheus" = true
-              "reload"     = true
-            }
-            "zone" = "cluster.local:53"
-          },
-          {
-            "plugins" = {
-              "cache" = {
-                "parameters" = 30
-              }
-              "debug"  = false
-              "errors" = true
-              "forward" = {
-                "force_tcp"  = false
-                "parameters" = "__PILLAR__CLUSTER__DNS__"
-              }
-              "health" = {
-                "port" = 8080
-              }
-              "log" = {
-                "classes" = "all"
-                "format"  = "combined"
-              }
-              "prometheus" = true
-              "reload"     = true
-            }
-            "zone" = "ip6.arpa:53"
-          },
-          {
-            "plugins" = {
-              "cache" = {
-                "parameters" = 30
-              }
-              "debug"  = false
-              "errors" = true
-              "forward" = {
-                "force_tcp"  = false
-                "parameters" = "__PILLAR__CLUSTER__DNS__"
-              }
-              "health" = {
-                "port" = 8080
-              }
-              "log" = {
-                "classes" = "all"
-                "format"  = "combined"
-              }
-              "prometheus" = true
-              "reload"     = true
-            }
-            "zone" = "in-addr.arpa:53"
-          },
-          {
-            "plugins" = {
-              "cache" = {
-                "parameters"  = 30
-                "serve_stale" = false
-              }
-              "debug"  = false
-              "errors" = true
-              "forward" = {
-                "expire"       = ""
-                "force_tcp"    = false
-                "health_check" = ""
-                "max_fails"    = ""
-                "parameters"   = "__PILLAR__UPSTREAM__SERVERS__"
-                "policy"       = ""
-                "prefer_udp"   = false
-              }
-              "health" = {
-                "port" = 8080
-              }
-              "log" = {
-                "classes" = "all"
-                "format"  = "combined"
-              }
-              "prometheus" = true
-              "reload"     = true
-            }
-            "zone" = ".:53"
-          },
-        ]
-      }
-      "image" = {
-        "args" = {
-          "setupIptables" = true
-          "skipTeardown"  = false
-        }
-      }
-      "serviceMonitor" = {
-        "enabled" = true
+      fullnameOverride = try(local.argocd_helm_apps_set["node-local-dns"]["name"], "")
+      serviceMonitor = {
+        enabled = local.prometheus_operator_enabled
       }
     }
 
     linkerd-crds = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-crds"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["linkerd-crds"]["name"], "")
     }
 
     linkerd-helpers = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-helpers"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["linkerd-helpers"]["name"], "")
       linkerd = {
         enabled = local.linkerd_enabled
       }
@@ -261,60 +170,63 @@ locals {
     }
 
     linkerd-smi = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-smi"]["name"], "")
-      "installNamespace" = false
-      "namespace"        = try(local.argocd_helm_apps_set["linkerd-smi"]["namespace"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["linkerd-smi"]["name"], "")
+      installNamespace = false
+      namespace        = try(local.argocd_helm_apps_set["linkerd-smi"]["namespace"], "")
     }
 
     linkerd = {
-      "fullnameOverride"        = try(local.argocd_helm_apps_set["linkerd"]["name"], "")
-      "installNamespace"        = false
-      "identityTrustAnchorsPEM" = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
+      fullnameOverride        = try(local.argocd_helm_apps_set["linkerd"]["name"], "")
+      installNamespace        = false
+      identityTrustAnchorsPEM = try(tls_self_signed_cert.linkerd["root.linkerd.cluster.local"].cert_pem, "")
 
-      "identity" = {
-        "issuer" = {
-          "scheme" = "kubernetes.io/tls"
+      identity = {
+        issuer = {
+          scheme = "kubernetes.io/tls"
         }
       }
 
-      "profileValidator" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/linkerd-sp-validator", local.linkerd_namepsace)
+      profileValidator = {
+        externalSecret = true
+        injectCaFrom   = format("%s/linkerd-sp-validator", local.linkerd_namepsace)
       }
 
-      "proxyInjector" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/linkerd-proxy-injector", local.linkerd_namepsace)
+      proxyInjector = {
+        externalSecret = true
+        injectCaFrom   = format("%s/linkerd-proxy-injector", local.linkerd_namepsace)
       }
 
-      "policyValidator" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/linkerd-policy-validator", local.linkerd_namepsace)
+      policyValidator = {
+        externalSecret = true
+        injectCaFrom   = format("%s/linkerd-policy-validator", local.linkerd_namepsace)
+      }
+      podMonitor = {
+        enabled = local.prometheus_operator_enabled
       }
     }
 
     linkerd-viz = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-viz"]["name"], "")
-      "installNamespace" = false
+      fullnameOverride = try(local.argocd_helm_apps_set["linkerd-viz"]["name"], "")
+      installNamespace = false
 
-      "tap" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/linkerd-tap-injector", local.linkerd_viz_namepsace)
+      tap = {
+        externalSecret = true
+        injectCaFrom   = format("%s/linkerd-tap-injector", local.linkerd_viz_namepsace)
       }
 
-      "tapInjector" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/tap-k8s-tls", local.linkerd_viz_namepsace)
+      tapInjector = {
+        externalSecret = true
+        injectCaFrom   = format("%s/tap-k8s-tls", local.linkerd_viz_namepsace)
       }
     }
 
     linkerd-jaeger = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["linkerd-jaeger"]["name"], "")
-      "installNamespace" = false
+      fullnameOverride = try(local.argocd_helm_apps_set["linkerd-jaeger"]["name"], "")
+      installNamespace = false
 
-      "webhook" = {
-        "externalSecret" = true
-        "injectCaFrom"   = format("%s/jaeger-injector", local.linkerd_jaeger_namepsace)
+      webhook = {
+        externalSecret = true
+        injectCaFrom   = format("%s/jaeger-injector", local.linkerd_jaeger_namepsace)
       }
     }
 
@@ -328,6 +240,7 @@ locals {
         eks_cluster_id         = local.eks_cluster_id
         kms_key_id             = module.velero_kms_key.key_id
         bucket_id              = module.velero_s3_bucket.bucket_id
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
@@ -340,48 +253,26 @@ locals {
         role_enabled           = local.ebs_csi_iam_role_enabled
         eks_cluster_id         = local.eks_cluster_id
         kms_key_id             = module.ebs_csi_kms_key.key_id
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
     aws-vpc-cni = {
-      "fullnameOverride" = "aws-node"
-      "init" = {
-        "image" = {
-          "region" = local.region
+      fullnameOverride    = "aws-node"
+      originalMatchLabels = true
+      init = {
+        image = {
+          region = local.region
         }
       }
-      "image" = {
-        "region" = local.region
+      image = {
+        region = local.region
       }
-      "eniConfig" = {
-        "region" = local.region
+      eniConfig = {
+        region = local.region
       }
-      "crd" = {
-        "create" = false
-      }
-      "originalMatchLabels" = true
-      "env" = {
-        "ADDITIONAL_ENI_TAGS"                   = "{}"
-        "AWS_VPC_CNI_NODE_PORT_SUPPORT"         = true
-        "AWS_VPC_ENI_MTU"                       = "9001"
-        "AWS_VPC_K8S_CNI_CONFIGURE_RPFILTER"    = false
-        "AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG"    = false
-        "AWS_VPC_K8S_CNI_EXTERNALSNAT"          = "false"
-        "AWS_VPC_K8S_CNI_LOG_FILE"              = "/host/var/log/aws-routed-eni/ipamd.log"
-        "AWS_VPC_K8S_CNI_LOGLEVEL"              = "DEBUG"
-        "AWS_VPC_K8S_CNI_RANDOMIZESNAT"         = "prng"
-        "AWS_VPC_K8S_CNI_VETHPREFIX"            = "eni"
-        "AWS_VPC_K8S_PLUGIN_LOG_FILE"           = "/var/log/aws-routed-eni/plugin.log"
-        "AWS_VPC_K8S_PLUGIN_LOG_LEVEL"          = "DEBUG"
-        "DISABLE_INTROSPECTION"                 = false
-        "DISABLE_METRICS"                       = false
-        "ENABLE_POD_ENI"                        = false
-        "ENABLE_PREFIX_DELEGATION"              = true
-        "WARM_ENI_TARGET"                       = 1
-        "WARM_PREFIX_TARGET"                    = 1
-        "DISABLE_NETWORK_RESOURCE_PROVISIONING" = false
-        "ENABLE_IPv4"                           = true
-        "ENABLE_IPv6"                           = false
+      env = {
+        ENABLE_PREFIX_DELEGATION = true
       }
     }
 
@@ -404,6 +295,7 @@ locals {
         role_enabled           = local.loki_iam_role_enabled
         region                 = local.region
         bucket_id              = module.loki_s3_bucket.bucket_id
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
@@ -425,71 +317,47 @@ locals {
         sts_regional_endpoints = local.prometheus_yace_exporter_use_sts_regional_endpoints
         role_arn               = module.prometheus_yace_exporter_eks_iam_role.service_account_role_arn
         role_enabled           = local.prometheus_yace_exporter_iam_role_enabled
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
     external-dns = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["external-dns"]["name"], "")
-      "txtSuffix"        = local.eks_cluster_id
+      fullnameOverride = try(local.argocd_helm_apps_set["external-dns"]["name"], "")
+      txtSuffix        = local.eks_cluster_id
     }
 
     gha-controller = {
-      "fullnameOverride"       = try(local.argocd_helm_apps_set["gha-controller"]["name"], "")
-      "dockerRegistryMirror"   = "mirror.gcr.io"
-      "githubAPICacheDuration" = "60s"
-      "metrics" = {
-        "serviceMonitor" = "enabled"
+      fullnameOverride       = try(local.argocd_helm_apps_set["gha-controller"]["name"], "")
+      dockerRegistryMirror   = "mirror.gcr.io"
+      githubAPICacheDuration = "60s"
+      metrics = {
+        serviceMonitor = local.prometheus_operator_enabled
       }
-      "resources" = {
-        "limits" = {
-          "cpu"    = "100m"
-          "memory" = "128Mi"
-        }
-        "requests" = {
-          "cpu"    = "100m"
-          "memory" = "128Mi"
-        }
-      }
-      "syncPeriod" = "30s"
+      syncPeriod = "30s"
     }
 
     gha-runners = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["gha-runners"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["gha-runners"]["name"], "")
     }
 
     argo-events = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-events"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["argo-events"]["name"], "")
     }
 
     argo-workflows = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["argo-workflows"]["name"], "")
+      fullnameOverride = try(local.argocd_helm_apps_set["argo-workflows"]["name"], "")
     }
 
     oauth2-proxy = {
-      "fullnameOverride" = try(local.argocd_helm_apps_set["oauth2-proxy"]["name"], "")
-      "metrics" = {
-        "enabled" = true
-        "port"    = 44180
-        "servicemonitor" = {
-          "enabled"            = true
-          "interval"           = "30s"
-          "namespace"          = "monitoring"
-          "prometheusInstance" = "default"
-          "scrapeTimeout"      = "10s"
+      fullnameOverride = try(local.argocd_helm_apps_set["oauth2-proxy"]["name"], "")
+      metrics = {
+        enabled = local.prometheus_operator_enabled
+        servicemonitor = {
+          enabled = local.prometheus_operator_enabled
         }
       }
-      "resources" = {
-        "limits" = {
-          "cpu"    = "100m"
-          "memory" = "100Mi"
-        }
-        "requests" = {
-          "cpu"    = "50m"
-          "memory" = "50Mi"
-        }
-      }
-      "sessionStorage" = {
-        "type" = "cookie"
+      sessionStorage = {
+        type = "cookie"
       }
     }
 
@@ -512,6 +380,8 @@ locals {
         role_enabled           = local.karpenter_iam_role_enabled
         cluster_name           = local.eks_cluster_id
         cluster_endpoint       = local.eks_cluster_endpoint
+        instance_profile       = module.karpenter_instance_profile.name
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
@@ -522,8 +392,23 @@ locals {
         role_arn               = module.aws_lb_controller_eks_iam_role.service_account_role_arn
         role_enabled           = local.aws_lb_controller_enabled
         cluster_name           = local.eks_cluster_id
+        prometheus_enabled     = local.prometheus_operator_enabled
+        cert_manager_enabled   = local.cert_manager_enabled
       }
     ))
+
+    aws-auth-controller = {
+      fullnameOverride = try(local.argocd_helm_apps_set["argo-rollouts"]["name"], "")
+    }
+
+    iam-identity-mappings = {
+      nodes = [
+        {
+          name = "karpenter"
+          arn  = module.karpenter_instance_profile.arn
+        }
+      ]
+    }
   }
 }
 

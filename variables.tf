@@ -131,11 +131,29 @@ variable "argocd_apps" {
     },
 
     {
+      name       = "aws-auth-controller"
+      repository = "https://rustrial.github.io/aws-eks-iam-auth-controller"
+      chart      = "rustrial-aws-eks-iam-auth-controller"
+      namespace  = "kube-system"
+      version    = "0.1.7"
+      sync_wave  = -24
+    },
+
+    {
+      name       = "iam-identity-mappings"
+      repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
+      chart      = "iam-identity-mappings"
+      namespace  = "kube-system"
+      version    = "0.1.0"
+      sync_wave  = -24
+    },
+
+    {
       name       = "aws-vpc-cni"
       namespace  = "kube-system"
       repository = "https://aws.github.io/eks-charts"
       chart      = "aws-vpc-cni"
-      version    = "1.1.12"
+      version    = "1.2.2"
       sync_wave  = -11
     },
 
@@ -170,7 +188,7 @@ variable "argocd_apps" {
       namespace  = "kube-system"
       chart      = "node-local-dns"
       repository = "https://sweetops.github.io/helm-charts"
-      version    = "0.2.0"
+      version    = "0.2.1"
       sync_wave  = -9
     },
 
@@ -357,8 +375,8 @@ variable "argocd_apps" {
       name       = "karpenter"
       namespace  = "karpenter"
       chart      = "karpenter"
-      repository = "https://charts.karpenter.sh"
-      version    = "0.10.0"
+      repository = "public.ecr.aws/karpenter"
+      version    = "v0.22.1"
       ignore_differences = [
         {
           kind = "Secret"

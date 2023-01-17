@@ -38,8 +38,6 @@ resources:
     memory: 128Mi
 
 metrics:
-  enabled: true
-  scrapeInterval: 30s
-  scrapeTimeout: 10s
+  enabled: ${prometheus_enabled}
   serviceMonitor:
-    enabled: true
+    enabled: ${prometheus_enabled}
