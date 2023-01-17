@@ -29,7 +29,7 @@ resource "argocd_project" "default" {
 
   metadata {
     name      = local.argocd_destination_project
-    namespace = var.argocd_namespace
+    namespace = local.argocd_namespace
     labels    = module.this.tags
   }
 
@@ -45,7 +45,7 @@ resource "argocd_project" "default" {
 
     destination {
       server    = "https://kubernetes.default.svc"
-      namespace = var.argocd_namespace
+      namespace = local.argocd_namespace
     }
 
     namespace_resource_whitelist {
@@ -72,7 +72,7 @@ resource "argocd_project" "additional" {
 
   metadata {
     name      = each.value.name
-    namespace = var.argocd_namespace
+    namespace = local.argocd_namespace
     labels    = module.this.tags
   }
 
@@ -87,7 +87,7 @@ resource "argocd_project" "additional" {
 
     destination {
       server    = "https://kubernetes.default.svc"
-      namespace = var.argocd_namespace
+      namespace = local.argocd_namespace
     }
 
     namespace_resource_whitelist {

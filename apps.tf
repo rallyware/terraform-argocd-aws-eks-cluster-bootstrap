@@ -1,6 +1,7 @@
 locals {
-  argocd_apps     = local.enabled ? var.argocd_apps : []
-  argocd_app_name = can(var.argocd_app_config["name"]) ? var.argocd_app_config["name"] : local.argocd_destination_project
+  argocd_apps      = local.enabled ? var.argocd_apps : []
+  argocd_namespace = var.argocd_app_config["namespace"]
+  argocd_app_name  = can(var.argocd_app_config["name"]) ? var.argocd_app_config["name"] : local.argocd_destination_project
 
   argocd_helm_apps_value = {
     syncOptions = {
@@ -15,23 +16,31 @@ locals {
 
     applications = [for app in local.argocd_apps :
       {
-        name              = module.apps_label[app.name].id
-        namespace         = app.namespace
-        chart             = app.chart
-        repoURL           = app.repository
-        path              = app.path
-        targetRevision    = app.version
-        syncWave          = app.sync_wave
-        values            = data.utils_deep_merge_yaml.argocd_helm_apps[app.name].output
-        releaseName       = app.name
-        annotations       = app.annotations
-        ignoreDifferences = app.ignore_differences != null ? app.ignore_differences : []
-        clusterName       = app.cluster != null ? app.cluster : local.argocd_cluster_destination_name
-        projectName       = app.project != null ? app.project : local.argocd_destination_project
-        syncPolicy        = app.sync_policy
-        syncOptions       = app.sync_options
-        skipCrds          = app.skip_crds
-        valueFiles        = app.value_files
+        name                     = module.apps_label[app.name].id
+        namespace                = app.namespace
+        chart                    = app.chart
+        repoURL                  = app.repository
+        path                     = app.path
+        targetRevision           = app.version
+        syncWave                 = app.sync_wave
+        values                   = data.utils_deep_merge_yaml.argocd_helm_apps[app.name].output
+        releaseName              = app.name
+        annotations              = app.annotations
+        ignoreDifferences        = app.ignore_differences != null ? app.ignore_differences : []
+        clusterName              = app.cluster != null ? app.cluster : local.argocd_cluster_destination_name
+        projectName              = app.project != null ? app.project : local.argocd_destination_project
+        syncOptions              = app.sync_options
+        skipCrds                 = app.skip_crds
+        valueFiles               = app.value_files
+        managedNamespaceMetadata = app.managed_namespace_metadata
+        retry                    = app.retry
+        revisionHistoryLimit     = app.max_history
+
+        automated = {
+          prune      = app.automated.prune
+          selfHeal   = app.automated.self_heal
+          allowEmpty = app.automated.allow_empty
+        }
       }
     ]
   }
@@ -52,9 +61,9 @@ resource "argocd_application" "apps" {
 
   metadata {
     name        = local.argocd_app_name
-    namespace   = var.argocd_namespace
+    namespace   = var.argocd_app_config["namespace"]
     labels      = module.this.tags
-    annotations = var.argocd_app_annotations
+    annotations = var.argocd_app_config["annotations"]
   }
 
   wait = var.argocd_app_config["wait"]
@@ -63,9 +72,9 @@ resource "argocd_application" "apps" {
     project = local.argocd_destination_project
 
     source {
-      repo_url        = var.app_of_apps_helm_chart["repository"]
-      chart           = var.app_of_apps_helm_chart["chart"]
-      target_revision = var.app_of_apps_helm_chart["version"]
+      repo_url        = var.argocd_app_config["helm"]["repository"]
+      chart           = var.argocd_app_config["helm"]["chart"]
+      target_revision = var.argocd_app_config["helm"]["version"]
 
       helm {
         values       = yamlencode(local.argocd_helm_apps_value)
@@ -74,29 +83,29 @@ resource "argocd_application" "apps" {
     }
 
     destination {
-      name      = var.argocd_app_config["cluster_name"]
-      namespace = var.argocd_namespace
+      name      = var.argocd_app_config["destination"]["name"]
+      namespace = local.argocd_namespace
     }
 
     sync_policy {
       automated = {
-        prune       = var.argocd_app_config["automated_prune"]
-        self_heal   = var.argocd_app_config["automated_self_heal"]
-        allow_empty = var.argocd_app_config["automated_allow_empty"]
+        prune       = var.argocd_app_config["automated"]["prune"]
+        self_heal   = var.argocd_app_config["automated"]["self_heal"]
+        allow_empty = var.argocd_app_config["automated"]["allow_empty"]
       }
 
       sync_options = var.argocd_app_config["sync_options"]
 
       dynamic "retry" {
-        for_each = var.argocd_app_config["retry_limit"] > 0 ? [1] : []
+        for_each = var.argocd_app_config["retry"]["limit"] > 0 ? [1] : []
 
         content {
-          limit = var.argocd_app_config["retry_limit"]
+          limit = var.argocd_app_config["retry"]["limit"]
 
           backoff = {
-            duration     = var.argocd_app_config["retry_backoff_duration"]
-            max_duration = var.argocd_app_config["retry_backoff_max_duration"]
-            factor       = var.argocd_app_config["retry_backoff_factor"]
+            duration     = var.argocd_app_config["retry"]["backoff_duration"]
+            max_duration = var.argocd_app_config["retry"]["backoff_max_duration"]
+            factor       = var.argocd_app_config["retry"]["backoff_factor"]
           }
         }
       }
