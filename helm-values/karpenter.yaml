@@ -9,5 +9,15 @@ serviceAccount:
 
 replicas: 1
 
-clusterName: ${cluster_name}
-clusterEndpoint: ${cluster_endpoint}
+settings:
+  aws:
+    clusterName: ${cluster_name}
+    clusterEndpoint: ${cluster_endpoint}
+%{ if role_enabled }
+    defaultInstanceProfile: ${instance_profile}
+%{ endif }
+    featureGates:
+      driftEnabled: true
+
+serviceMonitor:
+  enabled: ${prometheus_enabled}

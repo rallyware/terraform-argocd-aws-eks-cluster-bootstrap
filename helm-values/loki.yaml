@@ -26,10 +26,10 @@ test:
 
 monitoring:
   dashboards:
-    enabled: true
+    enabled: ${prometheus_enabled}
     namespace: monitoring
   rules:
-    enabled: true
-    alerting: true
+    enabled: ${prometheus_enabled}
+    alerting: ${prometheus_enabled}
   serviceMonitor:
-    enabled: true
+    enabled: ${prometheus_enabled}

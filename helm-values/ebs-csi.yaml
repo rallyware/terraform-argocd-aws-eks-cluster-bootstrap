@@ -4,9 +4,9 @@ controller:
   extraCreateMetadata: true
   k8sTagClusterId: ${eks_cluster_id}
   region: ${region}
-  enableMetrics: true
+  enableMetrics: ${prometheus_enabled}
   serviceMonitor:
-    forceEnable: true
+    forceEnable: ${prometheus_enabled}
 
   updateStrategy:
     rollingUpdate:

@@ -9,9 +9,7 @@ serviceAccount:
     eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
 %{ endif }
 
-enableCertManager: true
+enableCertManager: ${cert_manager_enabled}
 
 serviceMonitor:
-  enabled: true
-  interval: 30s
-  scrapeTimeout: 10s
+  enabled: ${prometheus_enabled}
