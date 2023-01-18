@@ -17,7 +17,9 @@ applications:
   #   values: |
   #     fullnameOverride: prometheus
   #   valueFiles: []
-  #   syncOptions: []
+  #   syncOptions:
+  #     - ApplyOutOfSyncOnly=true
+  #     - CreateNamespace=true
   #   automated: {}
   #   retry:
   #     limit: 5
