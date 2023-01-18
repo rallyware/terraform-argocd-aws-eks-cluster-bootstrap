@@ -56,8 +56,9 @@ spec:
     managedNamespaceMetadata:
       {{- toYaml .managedNamespaceMetadata | nindent 6 }}
 {{- end }}
-{{- if .syncOptions }}
-    syncOptions: {{ .syncOptions }}
+{{- with .syncOptions }}
+    syncOptions:
+    {{- toYaml . | nindent 6 }}
 {{- end }}
 {{- if and .retry (ne (.retry.limit | int ) 0) }}
     retry:
@@ -66,5 +67,7 @@ spec:
         duration: {{ .retry.backoff_duration }}
         factor: {{ .retry.backoff_factor }}
         maxDuration: {{ .retry.backoff_maxduration }}
+{{- else }}
+    retry: {}
 {{- end }}
 {{- end }}
