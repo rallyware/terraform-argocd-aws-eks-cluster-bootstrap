@@ -4,16 +4,6 @@ locals {
   argocd_app_name  = can(var.argocd_app_config["name"]) ? var.argocd_app_config["name"] : local.argocd_destination_project
 
   argocd_helm_apps_value = {
-    syncOptions = {
-      CreateNamespace = true
-    }
-
-    syncPolicy = {
-      prune      = true
-      selfHeal   = true
-      allowEmpty = true
-    }
-
     applications = [for app in local.argocd_apps :
       {
         name                     = module.apps_label[app.name].id
@@ -113,9 +103,9 @@ resource "argocd_application" "apps" {
   }
 
   timeouts {
-    create = var.argocd_app_config["create"]
-    update = var.argocd_app_config["update"]
-    delete = var.argocd_app_config["delete"]
+    create = var.argocd_app_config["timeouts"]["create"]
+    update = var.argocd_app_config["timeouts"]["update"]
+    delete = var.argocd_app_config["timeouts"]["delete"]
   }
 
   depends_on = [
