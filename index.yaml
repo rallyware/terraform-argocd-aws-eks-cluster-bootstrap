@@ -3,6 +3,18 @@ entries:
   argocd-app-of-apps:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-01-18T19:18:24.960251161Z"
+    description: A Helm chart to deploy ArgoCD app in app of apps pattern
+    digest: 8574b0e2313f0858ebd173e0365576a25d5685e830f73ffc74a09380577db263
+    maintainers:
+    - name: SweetOps
+    name: argocd-app-of-apps
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/argocd-app-of-apps-0.6.1/argocd-app-of-apps-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-01-16T16:02:21.929371533Z"
     description: A Helm chart to deploy ArgoCD app in app of apps pattern
     digest: cdc835897cc7267fe0758ab7673dd3de99e4ccc91f7bded7abf2713b2f32e0b7
@@ -87,4 +99,4 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
     version: 0.1.0
-generated: "2023-01-16T16:48:58.687771549Z"
+generated: "2023-01-18T19:18:24.960270161Z"
