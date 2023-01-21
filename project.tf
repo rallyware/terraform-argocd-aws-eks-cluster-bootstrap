@@ -1,9 +1,8 @@
 locals {
-  argocd_cluster_default_enabled    = local.enabled && var.argocd_cluster_default_enabled
-  argocd_project_default_enabled    = local.enabled && var.argocd_project_default_enabled
-  argocd_destination_project        = local.argocd_project_default_enabled ? format("%s-bootstrap", local.eks_cluster_id) : var.argocd_app_config["project"]
-  argocd_cluster_destination_server = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].server) : var.argocd_app_config["cluster_addr"]
-  argocd_cluster_destination_name   = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : var.argocd_app_config["cluster_name"]
+  argocd_cluster_default_enabled  = local.enabled && var.argocd_cluster_default_enabled
+  argocd_project_default_enabled  = local.enabled && var.argocd_project_default_enabled
+  argocd_destination_project      = local.enabled && var.argocd_app_config["project"] != null ? var.argocd_app_config["project"] : format("%s-bootstrap", local.eks_cluster_id)
+  argocd_cluster_destination_name = local.argocd_cluster_default_enabled ? one(argocd_cluster.default[*].name) : null
 }
 
 resource "argocd_cluster" "default" {
@@ -29,7 +28,7 @@ resource "argocd_project" "default" {
 
   metadata {
     name      = local.argocd_destination_project
-    namespace = var.argocd_namespace
+    namespace = local.argocd_namespace
     labels    = module.this.tags
   }
 
@@ -39,13 +38,12 @@ resource "argocd_project" "default" {
 
     destination {
       name      = local.argocd_cluster_destination_name
-      server    = local.argocd_cluster_destination_server
       namespace = "*"
     }
 
     destination {
       server    = "https://kubernetes.default.svc"
-      namespace = var.argocd_namespace
+      namespace = local.argocd_namespace
     }
 
     namespace_resource_whitelist {
@@ -72,7 +70,7 @@ resource "argocd_project" "additional" {
 
   metadata {
     name      = each.value.name
-    namespace = var.argocd_namespace
+    namespace = local.argocd_namespace
     labels    = module.this.tags
   }
 
@@ -81,13 +79,13 @@ resource "argocd_project" "additional" {
     source_repos = ["*"]
 
     destination {
-      server    = local.argocd_cluster_destination_server
+      name      = local.argocd_cluster_destination_name
       namespace = "*"
     }
 
     destination {
       server    = "https://kubernetes.default.svc"
-      namespace = var.argocd_namespace
+      namespace = local.argocd_namespace
     }
 
     namespace_resource_whitelist {

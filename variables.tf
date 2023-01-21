@@ -21,12 +21,6 @@ variable "argocd_project_default_enabled" {
   description = "Whether to create default ArgoCD project."
 }
 
-variable "argocd_namespace" {
-  type        = string
-  default     = "argo"
-  description = "The Kubernetes namespace where ArgoCD installed to."
-}
-
 variable "argocd_additional_projects" {
   type = list(object(
     {
@@ -38,47 +32,60 @@ variable "argocd_additional_projects" {
   description = "A list of additional ArgoCD projects to create."
 }
 
-variable "argocd_app_annotations" {
-  type        = map(string)
-  default     = {}
-  description = "A map of annotations which we be applied to the parent app."
-}
-
-variable "app_of_apps_helm_chart" {
-  type = object(
-    {
-      chart      = string
-      repository = string
-      version    = string
-    }
-  )
-
-  default = {
-    chart      = "argocd-app-of-apps"
-    repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-    version    = "0.5.0"
-  }
-}
-
 variable "argocd_app_config" {
   type = object(
     {
-      name                       = optional(string)
-      project                    = optional(string)
-      cluster_name               = optional(string, "in-cluster")
-      cluster_addr               = optional(string, "https://kubernetes.default.svc")
-      wait                       = optional(bool, false)
-      create                     = optional(string, "60m")
-      update                     = optional(string, "60m")
-      delete                     = optional(string, "60m")
-      sync_options               = optional(list(string), ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"])
-      automated_prune            = optional(bool, true)
-      automated_self_heal        = optional(bool, true)
-      automated_allow_empty      = optional(bool, true)
-      retry_limit                = optional(number, 2)
-      retry_backoff_duration     = optional(string, "30s")
-      retry_backoff_max_duration = optional(string, "1m")
-      retry_backoff_factor       = optional(number, 2)
+      name         = optional(string)
+      namespace    = optional(string, "argo")
+      annotations  = optional(map(string))
+      project      = optional(string)
+      wait         = optional(bool, false)
+      sync_options = optional(list(string), ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"])
+
+      helm = optional(
+        object(
+          {
+            repository = optional(string, "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap")
+            chart      = optional(string, "argocd-app-of-apps")
+            version    = optional(string, "0.6.1")
+          }
+      ), {})
+
+      timeouts = optional(
+        object(
+          {
+            create = optional(string, "60m")
+            update = optional(string, "60m")
+            delete = optional(string, "60m")
+          }
+      ), {})
+
+      retry = optional(
+        object(
+          {
+            limit                = optional(number, 0)
+            backoff_duration     = optional(string, "30s")
+            backoff_max_duration = optional(string, "1m")
+            backoff_factor       = optional(number, 2)
+          }
+      ), {})
+
+      destination = optional(
+        object(
+          {
+            name      = optional(string, "in-cluster")
+            namespace = optional(string, "argo")
+          }
+      ), {})
+
+      automated = optional(
+        object(
+          {
+            prune       = optional(bool, true)
+            self_heal   = optional(bool, true)
+            allow_empty = optional(bool, true)
+          }
+      ), {})
     }
   )
   default     = {}
@@ -102,6 +109,8 @@ variable "argocd_apps" {
       max_history     = optional(number, 10)
       sync_wave       = optional(number, 50)
       annotations     = optional(map(string), {})
+      sync_options    = optional(list(string), ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"])
+
       ignore_differences = optional(
         list(object(
           {
@@ -110,10 +119,35 @@ variable "argocd_apps" {
             jqPathExpressions = optional(list(string))
             jsonPointers      = optional(list(string))
           }
-        ))
-      )
-      sync_policy                = optional(map(string), {})
-      sync_options               = optional(map(string), {})
+      )), null)
+
+      retry = optional(
+        object(
+          {
+            limit                = optional(number, 0)
+            backoff_duration     = optional(string, "30s")
+            backoff_max_duration = optional(string, "1m")
+            backoff_factor       = optional(number, 2)
+          }
+      ), {})
+
+      automated = optional(
+        object(
+          {
+            prune       = optional(bool, true)
+            self_heal   = optional(bool, true)
+            allow_empty = optional(bool, true)
+          }
+      ), {})
+
+      managed_namespace_metadata = optional(
+        object(
+          {
+            labels      = optional(map(string))
+            annotations = optional(map(string))
+          }
+      ), null)
+
       create_default_iam_policy  = optional(bool, true)
       create_default_iam_role    = optional(bool, true)
       iam_policy_document        = optional(string, "{}")
@@ -128,24 +162,6 @@ variable "argocd_apps" {
       namespace  = "default"
       version    = "0.1.1"
       sync_wave  = -25
-    },
-
-    {
-      name       = "aws-auth-controller"
-      repository = "https://rustrial.github.io/aws-eks-iam-auth-controller"
-      chart      = "rustrial-aws-eks-iam-auth-controller"
-      namespace  = "kube-system"
-      version    = "0.1.7"
-      sync_wave  = -24
-    },
-
-    {
-      name       = "iam-identity-mappings"
-      repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-      chart      = "iam-identity-mappings"
-      namespace  = "kube-system"
-      version    = "0.1.0"
-      sync_wave  = -24
     },
 
     {

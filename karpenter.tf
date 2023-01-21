@@ -51,9 +51,20 @@ module "karpenter_label" {
 
 module "karpenter_sqs" {
   source  = "rallyware/sqs-queue/aws"
-  version = "0.1.1"
+  version = "0.2.0"
 
+  name    = "karpenter"
   context = module.karpenter_label.context
+
+  prebuilt_policy = {
+    enabled = true
+    principals = {
+      identifiers = [
+        "events.${local.dns_suffix}",
+        "sqs.${local.dns_suffix}",
+      ]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "karpenter" {
@@ -126,6 +137,7 @@ module "karpenter_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["karpenter"]["namespace"], "")
 
+  name    = "karpenter"
   context = module.karpenter_label.context
 }
 
@@ -149,6 +161,7 @@ module "karpenter_instance_profile" {
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
 
+  name       = "karpenter"
   attributes = concat(module.karpenter_label.attributes, ["ip"])
   context    = module.karpenter_label.context
 }
@@ -159,7 +172,8 @@ module "karpenter_event_label" {
 
   for_each = { for k, v in local.karpenter_events : k => v if local.karpenter_enabled }
 
-  attributes = concat(module.karpenter_label.attributes, each.value.name)
+  name       = "karpenter"
+  attributes = concat(module.karpenter_label.attributes, [each.key])
   context    = module.karpenter_label.context
 }
 
