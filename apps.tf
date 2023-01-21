@@ -1,7 +1,7 @@
 locals {
   argocd_apps      = local.enabled ? var.argocd_apps : []
   argocd_namespace = var.argocd_app_config["namespace"]
-  argocd_app_name  = can(var.argocd_app_config["name"]) ? var.argocd_app_config["name"] : local.argocd_destination_project
+  argocd_app_name  = var.argocd_app_config["name"] != null ? var.argocd_app_config["name"] : local.argocd_destination_project
 
   argocd_helm_apps_value = {
     applications = [for app in local.argocd_apps :

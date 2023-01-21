@@ -4,6 +4,7 @@ locals {
   eks_cluster_id              = one(data.aws_eks_cluster.default[*].id)
   eks_cluster_oidc_issuer_url = one(data.aws_eks_cluster.default[*].identity[0].oidc[0].issuer)
   eks_cluster_endpoint        = one(data.aws_eks_cluster.default[*].endpoint)
+  dns_suffix                  = one(data.aws_partition.default[*].dns_suffix)
   partition                   = one(data.aws_partition.default[*].partition)
   region                      = one(data.aws_region.default[*].name)
 }

@@ -47,7 +47,7 @@ variable "argocd_app_config" {
           {
             repository = optional(string, "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap")
             chart      = optional(string, "argocd-app-of-apps")
-            version    = optional(string, "0.6.0")
+            version    = optional(string, "0.6.1")
           }
       ), {})
 
@@ -162,24 +162,6 @@ variable "argocd_apps" {
       namespace  = "default"
       version    = "0.1.1"
       sync_wave  = -25
-    },
-
-    {
-      name       = "aws-auth-controller"
-      repository = "https://rustrial.github.io/aws-eks-iam-auth-controller"
-      chart      = "rustrial-aws-eks-iam-auth-controller"
-      namespace  = "kube-system"
-      version    = "0.1.7"
-      sync_wave  = -24
-    },
-
-    {
-      name       = "iam-identity-mappings"
-      repository = "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap"
-      chart      = "iam-identity-mappings"
-      namespace  = "kube-system"
-      version    = "0.1.0"
-      sync_wave  = -24
     },
 
     {
