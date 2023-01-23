@@ -3,6 +3,16 @@ variable "eks_cluster_id" {
   description = "EKS cluster ID."
 }
 
+variable "irsa_label_order" {
+  type        = list(string)
+  default     = ["namespace", "tenant", "stage", "attributes"]
+  description = <<-EOT
+    The order in which the labels (ID elements) appear in the `id`.
+    Defaults to ["namespace", "environment", "stage", "name", "attributes"].
+    You can omit any of the 6 labels ("tenant" is the 6th), but at least one must be present.
+    EOT
+}
+
 variable "argocd_iam_role_arn" {
   type        = string
   default     = ""

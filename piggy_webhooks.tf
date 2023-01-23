@@ -65,5 +65,6 @@ module "piggy_webhooks_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["piggy-webhooks"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["piggy-webhooks"]["namespace"], "")
 
-  context = module.piggy_webhooks_label.context
+  label_order = var.irsa_label_order
+  context     = module.piggy_webhooks_label.context
 }

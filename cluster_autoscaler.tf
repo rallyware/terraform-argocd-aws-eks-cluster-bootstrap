@@ -43,5 +43,6 @@ module "cluster_autoscaler_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["cluster-autoscaler"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["cluster-autoscaler"]["namespace"], "")
 
-  context = module.cluster_autoscaler_label.context
+  label_order = var.irsa_label_order
+  context     = module.cluster_autoscaler_label.context
 }

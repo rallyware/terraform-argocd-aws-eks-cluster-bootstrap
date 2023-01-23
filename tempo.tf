@@ -61,5 +61,6 @@ module "tempo_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["tempo"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["tempo"]["namespace"], "")
 
-  context = module.tempo_label.context
+  label_order = var.irsa_label_order
+  context     = module.tempo_label.context
 }
