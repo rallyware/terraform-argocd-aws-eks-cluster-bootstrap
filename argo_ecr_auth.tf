@@ -51,5 +51,6 @@ module "argo_ecr_auth_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["argo-ecr-auth"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["argo-ecr-auth"]["namespace"], "")
 
-  context = module.argo_ecr_auth_label.context
+  label_order = var.irsa_label_order
+  context     = module.argo_ecr_auth_label.context
 }

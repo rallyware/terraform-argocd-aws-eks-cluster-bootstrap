@@ -137,8 +137,8 @@ module "karpenter_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["karpenter"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["karpenter"]["namespace"], "")
 
-  name    = "karpenter"
-  context = module.karpenter_label.context
+  label_order = var.irsa_label_order
+  context     = module.karpenter_label.context
 }
 
 module "karpenter_instance_profile" {

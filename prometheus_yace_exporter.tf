@@ -38,5 +38,6 @@ module "prometheus_yace_exporter_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["prometheus-yace-exporter"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["prometheus-yace-exporter"]["namespace"], "")
 
-  context = module.prometheus_yace_exporter_label.context
+  label_order = var.irsa_label_order
+  context     = module.prometheus_yace_exporter_label.context
 }

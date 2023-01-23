@@ -285,5 +285,6 @@ module "aws_lb_controller_eks_iam_role" {
   service_account_name        = try(local.argocd_helm_apps_set["aws-lb-controller"]["name"], "")
   service_account_namespace   = try(local.argocd_helm_apps_set["aws-lb-controller"]["namespace"], "")
 
-  context = module.aws_lb_controller_label.context
+  label_order = var.irsa_label_order
+  context     = module.aws_lb_controller_label.context
 }
