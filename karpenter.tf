@@ -79,7 +79,6 @@ data "aws_iam_policy_document" "karpenter" {
 
     actions = [
       "ssm:GetParameter",
-      "iam:PassRole",
       "ec2:DescribeImages",
       "ec2:RunInstances",
       "ec2:DescribeSubnets",
@@ -93,28 +92,15 @@ data "aws_iam_policy_document" "karpenter" {
       "ec2:CreateLaunchTemplate",
       "ec2:CreateFleet",
       "ec2:DescribeSpotPriceHistory",
-      "pricing:GetProducts"
+      "pricing:GetProducts",
+      "ec2:TerminateInstances",
+      "ec2:DeleteLaunchTemplate",
     ]
   }
 
   statement {
     actions   = ["iam:PassRole"]
     resources = [module.karpenter_instance_profile.arn]
-  }
-
-  statement {
-    actions = [
-      "ec2:TerminateInstances",
-      "ec2:DeleteLaunchTemplate",
-    ]
-
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = format("ec2:ResourceTag/kubernetes.io/cluster/%s", local.eks_cluster_id)
-      values   = ["owned"]
-    }
   }
 
   statement {
