@@ -99,19 +99,13 @@ locals {
       prometheus = {
         metricServer = {
           enabled = local.prometheus_operator_enabled
-          serviceMonitor = {
+          podMonitor = {
             enabled = local.prometheus_operator_enabled
           }
         }
         operator = {
           enabled = local.prometheus_operator_enabled
-          serviceMonitor = {
-            enabled = local.prometheus_operator_enabled
-          }
-        }
-        webhooks = {
-          enabled = local.prometheus_operator_enabled
-          serviceMonitor = {
+          podMonitor = {
             enabled = local.prometheus_operator_enabled
           }
         }
