@@ -51,7 +51,7 @@ module "karpenter_label" {
 
 module "karpenter_sqs" {
   source  = "rallyware/sqs-queue/aws"
-  version = "0.2.0"
+  version = "0.2.1"
 
   name    = "karpenter"
   context = module.karpenter_label.context
