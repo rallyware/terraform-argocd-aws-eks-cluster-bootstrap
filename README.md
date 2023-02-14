@@ -62,7 +62,7 @@ module "apps" {
 | <a name="module_karpenter_event_label"></a> [karpenter\_event\_label](#module\_karpenter\_event\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_karpenter_instance_profile"></a> [karpenter\_instance\_profile](#module\_karpenter\_instance\_profile) | cloudposse/iam-role/aws | 0.17.0 |
 | <a name="module_karpenter_label"></a> [karpenter\_label](#module\_karpenter\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_karpenter_sqs"></a> [karpenter\_sqs](#module\_karpenter\_sqs) | rallyware/sqs-queue/aws | 0.2.0 |
+| <a name="module_karpenter_sqs"></a> [karpenter\_sqs](#module\_karpenter\_sqs) | rallyware/sqs-queue/aws | 0.2.1 |
 | <a name="module_loki_eks_iam_role"></a> [loki\_eks\_iam\_role](#module\_loki\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.1.2 |
 | <a name="module_loki_label"></a> [loki\_label](#module\_loki\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_loki_s3_bucket"></a> [loki\_s3\_bucket](#module\_loki\_s3\_bucket) | cloudposse/s3-bucket/aws | 3.0.0 |
