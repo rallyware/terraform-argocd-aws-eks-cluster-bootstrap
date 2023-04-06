@@ -17,7 +17,7 @@ jobs:
 
       - name: Comment for PR title conformance
         if: failure()
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v3
         with:
           issue-number: ${{tojson(github.event.number)}}
           body: |
