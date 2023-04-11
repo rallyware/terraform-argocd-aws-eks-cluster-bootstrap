@@ -14,20 +14,6 @@ module "efs_csi_label" {
   context = module.this.context
 }
 
-module "efs_csi_kms_key" {
-  source  = "cloudposse/kms-key/aws"
-  version = "0.12.1"
-
-  description             = format("KMS key for efs-csi on %s", local.eks_cluster_id)
-  deletion_window_in_days = 10
-  enable_key_rotation     = true
-  alias                   = format("alias/%s/efs-csi", local.eks_cluster_id)
-
-  name       = "efs"
-  attributes = ["csi"]
-  context    = module.efs_csi_label.context
-}
-
 data "aws_iam_policy_document" "efs_csi" {
   count = local.efs_csi_iam_role_enabled ? (local.efs_csi_iam_policy_enabled ? 1 : 0) : 0
 
@@ -84,41 +70,6 @@ data "aws_iam_policy_document" "efs_csi" {
 
       values = ["true"]
     }
-  }
-
-  statement {
-    effect = "Allow"
-    resources = [
-      module.efs_csi_kms_key.key_arn
-    ]
-
-    actions = [
-      "kms:CreateGrant",
-      "kms:ListGrants",
-      "kms:RevokeGrant",
-    ]
-
-    condition {
-      test     = "Bool"
-      variable = "kms:GrantIsForAWSResource"
-      values   = ["true"]
-    }
-  }
-
-  statement {
-    effect = "Allow"
-    resources = [
-      module.efs_csi_kms_key.key_arn
-    ]
-
-
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey",
-    ]
   }
 }
 

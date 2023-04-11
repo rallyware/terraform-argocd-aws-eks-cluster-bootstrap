@@ -412,7 +412,6 @@ locals {
         role_arn               = module.efs_csi_eks_iam_role.service_account_role_arn
         role_enabled           = local.efs_csi_iam_role_enabled
         eks_cluster_id         = local.eks_cluster_id
-        kms_key_id             = module.efs_csi_kms_key.key_id
       }
     ))
   }
