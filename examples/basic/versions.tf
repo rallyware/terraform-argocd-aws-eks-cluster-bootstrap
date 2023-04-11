@@ -12,7 +12,7 @@ terraform {
     }
     argocd = {
       source  = "oboukili/argocd"
-      version = ">= 3.0, < 5.0"
+      version = "< 5.2"
     }
     utils = {
       source  = "cloudposse/utils"
