@@ -493,5 +493,12 @@ variable "argocd_apps" {
       chart      = "oauth2-proxy"
       version    = "4.2.0"
     },
+    {
+      name       = "efs-csi"
+      namespace  = "csi-drivers"
+      chart      = "aws-efs-csi-driver"
+      repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
+      version    = "1.5.4"
+    },
   ]
 }
