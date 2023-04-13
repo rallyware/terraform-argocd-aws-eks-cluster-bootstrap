@@ -498,7 +498,7 @@ variable "argocd_apps" {
       namespace  = "csi-drivers"
       chart      = "aws-efs-csi-driver"
       repository = "https://kubernetes-sigs.github.io/aws-efs-csi-driver"
-      version    = "1.5.4"
+      version    = "2.4.1"
     },
   ]
 }
