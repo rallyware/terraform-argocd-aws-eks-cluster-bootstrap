@@ -404,6 +404,7 @@ locals {
         }
       ]
     }
+
     efs-csi = yamldecode(templatefile("${path.module}/helm-values/efs-csi.yaml",
       {
         fullname_override      = try(local.argocd_helm_apps_set["efs-csi"]["name"], "")
