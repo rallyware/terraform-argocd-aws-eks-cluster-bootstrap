@@ -168,6 +168,11 @@ module "apps" {
 | <a name="output_ebs_csi_service_account_role_arn"></a> [ebs\_csi\_service\_account\_role\_arn](#output\_ebs\_csi\_service\_account\_role\_arn) | EBS CSI driver IAM role ARN |
 | <a name="output_ebs_csi_service_account_role_name"></a> [ebs\_csi\_service\_account\_role\_name](#output\_ebs\_csi\_service\_account\_role\_name) | EBS CSI driver IAM role name |
 | <a name="output_ebs_csi_service_account_role_unique_id"></a> [ebs\_csi\_service\_account\_role\_unique\_id](#output\_ebs\_csi\_service\_account\_role\_unique\_id) | EBS CSI driver IAM role unique ID |
+| <a name="output_efs_csi_service_account_policy_id"></a> [efs\_csi\_service\_account\_policy\_id](#output\_efs\_csi\_service\_account\_policy\_id) | EFS CSI driver IAM policy ID |
+| <a name="output_efs_csi_service_account_policy_name"></a> [efs\_csi\_service\_account\_policy\_name](#output\_efs\_csi\_service\_account\_policy\_name) | EFS CSI driver IAM policy name |
+| <a name="output_efs_csi_service_account_role_arn"></a> [efs\_csi\_service\_account\_role\_arn](#output\_efs\_csi\_service\_account\_role\_arn) | EFS CSI driver IAM role ARN |
+| <a name="output_efs_csi_service_account_role_name"></a> [efs\_csi\_service\_account\_role\_name](#output\_efs\_csi\_service\_account\_role\_name) | EFS CSI driver IAM role name |
+| <a name="output_efs_csi_service_account_role_unique_id"></a> [efs\_csi\_service\_account\_role\_unique\_id](#output\_efs\_csi\_service\_account\_role\_unique\_id) | EFS CSI driver IAM role unique ID |
 | <a name="output_karpenter_instance_profile_arn"></a> [karpenter\_instance\_profile\_arn](#output\_karpenter\_instance\_profile\_arn) | The Karpenter Instance Profile ARN |
 | <a name="output_karpenter_instance_profile_id"></a> [karpenter\_instance\_profile\_id](#output\_karpenter\_instance\_profile\_id) | The Karpenter Instance Profile ID |
 | <a name="output_karpenter_instance_profile_name"></a> [karpenter\_instance\_profile\_name](#output\_karpenter\_instance\_profile\_name) | The name of Karpenter Instance Profile |

@@ -267,3 +267,28 @@ output "argo_ecr_auth_service_account_role_unique_id" {
   value       = module.argo_ecr_auth_eks_iam_role.service_account_role_unique_id
   description = "argo-ecr-auth IAM role unique ID"
 }
+
+output "efs_csi_service_account_role_name" {
+  value       = module.efs_csi_eks_iam_role.service_account_role_name
+  description = "EFS CSI driver IAM role name"
+}
+
+output "efs_csi_service_account_role_unique_id" {
+  value       = module.efs_csi_eks_iam_role.service_account_role_unique_id
+  description = "EFS CSI driver IAM role unique ID"
+}
+
+output "efs_csi_service_account_role_arn" {
+  value       = module.efs_csi_eks_iam_role.service_account_role_arn
+  description = "EFS CSI driver IAM role ARN"
+}
+
+output "efs_csi_service_account_policy_name" {
+  value       = module.efs_csi_eks_iam_role.service_account_policy_name
+  description = "EFS CSI driver IAM policy name"
+}
+
+output "efs_csi_service_account_policy_id" {
+  value       = module.efs_csi_eks_iam_role.service_account_policy_id
+  description = "EFS CSI driver IAM policy ID"
+}
