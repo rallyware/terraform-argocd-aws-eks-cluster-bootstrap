@@ -82,7 +82,6 @@ module "efs_csi_eks_iam_role" {
   service_account_name        = "efs-csi-controller-sa"
   service_account_namespace   = try(local.argocd_helm_apps_set["efs-csi"]["namespace"], "")
 
-  enabled     = local.efs_csi_iam_role_enabled
   label_order = var.irsa_label_order
   context     = module.efs_csi_label.context
 }
