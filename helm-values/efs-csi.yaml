@@ -6,9 +6,11 @@ node:
     name: efs-csi-node-sa
     annotations: {}
 controller:
+%{ if role_enabled }
   serviceAccount:
     create: true
     name: efs-csi-controller-sa
     annotations:
       eks.amazonaws.com/role-arn: ${role_arn}
       eks.amazonaws.com/sts-regional-endpoints: "${sts_regional_endpoints}"
+%{ endif }
