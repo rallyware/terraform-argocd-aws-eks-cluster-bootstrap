@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "velero" {
 
 module "velero_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.2"
+  version = "0.2.0"
 
   aws_iam_policy_document     = local.velero_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
