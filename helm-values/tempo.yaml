@@ -160,6 +160,6 @@ memcachedExporter:
   enabled: true
 
 serviceMonitor:
-  enabled: true
+  enabled: ${prometheus_enabled}
   interval: 30s
   scrapeTimeout: 10s

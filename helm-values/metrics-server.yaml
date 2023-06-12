@@ -1,0 +1,8 @@
+fullnameOverride: ${fullname_override}
+
+metrics:
+  enabled: ${prometheus_enabled}
+
+serviceMonitor:
+  enabled: ${prometheus_enabled}
+  interval: 30s

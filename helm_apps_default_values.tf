@@ -3,6 +3,7 @@ locals {
   argocd_helm_apps_set        = local.enabled ? { for app in local.argocd_apps : app.name => app if app.chart != null } : {}
   prometheus_operator_enabled = local.enabled && contains(local.argocd_helm_apps_enabled, "prometheus-operator-crds")
   cert_manager_enabled        = local.enabled && contains(local.argocd_helm_apps_enabled, "cert-manager")
+  metrics_server_enabled      = module.this.enabled && contains(local.argocd_helm_apps_enabled, "metrics-server")
 
   argocd_helm_apps_default_values = {
     argo-rollouts = {
@@ -301,6 +302,7 @@ locals {
         role_arn               = module.tempo_eks_iam_role.service_account_role_arn
         role_enabled           = local.tempo_iam_role_enabled
         bucket_id              = module.tempo_s3_bucket.bucket_id
+        prometheus_enabled     = local.prometheus_operator_enabled
       }
     ))
 
@@ -413,6 +415,13 @@ locals {
         role_arn               = module.efs_csi_eks_iam_role.service_account_role_arn
         role_enabled           = local.efs_csi_iam_role_enabled
         eks_cluster_id         = local.eks_cluster_id
+      }
+    ))
+
+    metrics-server = yamldecode(templatefile("${path.module}/helm-values/metrics-server.yaml",
+      {
+        fullname_override  = try(local.argocd_helm_apps_set["metrics-server"]["name"], "")
+        prometheus_enabled = local.prometheus_operator_enabled
       }
     ))
   }
