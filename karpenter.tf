@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "karpenter" {
 
 module "karpenter_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.2"
+  version = "0.2.0"
 
   aws_iam_policy_document     = local.karpenter_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
