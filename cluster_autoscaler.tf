@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "cluster_autoscaler" {
 
 module "cluster_autoscaler_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.1.2"
+  version = "0.2.1"
 
   aws_iam_policy_document     = local.cluster_autoscaler_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
