@@ -16,7 +16,7 @@ resource "tls_self_signed_cert" "linkerd" {
 
   private_key_pem       = tls_private_key.linkerd[each.key].private_key_pem
   validity_period_hours = 87600
-  early_renewal_hours   = 80000
+  early_renewal_hours   = 1440
   is_ca_certificate     = true
 
   subject {
