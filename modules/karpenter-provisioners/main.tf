@@ -1,10 +1,4 @@
 locals {
-  karpenter_provisioner_enabled                    = module.this.enabled && contains(local.argocd_helm_apps_enabled, "karpenter_provisioner")
-  karpenter_provisioner_iam_role_enabled           = local.karpenter_provisioner_enabled ? local.argocd_helm_apps_set["karpenter_provisioner"]["create_default_iam_role"] : false
-  karpenter_provisioner_iam_policy_enabled         = local.karpenter_provisioner_enabled ? local.argocd_helm_apps_set["karpenter_provisioner"]["create_default_iam_policy"] : false
-  karpenter_provisioner_iam_policy_document        = local.karpenter_provisioner_iam_policy_enabled ? one(data.aws_iam_policy_document.karpenter_provisioner[*].json) : try(local.argocd_helm_apps_set["karpenter_provisioner"]["iam_policy_document"], "{}")
-  karpenter_provisioner_use_sts_regional_endpoints = local.karpenter_provisioner_enabled ? local.argocd_helm_apps_set["karpenter_provisioner"]["use_sts_regional_endpoints"] : false
-
   karpenter_provisioner_values = yamlencode({ provisioners = [for node in var.karpenter_node_pools :
     {
       name = node.name
@@ -78,8 +72,9 @@ locals {
       {
         name = node.name
         spec = {
-          amiFamily = "AL2"
-          tags      = module.karpenter_provisioner_label[node.name].tags
+          amiFamily          = "AL2"
+          tags               = module.karpenter_provisioner_label[node.name].tags
+          detailedMonitoring = true
 
           subnetSelector = {
             aws-ids = join(",", local.private_subnet_ids)
@@ -115,13 +110,27 @@ locals {
     ]
     }
   )
-  
+
+}
+
+data "aws_ami" "karpenter_provisioner" {
+  for_each    = toset(["arm64", "amd64"])
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["eks-${each.value}-cluster-${var.kubernetes_version}-${var.karpenter_ami_version}"]
+  }
 }
 
 module "karpenter_provisioner_label" {
+  for_each = { for node in var.karpenter_node_pools : node.name => node }
+
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  enabled = local.karpenter_provisioner_iam_role_enabled
-  context = module.this.context
+  name       = "karpenter"
+  attributes = [each.value.name]
+  context    = var.context
+  tags       = each.value.kubernetes_labels
 }

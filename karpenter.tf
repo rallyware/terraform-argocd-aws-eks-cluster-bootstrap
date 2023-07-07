@@ -163,6 +163,14 @@ module "karpenter_event_label" {
   context    = module.karpenter_label.context
 }
 
+module "karpenter_provisioner" {
+  source = "./modules/karpenter-provisioners"
+
+  context = module.karpenter_label.context
+  kubernetes_version = var.kubernetes_version
+  karpenter_ami_version = var.karpenter_ami_version
+}
+
 resource "aws_cloudwatch_event_rule" "karpenter" {
   for_each = { for k, v in local.karpenter_events : k => v if local.karpenter_enabled }
 

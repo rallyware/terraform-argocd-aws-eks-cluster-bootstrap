@@ -1,3 +1,13 @@
+variable "kubernetes_version" {
+  type        = string
+  description = "Desired Kubernetes master version. If you do not specify a value, the latest available version is used"
+}
+
+variable "karpenter_ami_version" {
+  type        = string
+  description = "Karpenter AMI version"
+}
+
 variable "eks_cluster_id" {
   type        = string
   description = "EKS cluster ID."

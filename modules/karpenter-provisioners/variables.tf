@@ -1,3 +1,16 @@
+variable "context" {
+}
+
+variable "kubernetes_version" {
+  type        = string
+  description = "Desired Kubernetes master version. If you do not specify a value, the latest available version is used"
+}
+
+variable "karpenter_ami_version" {
+  type        = string
+  description = "Karpenter AMI version"
+}
+
 variable "karpenter_node_pools" {
   type = list(object({
     name              = string
