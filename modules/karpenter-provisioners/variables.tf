@@ -1,21 +1,60 @@
-variable "context" {
-}
-
-variable "kubernetes_version" {
-  type        = string
-  description = "Desired Kubernetes master version. If you do not specify a value, the latest available version is used"
-}
-
-variable "karpenter_ami_version" {
-  type        = string
-  description = "Karpenter AMI version"
-}
-
 variable "karpenter_node_pools" {
   type = list(object({
-    name              = string
-    instance_types    = list(string)
-    kubernetes_labels = map(string)
+    name                                   = string
+    instance_types                         = list(string)
+    kubernetes_labels                      = map(string)
+    annotations                            = optional(map(string), null)
+    taints                                 = optional(map(string), null)
+    startup_taints                         = optional(map(string), null)
+    limits                                 = optional(map(any), null)
+    consolidation                          = optional(bool, false)
+    capacity_type                          = optional(list(string), ["on-demand", "spot"])
+    arch                                   = optional(list(string), ["arm64", "amd64"])
+    os                                     = optional(list(string), ["linux"])
+    instance_category                      = optional(list(string), ["m", "r", "t"])
+    instance_cpu                           = optional(list(string), ["2", "4", "8", "16"])
+    instance_hypervisor                    = optional(list(string), ["nitro"])
+    instance_generation                    = optional(list(string), ["2"])
+    ttl_seconds_after_empty                = optional(number, 300)
+    vpc_azs                                = optional(list(string), ["eu-central-1a", "eu-central-1b", "eu-central-1c"])
+    cluster_dns                            = optional(list(string), ["10.0.1.100"])
+    container_runtime                      = optional(string, "containerd")
+    cpu_system_reserved                    = optional(string, "100m")
+    memory_system_reserved                 = optional(string, "100Mi")
+    ephemeral_storage_system_reserved      = optional(string, "1Gi")
+    cpu_kube_reserved                      = optional(string, "100m")
+    memory_kube_reserved                   = optional(string, "200Mi")
+    ephemeral_storage_kube_reserved        = optional(string, "3Gi")
+    memory_eviction_hard                   = optional(string, "2%")
+    nodefs_eviction_hard                   = optional(string, "10%")
+    inodes_free_eviction_hard              = optional(string, "10%")
+    memory_eviction_soft                   = optional(string, "5%")
+    nodefs_eviction_soft                   = optional(string, "15%")
+    inodes_free_eviction_soft              = optional(string, "15%")
+    memory_eviction_soft_grace_period      = optional(string, "5m0s")
+    nodefs_eviction_soft_grace_period      = optional(string, "1m30s")
+    inodes_free_eviction_soft_grace_period = optional(string, "2m")
+    eviction_max_pod_grace_period          = optional(number, 600)
+    image_gc_high_threshold_percent        = optional(number, 85)
+    image_gc_low_threshold_percent         = optional(number, 80)
+    cpu_cfs_quota                          = optional(bool, true)
+    pods_per_core                          = optional(number, 2)
+    max_pods                               = optional(number, 110)
+    ttl_seconds_until_expired              = optional(number, 2592000)
+    ttl_seconds_after_empty                = optional(number, 30)
+    weight                                 = optional(number, 0)
+    ami_family                             = optional(string, "AL2")
+    detailed_monitoring                    = optional(bool, true)
+    instance_profile                       = optional(string, null)
+    user_data                              = optional(string, null)
+    metadata_http_endpoint                 = optional(string, "enabled")
+    metadata_http_put_response_hop_limit   = optional(number, 2)
+    metadata_http_tokens                   = optional(string, "required")
+    block_device_name                      = optional(string, "/dev/xvda")
+    volume_type                            = optional(string, "gp3")
+    volume_size                            = optional(string, "35Gi")
+    device_delete_on_termination           = optional(bool, true)
+    device_encrypted                       = optional(bool, true)
   }))
   default = [
     {
