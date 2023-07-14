@@ -3,12 +3,12 @@ locals {
     {
       name = node.name
       spec = {
-        ttlSecondsAfterEmpty = node.ttl_seconds_after_empty
+        ttlSecondsAfterEmpty = node.consolidation == true ? null : node.ttl_seconds_after_empty
         labels               = node.kubernetes_labels
         annotations          = node.annotations
 
         consolidation = {
-          enabled = node.ttl_seconds_after_empty == null ? true : false
+          enabled = node.consolidation
         }
 
         requirements = node.requirements
@@ -39,7 +39,7 @@ locals {
         name = temp.name
         spec = {
           amiFamily          = temp.ami_family
-          tags               = module.karpenter_provisioner_label[node.name].tags
+          tags               = module.karpenter_provisioner_label[temp.name].tags
           detailedMonitoring = temp.detailed_monitoring
           instanceProfile    = temp.instance_profile
           userData           = temp.user_data
@@ -75,8 +75,7 @@ module "karpenter_provisioner_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name       = "karpenter"
+  context    = module.this.context
   attributes = [each.value.name]
-  context    = var.context
-  tags       = each.value.kubernetes_labels
+  tags       = merge(module.this.tags, each.value.kubernetes_labels)
 }

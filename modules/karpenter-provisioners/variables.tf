@@ -3,10 +3,11 @@ variable "karpenter_node_pools" {
     name                      = string
     instance_types            = list(string)
     kubernetes_labels         = map(string)
+    consolidation             = optional(bool, true)
     annotations               = optional(map(string), null)
     ttl_seconds_after_empty   = optional(number, 300)
-    ttl_seconds_until_expired = optional(number, 2592000)
-    weight                    = optional(number, 0)
+    ttl_seconds_until_expired = optional(number, null)
+    weight                    = optional(number, null)
     limits                    = optional(map(any), null)
 
     taints = optional(
@@ -42,41 +43,6 @@ variable "karpenter_node_pools" {
           key      = "kubernetes.io/arch"
           operator = "In"
           values   = ["arm64", "amd64"]
-        },
-        {
-          key      = "node.kubernetes.io/instance-type"
-          operator = "In"
-          values   = ["t4g.small", "t3a.small", "t3.small"]
-        },
-        {
-          key      = "topology.kubernetes.io/zone"
-          operator = "In"
-          values   = ["eu-central-1a", "eu-central-1b", "eu-central-1c"] # TODO
-        },
-        {
-          key      = "kubernetes.io/os"
-          operator = "In"
-          values   = ["linux"]
-        },
-        {
-          key      = "karpenter.k8s.aws/instance-category"
-          operator = "In"
-          values   = ["m", "r", "t"]
-        },
-        {
-          key      = "karpenter.k8s.aws/instance-cpu"
-          operator = "In"
-          values   = ["2", "4", "8", "16"]
-        },
-        {
-          key      = "karpenter.k8s.aws/instance-hypervisor"
-          operator = "In"
-          values   = ["nitro"]
-        },
-        {
-          key      = "karpenter.k8s.aws/instance-generation"
-          operator = "Gt"
-          values   = ["2"]
         }
     ])
 
@@ -117,7 +83,7 @@ variable "karpenter_node_pools" {
         maxPods                     = number
         })
         ), {
-        clusterDNS       = ["10.0.1.100"]
+        clusterDNS       = null
         containerRuntime = "containerd"
         systemReserved = map(object({
           cpu               = "100m"
@@ -148,203 +114,12 @@ variable "karpenter_node_pools" {
         imageGCHighThresholdPercent = 85
         imageGCLowThresholdPercent  = 80
         cpuCFSQuota                 = true
-        podsPerCore                 = 2
+        podsPerCore                 = null
         maxPods                     = 110
     })
 
   }))
-  default = [
-    {
-      name = "web-s"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.small", "t3a.small", "t3.small"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "web"
-        "plan"               = "S"
-      }
-    },
-    {
-      name = "web-m"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.medium", "m6g.medium", "m6gd.medium", "t3a.medium", "t3.medium"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "web"
-        "plan"               = "M"
-      }
-    },
-    {
-      name = "web-l"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.large", "m6gd.large", "t4g.large", "m6a.large", "m5a.large", "m5.large", "m5n.large"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "web"
-        "plan"               = "L"
-      }
-    },
-    {
-      name = "web-xl"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.xlarge", "m6gd.xlarge", "t4g.xlarge", "m6a.xlarge", "m5a.xlarge", "m5.xlarge", "m5n.xlarge"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "web"
-        "plan"               = "XL"
-      }
-    },
-    {
-      name = "web-xxl"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.2xlarge", "m6gd.2xlarge", "t4g.2xlarge", "m6a.2xlarge", "m5a.2xlarge", "m5.2xlarge", "m5n.2xlarge"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "web"
-        "plan"               = "XXL"
-      }
-    },
-    {
-      name = "worker-s"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.small", "t3a.small", "t3.small"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "worker"
-        "plan"               = "S"
-      }
-    },
-    {
-      name = "worker-m"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.medium", "m6g.medium", "m6gd.medium", "t3a.medium", "t3.medium"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "worker"
-        "plan"               = "M"
-      }
-    },
-    {
-      name = "worker-l"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.large", "m6gd.large", "t4g.large", "m6a.large", "m5a.large", "m5.large", "m5n.large"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "worker"
-        "plan"               = "L"
-      }
-    },
-    {
-      name = "worker-xl"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.xlarge", "m6gd.xlarge", "t4g.xlarge", "m6a.xlarge", "m5a.xlarge", "m5.xlarge", "m5n.xlarge"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "worker"
-        "plan"               = "XL"
-      }
-    },
-    {
-      name = "worker-xxl"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["m6g.2xlarge", "m6gd.2xlarge", "t4g.2xlarge", "m6a.2xlarge", "m5a.2xlarge", "m5.2xlarge", "m5n.2xlarge"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "worker"
-        "plan"               = "XXL"
-      }
-    },
-    {
-      name = "migrations"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.medium", "m6g.medium", "m6gd.medium", "t3a.medium", "t3.medium"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "migrations"
-      }
-    },
-    {
-      name = "redis"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.small", "t3a.small", "t3.small"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "redis"
-      }
-    },
-    {
-      name = "redis-prod"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.small", "t3a.small", "t3.small"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "redis-prod"
-      }
-    },
-    {
-      name = "elasticsearch"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["r6g.large", "r6gd.large", "t4g.xlarge", "m6g.xlarge", "m6gd.xlarge", "r5a.large", "r5.large", "r5ad.large"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "elasticsearch"
-      }
-    },
-    {
-      name = "infra"
-      requirements = [{
-        key      = "node.kubernetes.io/instance-type"
-        operator = "In"
-        values   = ["t4g.medium", "m6g.medium", "m6gd.medium", "t3a.medium", "t3.medium"]
-      }]
-
-      kubernetes_labels = {
-        "node-group-purpose" = "infra"
-      }
-    },
-  ]
+  default     = []
   description = "A list of karpenter node-pool sets"
 }
 
@@ -393,53 +168,7 @@ variable "node_templates" {
         }
     })
   }))
-  default = [
-    {
-      name = "web-s"
-    },
-    {
-      name = "web-m"
-    },
-    {
-      name = "web-l"
-    },
-    {
-      name = "web-xl"
-    },
-    {
-      name = "web-xxl"
-    },
-    {
-      name = "worker-s"
-    },
-    {
-      name = "worker-m"
-    },
-    {
-      name = "worker-l"
-    },
-    {
-      name = "worker-xl"
-    },
-    {
-      name = "worker-xxl"
-    },
-    {
-      name = "migrations"
-    },
-    {
-      name = "redis"
-    },
-    {
-      name = "redis-prod"
-    },
-    {
-      name = "elasticsearch"
-    },
-    {
-      name = "infra"
-    },
-  ]
+  default     = []
   description = "A list of karpenter node templates"
 
 }
