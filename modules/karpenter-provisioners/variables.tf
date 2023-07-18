@@ -1,18 +1,3 @@
-variable "subnet_selector" {
-  type        = string
-  description = "Discovers tagged subnets to attach to instances"
-}
-
-variable "security_group_selector" {
-  type        = map(string)
-  description = "Discovers tagged security groups to attach to instances"
-}
-
-variable "ami_selector" {
-  type = list(string)
-  description = "Discovers tagged amis to override the amiFamily's default"
-}
-
 variable "karpenter_node_pools" {
   type = list(object({
     name                      = string
@@ -65,7 +50,7 @@ variable "karpenter_node_pools" {
       object({
         cluster_dns       = list(string)
         container_runtime = string
-        system_reserved =object({
+        system_reserved = object({
           cpu               = string
           memory            = string
           ephemeral_storage = string
@@ -97,8 +82,8 @@ variable "karpenter_node_pools" {
         pods_per_core                   = number
         max_pods                        = number
         }
-        ),
-        {
+      ),
+      {
         cluster_dns       = null
         container_runtime = "containerd"
         system_reserved = {
@@ -141,14 +126,14 @@ variable "karpenter_node_pools" {
 
 variable "node_templates" {
   type = list(object({
-    name = string
-    #subnet_selector         = map(string)
-    #security_group_selector = map(string)
-    ami_selector        = map(string)
-    ami_family          = optional(string, "AL2")
-    detailed_monitoring = optional(bool, true)
-    instance_profile    = optional(string, null)
-    user_data           = optional(string, null)
+    name                    = string
+    subnet_selector         = optional(map(any), null)
+    security_group_selector = optional(map(any), null)
+    ami_selector            = optional(map(any), null)
+    ami_family              = optional(string, "AL2")
+    detailed_monitoring     = optional(bool, true)
+    instance_profile        = optional(string, null)
+    user_data               = optional(string, null)
 
     metadata_options = optional(
       object({
@@ -156,13 +141,13 @@ variable "node_templates" {
         httpProtocolIPv6        = string
         httpPutResponseHopLimit = number
         httpTokens              = string
-        }),
-        {
+      }),
+      {
         httpEndpoint            = "enabled"
         httpProtocolIPv6        = "disabled"
         httpPutResponseHopLimit = 2
         httpTokens              = "required"
-        })
+    })
 
     block_device_mappings = optional(
       list(object({

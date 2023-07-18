@@ -25,29 +25,29 @@ locals {
           clusterDNS       = node.kubelet_configuration.cluster_dns
           containerRuntime = node.kubelet_configuration.container_runtime
           systemReserved = {
-            cpu               = node.kubelet_configuration.cpu_system_reserved
-            memory            = node.kubelet_configuration.memory_system_reserved
-            ephemeral-storage = node.kubelet_configuration.ephemeral_storage_system_reserved
+            cpu               = node.kubelet_configuration.system_reserved.cpu
+            memory            = node.kubelet_configuration.system_reserved.memory
+            ephemeral-storage = node.kubelet_configuration.system_reserved.ephemeral_storage
           }
           kubeReserved = {
-            cpu               = node.kubelet_configuration.cpu_kube_reserved
-            memory            = node.kubelet_configuration.memory_kube_reserved
-            ephemeral-storage = node.kubelet_configuration.ephemeral_storage_kube_reserved
+            cpu               = node.kubelet_configuration.kube_reserved.cpu
+            memory            = node.kubelet_configuration.kube_reserved.memory
+            ephemeral-storage = node.kubelet_configuration.kube_reserved.ephemeral_storage
           }
           evictionHard = {
-            "memory.available"  = node.kubelet_configuration.memory_eviction_hard
-            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_hard
-            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_hard
+            "memory.available"  = node.kubelet_configuration.eviction_hard.memory_available
+            "nodefs.available"  = node.kubelet_configuration.eviction_hard.nodefs_available
+            "nodefs.inodesFree" = node.kubelet_configuration.eviction_hard.nodefs_inodes_free
           }
           evictionSoft = {
-            "memory.available"  = node.kubelet_configuration.memory_eviction_soft
-            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_soft
-            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_soft
+            "memory.available"  = node.kubelet_configuration.eviction_soft.memory_available
+            "nodefs.available"  = node.kubelet_configuration.eviction_soft.nodefs_available
+            "nodefs.inodesFree" = node.kubelet_configuration.eviction_soft.nodefs_inodes_free
           }
           evictionSoftGracePeriod = {
-            "memory.available"  = node.kubelet_configuration.memory_eviction_soft_grace_period
-            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_soft_grace_period
-            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_soft_grace_period
+            "memory.available"  = node.kubelet_configuration.eviction_soft_grace_period.memory_available
+            "nodefs.available"  = node.kubelet_configuration.eviction_soft_grace_period.nodefs_available
+            "nodefs.inodesFree" = node.kubelet_configuration.eviction_soft_grace_period.nodefs_inodes_free
           }
           evictionMaxPodGracePeriod   = node.kubelet_configuration.eviction_max_pod_grace_period
           imageGCHighThresholdPercent = node.kubelet_configuration.image_gc_high_threshold_percent
@@ -78,20 +78,11 @@ locals {
           instanceProfile    = temp.instance_profile
           userData           = temp.user_data
 
-          subnetSelector = var.subnet_selector
-          #{
-          #  aws-ids = join(",", local.private_subnet_ids) # TODO
-          #}
+          subnetSelector = temp.subnet_selector
 
-          securityGroupSelector = var.security_group_selector
-          #{
-          #  aws-ids = join(",", [data.aws_eks_cluster.saas.vpc_config[0].cluster_security_group_id]) # TODO
-          #}
+          securityGroupSelector = temp.security_group_selector
 
-          amiSelector = var.ami_selector
-          #{
-          #  aws-ids = join(",", [for arch in node.arch : data.aws_ami.karpenter_provisioner[arch].id])
-          #}
+          amiSelector = temp.ami_selector
 
           metadataOptions = temp.metadata_options
 
