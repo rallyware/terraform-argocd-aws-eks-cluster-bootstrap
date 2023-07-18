@@ -21,7 +21,41 @@ locals {
 
         startupTaints = node.startup_taints
 
-        kubeletConfiguration = node.kubelet_configuration
+        kubeletConfiguration = {
+          clusterDNS       = node.kubelet_configuration.cluster_dns
+          containerRuntime = node.kubelet_configuration.container_runtime
+          systemReserved = {
+            cpu               = node.kubelet_configuration.cpu_system_reserved
+            memory            = node.kubelet_configuration.memory_system_reserved
+            ephemeral-storage = node.kubelet_configuration.ephemeral_storage_system_reserved
+          }
+          kubeReserved = {
+            cpu               = node.kubelet_configuration.cpu_kube_reserved
+            memory            = node.kubelet_configuration.memory_kube_reserved
+            ephemeral-storage = node.kubelet_configuration.ephemeral_storage_kube_reserved
+          }
+          evictionHard = {
+            "memory.available"  = node.kubelet_configuration.memory_eviction_hard
+            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_hard
+            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_hard
+          }
+          evictionSoft = {
+            "memory.available"  = node.kubelet_configuration.memory_eviction_soft
+            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_soft
+            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_soft
+          }
+          evictionSoftGracePeriod = {
+            "memory.available"  = node.kubelet_configuration.memory_eviction_soft_grace_period
+            "nodefs.available"  = node.kubelet_configuration.nodefs_eviction_soft_grace_period
+            "nodefs.inodesFree" = node.kubelet_configuration.inodes_free_eviction_soft_grace_period
+          }
+          evictionMaxPodGracePeriod   = node.kubelet_configuration.eviction_max_pod_grace_period
+          imageGCHighThresholdPercent = node.kubelet_configuration.image_gc_high_threshold_percent
+          imageGCLowThresholdPercent  = node.kubelet_configuration.image_gc_low_threshold_percent
+          cpuCFSQuota                 = node.kubelet_configuration.cpu_cfs_quota
+          podsPerCore                 = node.kubelet_configuration.pods_per_core
+          maxPods                     = node.kubelet_configuration.max_pods
+        }
 
         limits = node.limits
 
@@ -44,17 +78,17 @@ locals {
           instanceProfile    = temp.instance_profile
           userData           = temp.user_data
 
-          subnetSelector = temp.subnet_selector
+          subnetSelector = var.subnet_selector
           #{
           #  aws-ids = join(",", local.private_subnet_ids) # TODO
           #}
 
-          securityGroupSelector = temp.security_group_selector
+          securityGroupSelector = var.security_group_selector
           #{
           #  aws-ids = join(",", [data.aws_eks_cluster.saas.vpc_config[0].cluster_security_group_id]) # TODO
           #}
 
-          amiSelector = temp.ami_selector
+          amiSelector = var.ami_selector
           #{
           #  aws-ids = join(",", [for arch in node.arch : data.aws_ami.karpenter_provisioner[arch].id])
           #}

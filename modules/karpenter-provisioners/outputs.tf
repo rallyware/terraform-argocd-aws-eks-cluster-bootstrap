@@ -8,7 +8,7 @@ output "karpenter_node_pools_yaml" {
   description = "YAML encoded Karpenter provisioners values"
 }
 
-output "karpenter_node_pools_yaml" {
+output "karpenter_node_pools" {
   value       = var.karpenter_node_pools
   description = "Karpenter provisioners values"
 }
