@@ -136,35 +136,35 @@ variable "node_templates" {
 
     metadata_options = optional(
       object({
-        httpEndpoint            = string
-        httpProtocolIPv6        = string
-        httpPutResponseHopLimit = number
-        httpTokens              = string
+        http_endpoint               = string
+        http_protocol_ipv6          = string
+        http_put_response_hop_limit = number
+        http_tokens                 = string
       }),
       {
-        httpEndpoint            = "enabled"
-        httpProtocolIPv6        = "disabled"
-        httpPutResponseHopLimit = 2
-        httpTokens              = "required"
+        http_endpoint               = "enabled"
+        http_protocol_ipv6          = "disabled"
+        http_put_response_hop_limit = 2
+        http_tokens                 = "required"
     })
 
     block_device_mappings = optional(
       list(object({
-        deviceName = string
+        device_name = string
         ebs = object({
-          volumeType          = string
-          volumeSize          = string
-          deleteOnTermination = bool
-          encrypted           = bool
+          volume_type           = string
+          volume_size           = string
+          delete_on_termination = bool
+          encrypted             = bool
         })
       })),
       [{
-        deviceName = "/dev/xvda"
+        device_name = "/dev/xvda"
         ebs = {
-          volumeType          = "gp3"
-          volumeSize          = "35Gi"
-          deleteOnTermination = true
-          encrypted           = true
+          volume_type           = "gp3"
+          volume_size           = "35Gi"
+          delete_on_termination = true
+          encrypted             = true
         }
     }])
   }))

@@ -84,9 +84,24 @@ locals {
 
           amiSelector = temp.ami_selector
 
-          metadataOptions = temp.metadata_options
+          metadataOptions = {
+            httpEndpoint            = temp.metadata_options.http_endpoint
+            httpProtocolIPv6        = temp.metadata_options.http_protocol_ipv6
+            httpPutResponseHopLimit = temp.metadata_options.http_put_response_hop_limit
+            httpTokens              = temp.metadata_options.http_tokens
+          }
 
-          blockDeviceMappings = temp.block_device_mappings
+          blockDeviceMappings = [
+            for bdm in temp.block_device_mappings : {
+              deviceName = bdm.device_name
+              ebs = {
+                volumeType          = bdm.ebs.volume_type
+                volumeSize          = bdm.ebs.volume_size
+                deleteOnTermination = bdm.ebs.delete_on_termination
+                encrypted           = bdm.ebs.encrypted
+              }
+            }
+          ]
         }
       }
     ]
