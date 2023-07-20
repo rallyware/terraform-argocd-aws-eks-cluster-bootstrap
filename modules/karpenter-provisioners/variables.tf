@@ -1,7 +1,6 @@
 variable "provisioners" {
   type = list(object({
     name                      = string
-    instance_types            = list(string)
     kubernetes_labels         = optional(map(string), null)
     consolidation             = optional(bool, true)
     annotations               = optional(map(string), null)
