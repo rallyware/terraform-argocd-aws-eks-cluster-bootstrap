@@ -1,8 +1,8 @@
-variable "karpenter_node_pools" {
+variable "provisioners" {
   type = list(object({
     name                      = string
     instance_types            = list(string)
-    kubernetes_labels         = map(string)
+    kubernetes_labels         = optional(map(string), null)
     consolidation             = optional(bool, true)
     annotations               = optional(map(string), null)
     ttl_seconds_after_empty   = optional(number, 300)
@@ -121,7 +121,7 @@ variable "karpenter_node_pools" {
 
   }))
   default     = []
-  description = "A list of karpenter node-pool sets"
+  description = "A list of karpenter provisioners"
 }
 
 variable "node_templates" {
@@ -170,6 +170,5 @@ variable "node_templates" {
     }])
   }))
   default     = []
-  description = "A list of karpenter node templates"
-
+  description = "A list of Karpenter node templates"
 }

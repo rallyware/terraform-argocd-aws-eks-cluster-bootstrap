@@ -1,9 +1,9 @@
 locals {
-  karpenter_provisioner_values = yamlencode({ provisioners = [for node in var.karpenter_node_pools :
+  helm_values = yamlencode({ provisioners = [for node in var.provisioners :
     {
       name = node.name
       spec = {
-        ttlSecondsAfterEmpty = node.consolidation == true ? null : node.ttl_seconds_after_empty
+        ttlSecondsAfterEmpty = node.consolidation ? null : node.ttl_seconds_after_empty
         labels               = node.kubernetes_labels
         annotations          = node.annotations
 
@@ -68,12 +68,12 @@ locals {
     }
     ]
 
-    nodetemplates = [for temp in var.node_templates :
+    node_templates = [for temp in var.node_templates :
       {
         name = temp.name
         spec = {
           amiFamily          = temp.ami_family
-          tags               = module.karpenter_provisioner_label[temp.name].tags
+          tags               = module.node_template_label[temp.name].tags
           detailedMonitoring = temp.detailed_monitoring
           instanceProfile    = temp.instance_profile
           userData           = temp.user_data
@@ -94,8 +94,8 @@ locals {
   )
 }
 
-module "karpenter_provisioner_label" {
-  for_each = { for node in var.karpenter_node_pools : node.name => node }
+module "node_template_label" {
+  for_each = { for node in var.provisioners : node.name => node }
 
   source  = "cloudposse/label/null"
   version = "0.25.0"
