@@ -131,7 +131,7 @@ variable "node_templates" {
     security_group_selector = optional(map(any), null)
     ami_selector            = optional(map(any), null)
     ami_family              = optional(string, "AL2")
-    detailed_monitoring     = optional(bool, true)
+    detailed_monitoring     = optional(bool, false)
     instance_profile        = optional(string, null)
     user_data               = optional(string, null)
 
