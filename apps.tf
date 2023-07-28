@@ -78,7 +78,7 @@ resource "argocd_application" "apps" {
     }
 
     sync_policy {
-      automated = {
+      automated {
         prune       = var.argocd_app_config["automated"]["prune"]
         self_heal   = var.argocd_app_config["automated"]["self_heal"]
         allow_empty = var.argocd_app_config["automated"]["allow_empty"]
@@ -92,7 +92,7 @@ resource "argocd_application" "apps" {
         content {
           limit = var.argocd_app_config["retry"]["limit"]
 
-          backoff = {
+          backoff {
             duration     = var.argocd_app_config["retry"]["backoff_duration"]
             max_duration = var.argocd_app_config["retry"]["backoff_max_duration"]
             factor       = var.argocd_app_config["retry"]["backoff_factor"]
