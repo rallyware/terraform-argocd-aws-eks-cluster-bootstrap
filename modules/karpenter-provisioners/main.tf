@@ -68,7 +68,7 @@ locals {
     }
     ]
 
-    node_templates = [for temp in var.node_templates :
+    nodetemplates = [for temp in var.node_templates :
       {
         name = temp.name
         spec = {
