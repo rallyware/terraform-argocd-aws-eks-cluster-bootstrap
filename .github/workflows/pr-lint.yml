@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Lint PR
-        uses: aslafy-z/conventional-pr-title-action@v3.0.1
+        uses: aslafy-z/conventional-pr-title-action@v3.1.0
         with:
           preset: conventional-changelog-angular@^5.0.6
         env:
