@@ -17,7 +17,7 @@ configuration:
   - name: 
     provider: aws
     bucket: ${bucket_id}
-    prefix: format("backups/%s", ${eks_cluster_id})
+    prefix: ${eks_cluster_id}
     accessMode: ReadWrite
     config:
       region: ${region}
