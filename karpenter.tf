@@ -129,7 +129,7 @@ module "karpenter_eks_iam_role" {
 
 module "karpenter_instance_profile" {
   source  = "cloudposse/iam-role/aws"
-  version = "0.18.0"
+  version = "0.19.0"
 
   policy_document_count    = 0
   instance_profile_enabled = "true"

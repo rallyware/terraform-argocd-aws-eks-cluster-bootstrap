@@ -102,7 +102,7 @@ module "velero_eks_iam_role" {
 
   aws_iam_policy_document     = local.velero_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
-  service_account_name        = try(local.argocd_helm_apps_set["velero"]["name"], "")
+  service_account_name        = try("${local.argocd_helm_apps_set["velero"]["name"]}-server", "")
   service_account_namespace   = try(local.argocd_helm_apps_set["velero"]["namespace"], "")
 
   label_order = var.irsa_label_order
