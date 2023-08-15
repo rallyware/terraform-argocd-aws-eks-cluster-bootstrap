@@ -17,7 +17,7 @@ module "loki_label" {
 
 module "loki_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
-  version = "3.1.2"
+  version = "3.1.3"
 
   acl                 = "private"
   block_public_acls   = true
