@@ -108,7 +108,7 @@ variable "provisioners" {
         eviction_soft_grace_period = {
           memory_available   = "5m0s"
           nodefs_available   = "1m30s"
-          nodefs_inodes_free = "2m"
+          nodefs_inodes_free = "2m0s"
         }
         eviction_max_pod_grace_period   = 600
         image_gc_high_threshold_percent = 85

@@ -61,14 +61,12 @@ locals {
 
         ttlSecondsUntilExpired = node.ttl_seconds_until_expired
 
-        ttlSecondsAfterEmpty = node.ttl_seconds_after_empty
-
         weight = node.weight
       }
     }
     ]
 
-    node_templates = [for temp in var.node_templates :
+    nodetemplates = [for temp in var.node_templates :
       {
         name = temp.name
         spec = {
@@ -110,12 +108,11 @@ locals {
 }
 
 module "node_template_label" {
-  for_each = { for node in var.provisioners : node.name => node }
+  for_each = { for node in var.node_templates : node.name => node }
 
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
   context    = module.this.context
   attributes = [each.value.name]
-  tags       = merge(module.this.tags, each.value.kubernetes_labels)
 }
