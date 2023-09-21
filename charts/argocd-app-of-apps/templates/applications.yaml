@@ -1,12 +1,15 @@
 {{- range .Values.applications }}
 ---
+{{- $omitFinalizer := .omitFinalizer | default false }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .name }}
   namespace: {{ $.Release.Namespace }}
+{{- if not $omitFinalizer }}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+{{- end }}
   annotations:
     argocd.argoproj.io/sync-wave: {{ .syncWave | quote }} 
     {{- with .annotations }}

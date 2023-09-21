@@ -6,6 +6,7 @@ applications:
   # - name: prometheus
   #   namespace: monitoring
   #   revisionHistoryLimit: 10
+  #   omitFinalizer: false
   #   chart: prometheus-community
   #   repoURL: https://prometheus-community.github.io/helm-charts
   #   targetRevision: 15.0.1

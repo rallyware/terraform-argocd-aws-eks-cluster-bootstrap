@@ -57,7 +57,7 @@ variable "argocd_app_config" {
           {
             repository = optional(string, "https://rallyware.github.io/terraform-argocd-aws-eks-cluster-bootstrap")
             chart      = optional(string, "argocd-app-of-apps")
-            version    = optional(string, "0.6.1")
+            version    = optional(string, "0.6.2")
           }
       ), {})
 
@@ -120,6 +120,7 @@ variable "argocd_apps" {
       sync_wave       = optional(number, 50)
       annotations     = optional(map(string), {})
       sync_options    = optional(list(string), ["CreateNamespace=true", "ApplyOutOfSyncOnly=true"])
+      omit_finalizer  = optional(bool, false)
 
       ignore_differences = optional(
         list(object(
