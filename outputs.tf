@@ -315,10 +315,10 @@ output "external_secrets_service_account_policy_name" {
 
 output "external_secrets_service_account_policy_id" {
   value       = module.external_secrets_eks_iam_role.service_account_policy_id
-  description = "The External-secrets injector IAM policy ID"
+  description = "The External-secrets IAM policy ID"
 }
 
 output "external_secrets_injector_role_arn" {
   value       = module.external_secrets_injector_role.arn
-  description = "The External-secrets injector Profile ARN"
+  description = "The External-secrets injector IAM role ARN"
 }
