@@ -178,8 +178,8 @@ module "apps" {
 | <a name="output_efs_csi_service_account_role_arn"></a> [efs\_csi\_service\_account\_role\_arn](#output\_efs\_csi\_service\_account\_role\_arn) | EFS CSI driver IAM role ARN |
 | <a name="output_efs_csi_service_account_role_name"></a> [efs\_csi\_service\_account\_role\_name](#output\_efs\_csi\_service\_account\_role\_name) | EFS CSI driver IAM role name |
 | <a name="output_efs_csi_service_account_role_unique_id"></a> [efs\_csi\_service\_account\_role\_unique\_id](#output\_efs\_csi\_service\_account\_role\_unique\_id) | EFS CSI driver IAM role unique ID |
-| <a name="output_external_secrets_injector_role_arn"></a> [external\_secrets\_injector\_role\_arn](#output\_external\_secrets\_injector\_role\_arn) | The External-secrets injector Profile ARN |
-| <a name="output_external_secrets_service_account_policy_id"></a> [external\_secrets\_service\_account\_policy\_id](#output\_external\_secrets\_service\_account\_policy\_id) | The External-secrets injector IAM policy ID |
+| <a name="output_external_secrets_injector_role_arn"></a> [external\_secrets\_injector\_role\_arn](#output\_external\_secrets\_injector\_role\_arn) | The External-secrets injector IAM role ARN |
+| <a name="output_external_secrets_service_account_policy_id"></a> [external\_secrets\_service\_account\_policy\_id](#output\_external\_secrets\_service\_account\_policy\_id) | The External-secrets IAM policy ID |
 | <a name="output_external_secrets_service_account_policy_name"></a> [external\_secrets\_service\_account\_policy\_name](#output\_external\_secrets\_service\_account\_policy\_name) | The External-secrets operator IAM policy name |
 | <a name="output_external_secrets_service_account_role_arn"></a> [external\_secrets\_service\_account\_role\_arn](#output\_external\_secrets\_service\_account\_role\_arn) | The External-secrets operator IAM role ARN |
 | <a name="output_external_secrets_service_account_role_name"></a> [external\_secrets\_service\_account\_role\_name](#output\_external\_secrets\_service\_account\_role\_name) | The External-secrets operator IAM role name |
