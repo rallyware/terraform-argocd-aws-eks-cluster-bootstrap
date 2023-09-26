@@ -55,6 +55,16 @@ data "aws_iam_policy_document" "external_secrets_injector" {
       "kms:DescribeKey"
     ]
   }
+
+  statement {
+    effect = "Allow"
+
+    resources = ["*"]
+
+    actions = [
+      "ecr:GetAuthorizationToken"
+    ]
+  }
 }
 
 module "external_secrets_injector_role" {
