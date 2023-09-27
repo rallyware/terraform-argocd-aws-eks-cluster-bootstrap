@@ -292,3 +292,33 @@ output "efs_csi_service_account_policy_id" {
   value       = module.efs_csi_eks_iam_role.service_account_policy_id
   description = "EFS CSI driver IAM policy ID"
 }
+
+output "external_secrets_service_account_role_name" {
+  value       = module.external_secrets_eks_iam_role.service_account_role_name
+  description = "The External-secrets operator IAM role name"
+}
+
+output "external_secrets_service_account_role_unique_id" {
+  value       = module.external_secrets_eks_iam_role.service_account_role_unique_id
+  description = "The External-secrets operator IAM role unique ID"
+}
+
+output "external_secrets_service_account_role_arn" {
+  value       = module.external_secrets_eks_iam_role.service_account_role_arn
+  description = "The External-secrets operator IAM role ARN"
+}
+
+output "external_secrets_service_account_policy_name" {
+  value       = module.external_secrets_eks_iam_role.service_account_policy_name
+  description = "The External-secrets operator IAM policy name"
+}
+
+output "external_secrets_service_account_policy_id" {
+  value       = module.external_secrets_eks_iam_role.service_account_policy_id
+  description = "The External-secrets IAM policy ID"
+}
+
+output "external_secrets_injector_role_arn" {
+  value       = module.external_secrets_injector_role.arn
+  description = "The External-secrets injector IAM role ARN"
+}

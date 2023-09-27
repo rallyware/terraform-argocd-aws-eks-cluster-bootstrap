@@ -423,6 +423,16 @@ locals {
         prometheus_enabled = local.prometheus_operator_enabled
       }
     ))
+
+    external-secrets = yamldecode(templatefile("${path.module}/helm-values/external-secrets.yaml",
+      {
+        fullname_override      = try(local.argocd_helm_apps_set["external-secrets"]["name"], "")
+        prometheus_enabled     = local.prometheus_operator_enabled
+        sts_regional_endpoints = local.external_secrets_use_sts_regional_endpoints
+        role_arn               = module.external_secrets_eks_iam_role.service_account_role_arn
+        role_enabled           = local.external_secrets_iam_role_enabled
+      }
+    ))
   }
 }
 

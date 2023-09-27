@@ -162,7 +162,7 @@ variable "argocd_apps" {
       create_default_iam_policy  = optional(bool, true)
       create_default_iam_role    = optional(bool, true)
       iam_policy_document        = optional(string, "{}")
-      use_sts_regional_endpoints = optional(bool, false)
+      use_sts_regional_endpoints = optional(bool, true)
     }
   ))
   default = [
