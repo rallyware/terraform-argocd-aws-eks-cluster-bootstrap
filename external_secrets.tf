@@ -71,15 +71,25 @@ module "external_secrets_injector_role" {
   source  = "cloudposse/iam-role/aws"
   version = "0.19.0"
 
+  role_description = "Allows external-secrets to access AWS resources"
+
+  principals = {
+    AWS = [
+      module.external_secrets_eks_iam_role.service_account_role_arn
+    ]
+  }
 
   policy_documents = [
     one(data.aws_iam_policy_document.external_secrets_injector[*].json)
   ]
 
+  assume_role_actions = [
+    "sts:AssumeRole"
+  ]
+
   name        = local.eks_cluster_id
   attributes  = ["secrets-injector"]
   label_order = ["name", "attributes"]
-  delimiter   = "/"
   context     = module.external_secrets_label.context
 }
 
