@@ -3,7 +3,7 @@ locals {
   piggy_webhooks_iam_role_enabled           = local.piggy_webhooks_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["create_default_iam_role"] : false
   piggy_webhooks_iam_policy_enabled         = local.piggy_webhooks_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["create_default_iam_policy"] : false
   piggy_webhooks_iam_policy_document        = local.piggy_webhooks_iam_policy_enabled ? one(data.aws_iam_policy_document.piggy_webhooks[*].json) : try(local.argocd_helm_apps_set["piggy-webhooks"]["iam_policy_document"], "{}")
-  piggy_webhooks_use_sts_regional_endpoints = local.velero_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["use_sts_regional_endpoints"] : false
+  piggy_webhooks_use_sts_regional_endpoints = local.piggy_webhooks_enabled ? local.argocd_helm_apps_set["piggy-webhooks"]["use_sts_regional_endpoints"] : false
 }
 
 data "aws_iam_policy_document" "piggy_webhooks" {

@@ -62,7 +62,10 @@ data "aws_iam_policy_document" "external_secrets_injector" {
     resources = ["*"]
 
     actions = [
-      "ecr:GetAuthorizationToken"
+      "ecr:GetAuthorizationToken",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability"
     ]
   }
 }
