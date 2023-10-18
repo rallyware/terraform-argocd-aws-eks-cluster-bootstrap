@@ -1,0 +1,12 @@
+{{- range .Values.certificates }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .name }}
+  labels:
+    cert-manager.io/v1/certificate/name: {{ .name }}
+    {{- include "cert-manager-resources.labels" $ | nindent 4 }}
+spec:
+  {{- .spec | toYaml | nindent 2 }}
+{{- end }}
