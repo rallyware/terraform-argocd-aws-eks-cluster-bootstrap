@@ -85,6 +85,19 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/argocd-app-of-apps-0.2.1/argocd-app-of-apps-0.2.1.tgz
     version: 0.2.1
+  cert-manager-resources:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-10-19T15:57:55.729779932Z"
+    description: A Helm chart for Kubernetes to provision cert-manager resources
+    digest: 39436920f0e2e829db3a8e06b9f65437c2b1588507bddc0c5fb4aa0a4ead3596
+    maintainers:
+    - name: SweetOps
+    name: cert-manager-resources
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/cert-manager-resources-0.1.0/cert-manager-resources-0.1.0.tgz
+    version: 0.1.0
   iam-identity-mappings:
   - apiVersion: v2
     appVersion: v0.1.7
@@ -111,4 +124,4 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-22T15:39:29.155651125Z"
+generated: "2023-10-19T15:57:55.729794332Z"
