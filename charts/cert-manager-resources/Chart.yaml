@@ -2,7 +2,7 @@ apiVersion: v2
 name: cert-manager-resources
 description: A Helm chart for Kubernetes to provision cert-manager resources
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: 0.1.0
 maintainers:
   - name: SweetOps
