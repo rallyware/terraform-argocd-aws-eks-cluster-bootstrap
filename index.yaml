@@ -88,6 +88,18 @@ entries:
   cert-manager-resources:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-10-27T18:01:35.417346829Z"
+    description: A Helm chart for Kubernetes to provision cert-manager resources
+    digest: 1d28cc087aa683dd4062df26cab218f46e01e85773bd9e115039ce2d0a47ca8d
+    maintainers:
+    - name: SweetOps
+    name: cert-manager-resources
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/cert-manager-resources-0.1.1/cert-manager-resources-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-10-19T15:57:55.729779932Z"
     description: A Helm chart for Kubernetes to provision cert-manager resources
     digest: 39436920f0e2e829db3a8e06b9f65437c2b1588507bddc0c5fb4aa0a4ead3596
@@ -124,4 +136,4 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-19T15:57:55.729794332Z"
+generated: "2023-10-27T18:01:35.417364529Z"
