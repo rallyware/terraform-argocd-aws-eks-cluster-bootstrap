@@ -5,7 +5,7 @@ kind: ClusterIssuer
 metadata:
   name: {{ .name }}
   labels:
-    cert-manager.io/v1/cluster-issuer/name: {{ .name }}
+    cluster-issuer: {{ .name | quote }}
     {{- include "cert-manager-resources.labels" $ | nindent 4 }}
 spec:
   {{- .spec | toYaml | nindent 2 }}
