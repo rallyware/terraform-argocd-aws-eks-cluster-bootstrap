@@ -17,7 +17,7 @@ module "chartmuseum_label" {
 
 module "chartmuseum_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
-  version = "4.0.0"
+  version = "4.0.1"
 
   acl                 = "private"
   block_public_acls   = true
