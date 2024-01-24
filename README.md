@@ -194,11 +194,11 @@ module "apps" {
 | <a name="output_karpenter_service_account_role_arn"></a> [karpenter\_service\_account\_role\_arn](#output\_karpenter\_service\_account\_role\_arn) | AWS Karpenter IAM role ARN |
 | <a name="output_karpenter_service_account_role_name"></a> [karpenter\_service\_account\_role\_name](#output\_karpenter\_service\_account\_role\_name) | AWS Karpenter IAM role name |
 | <a name="output_karpenter_service_account_role_unique_id"></a> [karpenter\_service\_account\_role\_unique\_id](#output\_karpenter\_service\_account\_role\_unique\_id) | AWS Karpenter IAM role unique ID |
-| <a name="output_keda_service_account_policy_id"></a> [keda\_service\_account\_policy\_id](#output\_keda\_service\_account\_policy\_id) | AWS Keda IAM policy ID |
-| <a name="output_keda_service_account_policy_name"></a> [keda\_service\_account\_policy\_name](#output\_keda\_service\_account\_policy\_name) | AWS Keda IAM policy name |
-| <a name="output_keda_service_account_role_arn"></a> [keda\_service\_account\_role\_arn](#output\_keda\_service\_account\_role\_arn) | AWS Keda IAM role ARN |
-| <a name="output_keda_service_account_role_name"></a> [keda\_service\_account\_role\_name](#output\_keda\_service\_account\_role\_name) | AWS Keda IAM role name |
-| <a name="output_keda_service_account_role_unique_id"></a> [keda\_service\_account\_role\_unique\_id](#output\_keda\_service\_account\_role\_unique\_id) | AWS Keda IAM role unique ID |
+| <a name="output_keda_service_account_policy_id"></a> [keda\_service\_account\_policy\_id](#output\_keda\_service\_account\_policy\_id) | KEDA AWS IAM policy ID |
+| <a name="output_keda_service_account_policy_name"></a> [keda\_service\_account\_policy\_name](#output\_keda\_service\_account\_policy\_name) | KEDA AWS IAM policy name |
+| <a name="output_keda_service_account_role_arn"></a> [keda\_service\_account\_role\_arn](#output\_keda\_service\_account\_role\_arn) | KEDA AWS IAM role ARN |
+| <a name="output_keda_service_account_role_name"></a> [keda\_service\_account\_role\_name](#output\_keda\_service\_account\_role\_name) | Keda AWS IAM role name |
+| <a name="output_keda_service_account_role_unique_id"></a> [keda\_service\_account\_role\_unique\_id](#output\_keda\_service\_account\_role\_unique\_id) | KEDA AWS IAM role unique ID |
 | <a name="output_loki_s3_bucket_arn"></a> [loki\_s3\_bucket\_arn](#output\_loki\_s3\_bucket\_arn) | Grafana Loki S3 bucket ARN |
 | <a name="output_loki_s3_bucket_id"></a> [loki\_s3\_bucket\_id](#output\_loki\_s3\_bucket\_id) | Grafana Loki S3 bucket name |
 | <a name="output_loki_service_account_policy_id"></a> [loki\_service\_account\_policy\_id](#output\_loki\_service\_account\_policy\_id) | Grafana Loki IAM policy ID |
