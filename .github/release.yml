@@ -1,0 +1,16 @@
+changelog:
+  categories:
+    - title: "🚀 Enhancements"
+      labels:
+        - feat
+    - title: "🐛 Bug Fixes"
+      labels:
+        - fix
+    - title: "✈️ CI/CD"
+      labels:
+        - ci
+    - title: "📦 Updates && Packages"
+      labels:
+        - chore
+        - dependencies
+        - "*"
