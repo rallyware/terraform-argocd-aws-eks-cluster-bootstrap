@@ -325,25 +325,25 @@ output "external_secrets_injector_role_arn" {
 
 output "keda_service_account_role_name" {
   value       = module.keda_eks_iam_role.service_account_role_name
-  description = "AWS Keda IAM role name"
+  description = "Keda AWS IAM role name"
 }
 
 output "keda_service_account_role_unique_id" {
   value       = module.keda_eks_iam_role.service_account_role_unique_id
-  description = "AWS Keda IAM role unique ID"
+  description = "KEDA AWS IAM role unique ID"
 }
 
 output "keda_service_account_role_arn" {
   value       = module.keda_eks_iam_role.service_account_role_arn
-  description = "AWS Keda IAM role ARN"
+  description = "KEDA AWS IAM role ARN"
 }
 
 output "keda_service_account_policy_name" {
   value       = module.keda_eks_iam_role.service_account_policy_name
-  description = "AWS Keda IAM policy name"
+  description = "KEDA AWS IAM policy name"
 }
 
 output "keda_service_account_policy_id" {
   value       = module.keda_eks_iam_role.service_account_policy_id
-  description = "AWS Keda IAM policy ID"
+  description = "KEDA AWS IAM policy ID"
 }
