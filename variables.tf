@@ -310,7 +310,7 @@ variable "argocd_apps" {
       namespace  = "infra"
       chart      = "keda"
       repository = "https://kedacore.github.io/charts"
-      version    = "2.4.0"
+      version    = "2.13.0"
     },
 
     {

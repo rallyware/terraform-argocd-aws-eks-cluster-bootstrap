@@ -96,6 +96,17 @@ locals {
 
     keda = {
       fullnameOverride = try(local.argocd_helm_apps_set["keda"]["name"], "")
+      clusterName      = local.eks_cluster_id
+
+      podIdentity = {
+        aws = {
+          irsa = {
+            enabled = local.keda_iam_role_enabled
+            roleArn = module.keda_eks_iam_role.service_account_role_arn
+          }
+        }
+      }
+
       prometheus = {
         metricServer = {
           enabled = local.prometheus_operator_enabled
