@@ -98,6 +98,9 @@ locals {
       fullnameOverride = try(local.argocd_helm_apps_set["keda"]["name"], "")
       clusterName      = local.eks_cluster_id
 
+      serviceAccount = {
+        name = local.keda_service_account_name
+      }
       podIdentity = {
         aws = {
           irsa = {
