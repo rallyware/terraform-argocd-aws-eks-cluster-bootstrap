@@ -215,7 +215,7 @@ data "aws_iam_policy_document" "ebs_csi" {
 
 module "ebs_csi_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.2.1"
+  version = "0.3.0"
 
   aws_iam_policy_document     = local.ebs_csi_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
