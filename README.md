@@ -53,7 +53,7 @@ module "apps" {
 | <a name="module_chartmuseum_eks_iam_role"></a> [chartmuseum\_eks\_iam\_role](#module\_chartmuseum\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_chartmuseum_label"></a> [chartmuseum\_label](#module\_chartmuseum\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_chartmuseum_s3_bucket"></a> [chartmuseum\_s3\_bucket](#module\_chartmuseum\_s3\_bucket) | cloudposse/s3-bucket/aws | 4.2.0 |
-| <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
+| <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_ebs_csi_eks_iam_role"></a> [ebs\_csi\_eks\_iam\_role](#module\_ebs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_ebs_csi_kms_key"></a> [ebs\_csi\_kms\_key](#module\_ebs\_csi\_kms\_key) | cloudposse/kms-key/aws | 0.12.2 |
@@ -73,7 +73,7 @@ module "apps" {
 | <a name="module_loki_eks_iam_role"></a> [loki\_eks\_iam\_role](#module\_loki\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_loki_label"></a> [loki\_label](#module\_loki\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_loki_s3_bucket"></a> [loki\_s3\_bucket](#module\_loki\_s3\_bucket) | cloudposse/s3-bucket/aws | 4.2.0 |
-| <a name="module_piggy_webhooks_eks_iam_role"></a> [piggy\_webhooks\_eks\_iam\_role](#module\_piggy\_webhooks\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
+| <a name="module_piggy_webhooks_eks_iam_role"></a> [piggy\_webhooks\_eks\_iam\_role](#module\_piggy\_webhooks\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_piggy_webhooks_label"></a> [piggy\_webhooks\_label](#module\_piggy\_webhooks\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_prometheus_yace_exporter_eks_iam_role"></a> [prometheus\_yace\_exporter\_eks\_iam\_role](#module\_prometheus\_yace\_exporter\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_prometheus_yace_exporter_label"></a> [prometheus\_yace\_exporter\_label](#module\_prometheus\_yace\_exporter\_label) | cloudposse/label/null | 0.25.0 |
