@@ -278,7 +278,7 @@ data "aws_iam_policy_document" "aws_lb_controller" {
 
 module "aws_lb_controller_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.2.1"
+  version = "0.3.0"
 
   aws_iam_policy_document     = local.aws_lb_controller_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
