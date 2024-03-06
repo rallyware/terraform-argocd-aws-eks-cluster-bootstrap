@@ -16,7 +16,7 @@ module "ebs_csi_label" {
 
 module "ebs_csi_kms_key" {
   source  = "cloudposse/kms-key/aws"
-  version = "0.12.1"
+  version = "0.12.2"
 
   description             = format("KMS key for ebs-csi on %s", local.eks_cluster_id)
   deletion_window_in_days = 10
@@ -215,7 +215,7 @@ data "aws_iam_policy_document" "ebs_csi" {
 
 module "ebs_csi_eks_iam_role" {
   source  = "rallyware/eks-iam-role/aws"
-  version = "0.2.1"
+  version = "0.3.0"
 
   aws_iam_policy_document     = local.ebs_csi_iam_policy_document
   eks_cluster_oidc_issuer_url = local.eks_cluster_oidc_issuer_url
