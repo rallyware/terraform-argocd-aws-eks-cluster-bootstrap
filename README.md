@@ -56,7 +56,7 @@ module "apps" {
 | <a name="module_cluster_autoscaler_eks_iam_role"></a> [cluster\_autoscaler\_eks\_iam\_role](#module\_cluster\_autoscaler\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
 | <a name="module_cluster_autoscaler_label"></a> [cluster\_autoscaler\_label](#module\_cluster\_autoscaler\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_ebs_csi_eks_iam_role"></a> [ebs\_csi\_eks\_iam\_role](#module\_ebs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
-| <a name="module_ebs_csi_kms_key"></a> [ebs\_csi\_kms\_key](#module\_ebs\_csi\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
+| <a name="module_ebs_csi_kms_key"></a> [ebs\_csi\_kms\_key](#module\_ebs\_csi\_kms\_key) | cloudposse/kms-key/aws | 0.12.2 |
 | <a name="module_ebs_csi_label"></a> [ebs\_csi\_label](#module\_ebs\_csi\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_efs_csi_eks_iam_role"></a> [efs\_csi\_eks\_iam\_role](#module\_efs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
 | <a name="module_efs_csi_label"></a> [efs\_csi\_label](#module\_efs\_csi\_label) | cloudposse/label/null | 0.25.0 |
@@ -82,7 +82,7 @@ module "apps" {
 | <a name="module_tempo_s3_bucket"></a> [tempo\_s3\_bucket](#module\_tempo\_s3\_bucket) | cloudposse/s3-bucket/aws | 4.0.1 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 | <a name="module_velero_eks_iam_role"></a> [velero\_eks\_iam\_role](#module\_velero\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.2.1 |
-| <a name="module_velero_kms_key"></a> [velero\_kms\_key](#module\_velero\_kms\_key) | cloudposse/kms-key/aws | 0.12.1 |
+| <a name="module_velero_kms_key"></a> [velero\_kms\_key](#module\_velero\_kms\_key) | cloudposse/kms-key/aws | 0.12.2 |
 | <a name="module_velero_label"></a> [velero\_label](#module\_velero\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_velero_s3_bucket"></a> [velero\_s3\_bucket](#module\_velero\_s3\_bucket) | cloudposse/s3-bucket/aws | 4.0.1 |
 
