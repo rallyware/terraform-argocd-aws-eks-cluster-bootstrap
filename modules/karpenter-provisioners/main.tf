@@ -41,10 +41,10 @@ locals {
           consolidateAfter    = node.consolidate_after
           annotations         = node.annotations
           labels              = node.labels
-          tains               = node.tains
+          taints              = node.taints
           startupTaints       = node.startup_taints
           requirements        = node.requirements
-          limits              = node.limits
+          limits              = node.limits == null ? {} : node.limits
 
           kubelet = {
             clusterDNS = node.kubelet.cluster_dns
