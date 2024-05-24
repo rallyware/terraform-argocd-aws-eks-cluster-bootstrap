@@ -1,0 +1,51 @@
+{{- range .Values.ec2NodeClasses }}
+---
+{{- $metadataTags := .tags | default dict }}
+{{- $metadataOptions := .metadataOptions | default dict }}
+{{- $metadataOptionsHttpEndpoint := $metadataOptions.httpEndpoint | default "enabled" }}
+{{- $metadataOptionsHttpProtocolIPv6 := $metadataOptions.httpProtocolIPv6 | default "disabled" }}
+{{- $metadataOptionsHttpPutResponseHopLimit := $metadataOptions.httpPutResponseHopLimit | default 2 }}
+{{- $metadataOptionsHttpTokens := $metadataOptions.httpTokens | default "required" }}
+apiVersion: karpenter.k8s.aws/v1beta1
+kind: EC2NodeClass
+metadata:
+  name: {{ .name }}
+  labels: 
+    name: {{ .name }}
+    {{- include "karpenter-provisioner.labels" $ | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  amiFamily: {{ .amiFamily | default "AL2" }}
+  subnetSelectorTerms:
+    {{- range $subnet := .subnetIDs }}
+    - id: {{ $subnet }}
+    {{- end }}
+  securityGroupSelectorTerms:
+    {{- range $sg := .securityGroupIDs }}
+    - id: {{ $sg }}
+    {{- end }}
+  instanceProfile: {{ .instanceProfile }}
+  amiSelectorTerms:
+    {{- range $ami := .amiIDs }}
+    - id: {{ $ami }}
+    {{- end }}
+  {{- with .userData }}
+  userData: {{- toYaml . | indent 1 }} 
+  {{- end }}
+  {{- with .tags }}
+  tags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  metadataOptions:
+    httpEndpoint: {{ $metadataOptionsHttpEndpoint }}
+    httpProtocolIPv6: {{ $metadataOptionsHttpProtocolIPv6 }}
+    httpPutResponseHopLimit: {{ $metadataOptionsHttpPutResponseHopLimit }}
+    httpTokens: {{ $metadataOptionsHttpTokens }}
+  {{- with .blockDeviceMappings }}
+  blockDeviceMappings:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  detailedMonitoring: {{ .detailedMonitoring | default false }}
+  associatePublicIPAddress: {{ .associatePublicIPAddress | default false }}
+{{- end }}
