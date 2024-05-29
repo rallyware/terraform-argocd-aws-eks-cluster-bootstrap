@@ -1,5 +1,5 @@
 apiVersion: v2
-name: karpenter-provisioners
+name: karpenter-provisioner
 description: A Helm chart for Kubernetes to deploy Karpenter provisioners
 type: application
 version: 0.2.0
