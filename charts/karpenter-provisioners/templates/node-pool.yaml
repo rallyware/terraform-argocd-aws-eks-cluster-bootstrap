@@ -1,6 +1,5 @@
 {{- range .Values.nodePools }}
 ---
-{{- $weight := .weight | default 0 }}
 {{- $consolidationPolicy := .consolidationPolicy | default "WhenUnderutilized" }}
 {{- $consolidateAfter := .consolidateAfter | default "300s" }}
 apiVersion: karpenter.sh/v1beta1
@@ -44,10 +43,11 @@ spec:
       {{- end }}
   disruption:
     consolidationPolicy: {{ $consolidationPolicy }}
+    {{- if eq $consolidationPolicy "WhenEmpty" }}
     consolidateAfter: {{ $consolidateAfter }}
+    {{- end }}
   {{- with .limits }}
   limits:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  weight: {{ $weight }}
 {{- end }}

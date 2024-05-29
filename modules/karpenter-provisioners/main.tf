@@ -1,7 +1,7 @@
 locals {
   helm_values = yamlencode(
     {
-      ec2NodeClass = [for node in var.ec2_node_classes :
+      ec2NodeClasses = [for node in var.ec2_node_classes :
         {
           name             = node.name
           amiFamily        = node.ami_family
