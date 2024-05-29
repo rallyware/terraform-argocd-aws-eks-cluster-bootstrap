@@ -1,0 +1,53 @@
+{{- range .Values.nodePools }}
+---
+{{- $consolidationPolicy := .consolidationPolicy | default "WhenUnderutilized" }}
+{{- $consolidateAfter := .consolidateAfter | default "300s" }}
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: {{ .name }}
+  labels: 
+    name: {{ .name }}
+    {{- include "karpenter-provisioner.labels" $ | nindent 4 }}
+spec:
+  template:
+    metadata:
+      {{- with .labels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      nodeClassRef:
+        apiVersion: karpenter.k8s.aws/v1beta1
+        kind: EC2NodeClass
+        name: {{ .nodeClassName }}
+      {{- with .taints }}
+      taints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .startupTaints }}
+      startupTaints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .requirements }}
+      requirements:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .kubelet }}
+      kubelet:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  disruption:
+    consolidationPolicy: {{ $consolidationPolicy }}
+    {{- if eq $consolidationPolicy "WhenEmpty" }}
+    consolidateAfter: {{ $consolidateAfter }}
+    {{- end }}
+  {{- with .limits }}
+  limits:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
