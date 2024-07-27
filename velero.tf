@@ -29,7 +29,7 @@ module "velero_kms_key" {
 
 module "velero_s3_bucket" {
   source  = "cloudposse/s3-bucket/aws"
-  version = "4.2.0"
+  version = "4.3.0"
 
   acl                 = "private"
   block_public_acls   = true
