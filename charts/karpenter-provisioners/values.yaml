@@ -106,3 +106,8 @@ ec2NodeClasses:
   #     httpProtocolIPv6: disabled
   #     httpPutResponseHopLimit: 2
   #     httpTokens: required
+
+provisioners:
+  []
+
+nodetemplates:

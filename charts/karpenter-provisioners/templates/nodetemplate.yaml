@@ -1,0 +1,16 @@
+{{- range .Values.nodetemplates }}
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: {{ .name }}
+  labels: 
+    name: {{ .name }}
+    {{- include "karpenter-provisioner.labels" $ | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+{{- with .spec }}
+  {{- toYaml . | nindent 2 }}
+{{- end }}
+{{- end }}

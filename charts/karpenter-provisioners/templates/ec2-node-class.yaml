@@ -27,7 +27,7 @@ spec:
     {{- range $sg := .securityGroupIDs }}
     - id: {{ $sg }}
     {{- end }}
-  instanceProfile: {{ .instanceProfile }}
+  role: {{ .role }}
   amiSelectorTerms:
     {{- range $ami := .amiIDs }}
     - id: {{ $ami }}
