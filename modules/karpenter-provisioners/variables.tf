@@ -7,7 +7,7 @@ variable "ec2_node_classes" {
         ami_ids            = list(string)
         subnet_ids         = list(string)
         security_group_ids = list(string)
-        instance_profile   = string
+        role               = string
         user_data          = optional(string, "")
 
         metadata_options = optional(
