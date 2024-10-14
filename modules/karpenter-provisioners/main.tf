@@ -8,7 +8,7 @@ locals {
           amiIDs           = node.ami_ids
           subnetIDs        = node.subnet_ids
           securityGroupIDs = node.security_group_ids
-          instanceProfile  = node.instance_profile
+          role             = node.role
           tags             = module.node_template_label[node.name].tags
           userData         = node.user_data
 
