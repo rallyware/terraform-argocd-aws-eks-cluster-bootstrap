@@ -24,7 +24,7 @@ module "apps" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3 |
-| <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >= 6, < 7 |
+| <a name="requirement_argocd"></a> [argocd](#requirement\_argocd) | >= 7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.2.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | ~> 2 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.7 |
@@ -35,7 +35,7 @@ module "apps" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 6, < 7 |
+| <a name="provider_argocd"></a> [argocd](#provider\_argocd) | >= 7 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.2.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | ~> 2 |
 | <a name="provider_tls"></a> [tls](#provider\_tls) | >= 3.0 |
@@ -90,10 +90,10 @@ module "apps" {
 
 | Name | Type |
 |------|------|
-| [argocd_application.apps](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/application) | resource |
-| [argocd_cluster.default](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/cluster) | resource |
-| [argocd_project.additional](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
-| [argocd_project.default](https://registry.terraform.io/providers/oboukili/argocd/latest/docs/resources/project) | resource |
+| [argocd_application.apps](https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/application) | resource |
+| [argocd_cluster.default](https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/cluster) | resource |
+| [argocd_project.additional](https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/project) | resource |
+| [argocd_project.default](https://registry.terraform.io/providers/argoproj-labs/argocd/latest/docs/resources/project) | resource |
 | [aws_cloudwatch_event_rule.karpenter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.karpenter](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
 | [kubernetes_namespace.linkerd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
