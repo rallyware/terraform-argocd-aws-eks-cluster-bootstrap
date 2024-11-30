@@ -61,11 +61,11 @@ module "apps" {
 | <a name="module_efs_csi_eks_iam_role"></a> [efs\_csi\_eks\_iam\_role](#module\_efs\_csi\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_efs_csi_label"></a> [efs\_csi\_label](#module\_efs\_csi\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_external_secrets_eks_iam_role"></a> [external\_secrets\_eks\_iam\_role](#module\_external\_secrets\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
-| <a name="module_external_secrets_injector_role"></a> [external\_secrets\_injector\_role](#module\_external\_secrets\_injector\_role) | cloudposse/iam-role/aws | 0.19.0 |
+| <a name="module_external_secrets_injector_role"></a> [external\_secrets\_injector\_role](#module\_external\_secrets\_injector\_role) | cloudposse/iam-role/aws | 0.20.0 |
 | <a name="module_external_secrets_label"></a> [external\_secrets\_label](#module\_external\_secrets\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_karpenter_eks_iam_role"></a> [karpenter\_eks\_iam\_role](#module\_karpenter\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |
 | <a name="module_karpenter_event_label"></a> [karpenter\_event\_label](#module\_karpenter\_event\_label) | cloudposse/label/null | 0.25.0 |
-| <a name="module_karpenter_instance_profile"></a> [karpenter\_instance\_profile](#module\_karpenter\_instance\_profile) | cloudposse/iam-role/aws | 0.19.0 |
+| <a name="module_karpenter_instance_profile"></a> [karpenter\_instance\_profile](#module\_karpenter\_instance\_profile) | cloudposse/iam-role/aws | 0.20.0 |
 | <a name="module_karpenter_label"></a> [karpenter\_label](#module\_karpenter\_label) | cloudposse/label/null | 0.25.0 |
 | <a name="module_karpenter_sqs"></a> [karpenter\_sqs](#module\_karpenter\_sqs) | rallyware/sqs-queue/aws | 0.2.1 |
 | <a name="module_keda_eks_iam_role"></a> [keda\_eks\_iam\_role](#module\_keda\_eks\_iam\_role) | rallyware/eks-iam-role/aws | 0.3.0 |

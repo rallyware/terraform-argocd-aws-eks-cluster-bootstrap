@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "external_secrets_injector" {
 
 module "external_secrets_injector_role" {
   source  = "cloudposse/iam-role/aws"
-  version = "0.19.0"
+  version = "0.20.0"
 
   role_description = "Allows external-secrets to access AWS resources"
 
