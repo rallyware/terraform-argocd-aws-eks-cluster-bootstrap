@@ -8,7 +8,7 @@
 {{- $metadataOptionsHttpTokens := $metadataOptions.httpTokens | default "required" }}
 {{- $detailedMonitoring := .detailedMonitoring | default false }}
 {{- $associatePublicIPAddress := .associatePublicIPAddress | default false }}
-apiVersion: karpenter.k8s.aws/v1beta1
+apiVersion: karpenter.k8s.aws/v1
 kind: EC2NodeClass
 metadata:
   name: {{ .name }}
@@ -44,6 +44,10 @@ spec:
     httpProtocolIPv6: {{ $metadataOptionsHttpProtocolIPv6 }}
     httpPutResponseHopLimit: {{ $metadataOptionsHttpPutResponseHopLimit }}
     httpTokens: {{ $metadataOptionsHttpTokens }}
+  {{- with .kubelet }}
+  kubelet:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .blockDeviceMappings }}
   blockDeviceMappings:
     {{- toYaml . | nindent 4 }}

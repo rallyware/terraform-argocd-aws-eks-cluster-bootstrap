@@ -19,33 +19,6 @@ locals {
             httpTokens              = node.metadata_options.http_tokens
           }
 
-          blockDeviceMappings = [
-            for bdm in node.block_device_mappings : {
-              deviceName = bdm.device_name
-              ebs = {
-                volumeType          = bdm.ebs.volume_type
-                volumeSize          = bdm.ebs.volume_size
-                deleteOnTermination = bdm.ebs.delete_on_termination
-                encrypted           = bdm.ebs.encrypted
-              }
-            }
-          ]
-        }
-      ]
-
-      nodePools = [for node in var.node_pools :
-        {
-          name                = node.name
-          nodeClassName       = node.node_class_name
-          consolidationPolicy = node.consolidation_policy
-          consolidateAfter    = node.consolidate_after
-          annotations         = node.annotations
-          labels              = node.labels
-          taints              = node.taints
-          startupTaints       = node.startup_taints
-          requirements        = node.requirements
-          limits              = node.limits == null ? {} : node.limits
-
           kubelet = {
             clusterDNS = node.kubelet.cluster_dns
             systemReserved = {
@@ -84,6 +57,33 @@ locals {
             podsPerCore                 = node.kubelet.pods_per_core
             maxPods                     = node.kubelet.max_pods
           }
+
+          blockDeviceMappings = [
+            for bdm in node.block_device_mappings : {
+              deviceName = bdm.device_name
+              ebs = {
+                volumeType          = bdm.ebs.volume_type
+                volumeSize          = bdm.ebs.volume_size
+                deleteOnTermination = bdm.ebs.delete_on_termination
+                encrypted           = bdm.ebs.encrypted
+              }
+            }
+          ]
+        }
+      ]
+
+      nodePools = [for node in var.node_pools :
+        {
+          name                = node.name
+          nodeClassName       = node.node_class_name
+          consolidationPolicy = node.consolidation_policy
+          consolidateAfter    = node.consolidate_after
+          annotations         = node.annotations
+          labels              = node.labels
+          taints              = node.taints
+          startupTaints       = node.startup_taints
+          requirements        = node.requirements
+          limits              = node.limits == null ? {} : node.limits
         }
       ]
     }

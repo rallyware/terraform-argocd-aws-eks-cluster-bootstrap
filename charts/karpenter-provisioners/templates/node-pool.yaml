@@ -1,8 +1,8 @@
 {{- range .Values.nodePools }}
 ---
-{{- $consolidationPolicy := .consolidationPolicy | default "WhenUnderutilized" }}
+{{- $consolidationPolicy := .consolidationPolicy | default "WhenEmptyOrUnderutilized" }}
 {{- $consolidateAfter := .consolidateAfter | default "300s" }}
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: {{ .name }}
@@ -22,7 +22,7 @@ spec:
       {{- end }}
     spec:
       nodeClassRef:
-        apiVersion: karpenter.k8s.aws/v1beta1
+        group: karpenter.k8s.aws
         kind: EC2NodeClass
         name: {{ .nodeClassName }}
       {{- with .taints }}
@@ -37,15 +37,9 @@ spec:
       requirements:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .kubelet }}
-      kubelet:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
   disruption:
     consolidationPolicy: {{ $consolidationPolicy }}
-    {{- if eq $consolidationPolicy "WhenEmpty" }}
-    consolidateAfter: {{ $consolidateAfter }}
-    {{- end }}
+    consolidateAfter: {{ $consolidateAfter | default "60s" }}
   {{- with .limits }}
   limits:
     {{- toYaml . | nindent 4 }}
