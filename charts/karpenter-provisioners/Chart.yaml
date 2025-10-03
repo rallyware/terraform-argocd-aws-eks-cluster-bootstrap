@@ -2,7 +2,7 @@ apiVersion: v2
 name: karpenter-provisioner
 description: A Helm chart for Kubernetes to deploy Karpenter provisioners
 type: application
-version: 0.2.2
-appVersion: "v0.36.0"
+version: 0.3.0
+appVersion: "v0.37.0"
 maintainers:
-  - name: SweetOps
+  - name: yhrunykRW

@@ -40,36 +40,8 @@ nodePools:
   #   limits:
   #     cpu: "1000"
   #     memory: 1000Gi
-  #   consolidationPolicy: WhenUnderutilized
-  #   consolidateAfter: 300s
-  #   kubelet:
-  #     clusterDNS: ["10.0.1.100"]
-  #     systemReserved:
-  #       cpu: 100m
-  #       memory: 100Mi
-  #       ephemeral-storage: 1Gi
-  #     kubeReserved:
-  #       cpu: 200m
-  #       memory: 100Mi
-  #       ephemeral-storage: 3Gi
-  #     evictionHard:
-  #       memory.available: 5%
-  #       nodefs.available: 10%
-  #       nodefs.inodesFree: 10%
-  #     evictionSoft:
-  #       memory.available: 500Mi
-  #       nodefs.available: 15%
-  #       nodefs.inodesFree: 15%
-  #     evictionSoftGracePeriod:
-  #       memory.available: 1m
-  #       nodefs.available: 1m30s
-  #       nodefs.inodesFree: 2m
-  #     evictionMaxPodGracePeriod: 60
-  #     imageGCHighThresholdPercent: 85
-  #     imageGCLowThresholdPercent: 80
-  #     cpuCFSQuota: true
-  #     podsPerCore: 2
-  #     maxPods: 20
+  #   consolidationPolicy: WhenEmptyOrUnderutilized
+  #   consolidateAfter: 60s
 
 ec2NodeClasses:
   []
@@ -106,6 +78,34 @@ ec2NodeClasses:
   #     httpProtocolIPv6: disabled
   #     httpPutResponseHopLimit: 2
   #     httpTokens: required
+  #   kubelet:
+  #     clusterDNS: ["10.0.1.100"]
+  #     systemReserved:
+  #       cpu: 100m
+  #       memory: 100Mi
+  #       ephemeral-storage: 1Gi
+  #     kubeReserved:
+  #       cpu: 200m
+  #       memory: 100Mi
+  #       ephemeral-storage: 3Gi
+  #     evictionHard:
+  #       memory.available: 5%
+  #       nodefs.available: 10%
+  #       nodefs.inodesFree: 10%
+  #     evictionSoft:
+  #       memory.available: 500Mi
+  #       nodefs.available: 15%
+  #       nodefs.inodesFree: 15%
+  #     evictionSoftGracePeriod:
+  #       memory.available: 1m
+  #       nodefs.available: 1m30s
+  #       nodefs.inodesFree: 2m
+  #     evictionMaxPodGracePeriod: 60
+  #     imageGCHighThresholdPercent: 85
+  #     imageGCLowThresholdPercent: 80
+  #     cpuCFSQuota: true
+  #     podsPerCore: 2
+  #     maxPods: 20
 
 provisioners:
   []
