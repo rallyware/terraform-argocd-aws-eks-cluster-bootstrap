@@ -125,6 +125,18 @@ entries:
     version: 0.1.0
   karpenter-provisioner:
   - apiVersion: v2
+    appVersion: v0.37.0
+    created: "2025-10-03T12:11:54.656480085Z"
+    description: A Helm chart for Kubernetes to deploy Karpenter provisioners
+    digest: 4ed3fb7c8844e0c2ae4a5b311593c759c94f943763330685d1ae3efb3a2b1f2d
+    maintainers:
+    - name: yhrunykRW
+    name: karpenter-provisioner
+    type: application
+    urls:
+    - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.3.0/karpenter-provisioner-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: v0.36.0
     created: "2024-10-14T11:23:25.135755372Z"
     description: A Helm chart for Kubernetes to deploy Karpenter provisioners
@@ -184,4 +196,4 @@ entries:
     urls:
     - https://github.com/rallyware/terraform-argocd-aws-eks-cluster-bootstrap/releases/download/karpenter-provisioner-0.1.0/karpenter-provisioner-0.1.0.tgz
     version: 0.1.0
-generated: "2024-10-14T11:23:25.135805536Z"
+generated: "2025-10-03T12:11:54.656521923Z"
