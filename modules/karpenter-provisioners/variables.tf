@@ -27,6 +27,89 @@ variable "ec2_node_classes" {
           }
         )
 
+        kubelet = optional(
+          object(
+            {
+              cluster_dns = optional(list(string), null)
+              system_reserved = object(
+                {
+                  cpu               = string
+                  memory            = string
+                  ephemeral_storage = string
+                }
+              )
+              kube_reserved = object(
+                {
+                  cpu               = string
+                  memory            = string
+                  ephemeral_storage = string
+                }
+              )
+              eviction_hard = object(
+                {
+                  memory_available   = string
+                  nodefs_available   = string
+                  nodefs_inodes_free = string
+                }
+              )
+              eviction_soft = object(
+                {
+                  memory_available   = string
+                  nodefs_available   = string
+                  nodefs_inodes_free = string
+                }
+              )
+              eviction_soft_grace_period = object(
+                {
+                  memory_available   = string
+                  nodefs_available   = string
+                  nodefs_inodes_free = string
+                }
+              )
+              eviction_max_pod_grace_period   = number
+              image_gc_high_threshold_percent = number
+              image_gc_low_threshold_percent  = number
+              cpu_cfs_quota                   = bool
+              pods_per_core                   = number
+              max_pods                        = number
+            }
+          ),
+          {
+            cluster_dns = null
+            system_reserved = {
+              cpu               = "50m"
+              memory            = "100Mi"
+              ephemeral_storage = "1Gi"
+            }
+            kube_reserved = {
+              cpu               = "50m"
+              memory            = "100Mi"
+              ephemeral_storage = "1Gi"
+            }
+            eviction_hard = {
+              memory_available   = "2%"
+              nodefs_available   = "10%"
+              nodefs_inodes_free = "10%"
+            }
+            eviction_soft = {
+              memory_available   = "5%"
+              nodefs_available   = "15%"
+              nodefs_inodes_free = "15%"
+            }
+            eviction_soft_grace_period = {
+              memory_available   = "5m0s"
+              nodefs_available   = "1m30s"
+              nodefs_inodes_free = "2m0s"
+            }
+            eviction_max_pod_grace_period   = 600
+            image_gc_high_threshold_percent = 85
+            image_gc_low_threshold_percent  = 80
+            cpu_cfs_quota                   = false
+            pods_per_core                   = null
+            max_pods                        = 110
+          }
+        )
+
         block_device_mappings = optional(
           list(
             object(
@@ -68,8 +151,8 @@ variable "node_pools" {
       {
         name                 = string
         node_class_name      = string
-        consolidation_policy = optional(string, "WhenUnderutilized")
-        consolidate_after    = optional(string, "300s")
+        consolidation_policy = optional(string, "WhenEmptyOrUnderutilized")
+        consolidate_after    = optional(string, "60s")
         labels               = optional(map(string), {})
         annotations          = optional(map(string), {})
 
@@ -125,90 +208,6 @@ variable "node_pools" {
             }
           ),
           null
-        )
-
-        kubelet = optional(
-          object(
-            {
-              cluster_dns = optional(list(string), null)
-              system_reserved = object(
-                {
-                  cpu               = string
-                  memory            = string
-                  ephemeral_storage = string
-                }
-              )
-              kube_reserved = object(
-                {
-                  cpu               = string
-                  memory            = string
-                  ephemeral_storage = string
-                }
-              )
-              eviction_hard = object(
-                {
-                  memory_available   = string
-                  nodefs_available   = string
-                  nodefs_inodes_free = string
-                }
-              )
-              eviction_soft = object(
-                {
-                  memory_available   = string
-                  nodefs_available   = string
-                  nodefs_inodes_free = string
-                }
-              )
-              eviction_soft_grace_period = object(
-                {
-                  memory_available   = string
-                  nodefs_available   = string
-                  nodefs_inodes_free = string
-                }
-              )
-              eviction_max_pod_grace_period   = number
-              image_gc_high_threshold_percent = number
-              image_gc_low_threshold_percent  = number
-              cpu_cfs_quota                   = bool
-              pods_per_core                   = number
-              max_pods                        = number
-            }
-          ),
-          {
-            cluster_dns       = null
-            container_runtime = "containerd"
-            system_reserved = {
-              cpu               = "50m"
-              memory            = "100Mi"
-              ephemeral_storage = "1Gi"
-            }
-            kube_reserved = {
-              cpu               = "50m"
-              memory            = "100Mi"
-              ephemeral_storage = "1Gi"
-            }
-            eviction_hard = {
-              memory_available   = "2%"
-              nodefs_available   = "10%"
-              nodefs_inodes_free = "10%"
-            }
-            eviction_soft = {
-              memory_available   = "5%"
-              nodefs_available   = "15%"
-              nodefs_inodes_free = "15%"
-            }
-            eviction_soft_grace_period = {
-              memory_available   = "5m0s"
-              nodefs_available   = "1m30s"
-              nodefs_inodes_free = "2m0s"
-            }
-            eviction_max_pod_grace_period   = 600
-            image_gc_high_threshold_percent = 85
-            image_gc_low_threshold_percent  = 80
-            cpu_cfs_quota                   = false
-            pods_per_core                   = null
-            max_pods                        = 110
-          }
         )
       }
     )
