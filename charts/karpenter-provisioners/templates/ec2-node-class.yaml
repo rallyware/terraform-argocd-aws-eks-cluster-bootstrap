@@ -18,7 +18,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
 spec:
-  amiFamily: {{ .amiFamily | default "AL2" }}
+  amiFamily: {{ .amiFamily | default "AL2023" }}
   subnetSelectorTerms:
     {{- range $subnet := .subnetIDs }}
     - id: {{ $subnet }}
