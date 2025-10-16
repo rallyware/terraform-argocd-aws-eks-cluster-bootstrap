@@ -3,7 +3,7 @@ variable "ec2_node_classes" {
     object(
       {
         name               = string
-        ami_family         = optional(string, "AL2")
+        ami_family         = optional(string, "AL2023")
         ami_ids            = list(string)
         subnet_ids         = list(string)
         security_group_ids = list(string)
