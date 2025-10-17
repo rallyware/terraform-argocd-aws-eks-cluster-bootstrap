@@ -46,7 +46,7 @@ nodePools:
 ec2NodeClasses:
   []
   # - name: default
-  #   amiFamily: AL2
+  #   amiFamily: AL2023
   #   amiIDs:
   #     - ami-a
   #     - ami-b
