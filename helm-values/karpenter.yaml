@@ -10,15 +10,9 @@ serviceAccount:
 replicas: 1
 
 settings:
-  featureGates:
-    driftEnabled: true
-  aws:
-    clusterName: ${cluster_name}
-    clusterEndpoint: ${cluster_endpoint}
-    interruptionQueueName: ${sqs_queue_name}
-%{ if role_enabled }
-    defaultInstanceProfile: ${instance_profile}
-%{ endif }
+  clusterName: ${cluster_name}
+  clusterEndpoint: ${cluster_endpoint}
+  interruptionQueue: ${sqs_queue_name}
 
 serviceMonitor:
   enabled: ${prometheus_enabled}
