@@ -391,7 +391,7 @@ locals {
         cluster_endpoint       = local.eks_cluster_endpoint
         instance_profile       = module.karpenter_instance_profile.name
         prometheus_enabled     = local.prometheus_operator_enabled
-        sqs_queue_name         = module.karpenter_sqs.name
+        sqs_queue_name         = module.karpenter_sqs.name != null ? module.karpenter_sqs.name : ""
       }
     ))
 
