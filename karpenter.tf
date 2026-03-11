@@ -95,6 +95,7 @@ data "aws_iam_policy_document" "karpenter" {
       "pricing:GetProducts",
       "ec2:TerminateInstances",
       "ec2:DeleteLaunchTemplate",
+      "iam:ListInstanceProfiles"
     ]
   }
 
