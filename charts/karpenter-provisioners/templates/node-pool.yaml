@@ -1,7 +1,8 @@
 {{- range .Values.nodePools }}
 ---
 {{- $consolidationPolicy := .consolidationPolicy | default "WhenEmptyOrUnderutilized" }}
-{{- $consolidateAfter := .consolidateAfter | default "300s" }}
+{{- $consolidateAfter := .consolidateAfter | default "60s" }}
+{{- $expireAfter := .expireAfter | default "720h" }}
 apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
@@ -10,6 +11,9 @@ metadata:
     name: {{ .name }}
     {{- include "karpenter-provisioner.labels" $ | nindent 4 }}
 spec:
+  {{- with .weight }}
+  weight: {{ . }}
+  {{- end }}
   template:
     metadata:
       {{- with .labels }}
@@ -25,6 +29,10 @@ spec:
         group: karpenter.k8s.aws
         kind: EC2NodeClass
         name: {{ .nodeClassName }}
+      expireAfter: {{ $expireAfter }}
+      {{- with .terminationGracePeriod }}
+      terminationGracePeriod: {{ . }}
+      {{- end }}
       {{- with .taints }}
       taints:
         {{- toYaml . | nindent 8 }}
@@ -39,7 +47,23 @@ spec:
       {{- end }}
   disruption:
     consolidationPolicy: {{ $consolidationPolicy }}
-    consolidateAfter: {{ $consolidateAfter | default "60s" }}
+    consolidateAfter: {{ $consolidateAfter }}
+    {{- with .budgets }}
+    budgets:
+      {{- range . }}
+      - nodes: {{ .nodes | quote }}
+        {{- with .schedule }}
+        schedule: {{ . | quote }}
+        {{- end }}
+        {{- with .duration }}
+        duration: {{ . }}
+        {{- end }}
+        {{- with .reasons }}
+        reasons:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- with .limits }}
   limits:
     {{- toYaml . | nindent 4 }}
