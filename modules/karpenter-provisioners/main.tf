@@ -74,16 +74,29 @@ locals {
 
       nodePools = [for node in var.node_pools :
         {
-          name                = node.name
-          nodeClassName       = node.node_class_name
-          consolidationPolicy = node.consolidation_policy
-          consolidateAfter    = node.consolidate_after
-          annotations         = node.annotations
-          labels              = node.labels
-          taints              = node.taints
-          startupTaints       = node.startup_taints
-          requirements        = node.requirements
-          limits              = node.limits == null ? {} : node.limits
+          name                   = node.name
+          nodeClassName          = node.node_class_name
+          consolidationPolicy    = node.consolidation_policy
+          consolidateAfter       = node.consolidate_after
+          expireAfter            = node.expire_after
+          terminationGracePeriod = node.termination_grace_period
+          weight                 = node.weight
+          annotations            = node.annotations
+          labels                 = node.labels
+          taints                 = node.taints
+          startupTaints          = node.startup_taints
+          requirements = [for req in node.requirements :
+            merge(
+              {
+                key      = req.key
+                operator = req.operator
+                values   = req.values
+              },
+              req.minValues != null ? { minValues = req.minValues } : {}
+            )
+          ]
+          limits  = node.limits == null ? {} : node.limits
+          budgets = node.budgets
         }
       ]
     }
