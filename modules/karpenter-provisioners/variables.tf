@@ -149,12 +149,33 @@ variable "node_pools" {
   type = list(
     object(
       {
-        name                 = string
-        node_class_name      = string
-        consolidation_policy = optional(string, "WhenEmptyOrUnderutilized")
-        consolidate_after    = optional(string, "60s")
-        labels               = optional(map(string), {})
-        annotations          = optional(map(string), {})
+        name                     = string
+        node_class_name          = string
+        consolidation_policy     = optional(string, "WhenEmptyOrUnderutilized")
+        consolidate_after        = optional(string, "60s")
+        expire_after             = optional(string, "720h")
+        termination_grace_period = optional(string, null)
+        weight                   = optional(number, null)
+        labels                   = optional(map(string), {})
+        annotations              = optional(map(string), {})
+
+        budgets = optional(
+          list(
+            object(
+              {
+                nodes    = string
+                schedule = optional(string, null)
+                duration = optional(string, null)
+                reasons  = optional(list(string), null)
+              }
+            )
+          ),
+          [
+            {
+              nodes = "10%"
+            }
+          ]
+        )
 
         taints = optional(
           list(
@@ -180,9 +201,10 @@ variable "node_pools" {
           list(
             object(
               {
-                key      = string
-                operator = string
-                values   = list(string)
+                key       = string
+                operator  = string
+                values    = list(string)
+                minValues = optional(number, null)
               }
             )
           ),
