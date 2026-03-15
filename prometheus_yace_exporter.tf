@@ -24,7 +24,8 @@ data "aws_iam_policy_document" "yace" {
       "tag:GetResources",
       "cloudwatch:GetMetricData",
       "cloudwatch:GetMetricStatistics",
-      "cloudwatch:ListMetrics"
+      "cloudwatch:ListMetrics",
+      "iam:ListAccountAliases"
     ]
   }
 }

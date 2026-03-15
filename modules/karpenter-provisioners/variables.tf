@@ -3,7 +3,7 @@ variable "ec2_node_classes" {
     object(
       {
         name               = string
-        ami_family         = optional(string, "AL2")
+        ami_family         = optional(string, "AL2023")
         ami_ids            = list(string)
         subnet_ids         = list(string)
         security_group_ids = list(string)
@@ -25,106 +25,6 @@ variable "ec2_node_classes" {
             http_put_response_hop_limit = 2
             http_tokens                 = "required"
           }
-        )
-
-        block_device_mappings = optional(
-          list(
-            object(
-              {
-                device_name = string
-                ebs = object(
-                  {
-                    volume_type           = optional(string, "gp3")
-                    volume_size           = optional(string, "35Gi")
-                    delete_on_termination = optional(bool, true)
-                    encrypted             = optional(bool, true)
-                  }
-                )
-              }
-            )
-          ),
-          [
-            {
-              device_name = "/dev/xvda"
-              ebs = {
-                volume_type           = "gp3"
-                volume_size           = "35Gi"
-                delete_on_termination = true
-                encrypted             = true
-              }
-            }
-          ]
-        )
-      }
-    )
-  )
-  default     = []
-  description = "A list of Karpenter EC2 node classes"
-}
-
-variable "node_pools" {
-  type = list(
-    object(
-      {
-        name                 = string
-        node_class_name      = string
-        consolidation_policy = optional(string, "WhenUnderutilized")
-        consolidate_after    = optional(string, "300s")
-        labels               = optional(map(string), {})
-        annotations          = optional(map(string), {})
-
-        taints = optional(
-          list(
-            object(
-              {
-                key    = string
-                effect = string
-              }
-            )
-        ), [])
-
-        startup_taints = optional(
-          list(
-            object(
-              {
-                key    = string
-                effect = string
-              }
-            )
-        ), [])
-
-        requirements = optional(
-          list(
-            object(
-              {
-                key      = string
-                operator = string
-                values   = list(string)
-              }
-            )
-          ),
-          [
-            {
-              key      = "karpenter.sh/capacity-type"
-              operator = "In"
-              values   = ["on-demand", "spot"]
-            },
-            {
-              key      = "kubernetes.io/arch"
-              operator = "In"
-              values   = ["arm64", "amd64"]
-            }
-          ]
-        )
-
-        limits = optional(
-          object(
-            {
-              cpu    = string
-              memory = string
-            }
-          ),
-          null
         )
 
         kubelet = optional(
@@ -175,8 +75,7 @@ variable "node_pools" {
             }
           ),
           {
-            cluster_dns       = null
-            container_runtime = "containerd"
+            cluster_dns = null
             system_reserved = {
               cpu               = "50m"
               memory            = "100Mi"
@@ -209,6 +108,128 @@ variable "node_pools" {
             pods_per_core                   = null
             max_pods                        = 110
           }
+        )
+
+        block_device_mappings = optional(
+          list(
+            object(
+              {
+                device_name = string
+                ebs = object(
+                  {
+                    volume_type           = optional(string, "gp3")
+                    volume_size           = optional(string, "35Gi")
+                    delete_on_termination = optional(bool, true)
+                    encrypted             = optional(bool, true)
+                  }
+                )
+              }
+            )
+          ),
+          [
+            {
+              device_name = "/dev/xvda"
+              ebs = {
+                volume_type           = "gp3"
+                volume_size           = "35Gi"
+                delete_on_termination = true
+                encrypted             = true
+              }
+            }
+          ]
+        )
+      }
+    )
+  )
+  default     = []
+  description = "A list of Karpenter EC2 node classes"
+}
+
+variable "node_pools" {
+  type = list(
+    object(
+      {
+        name                     = string
+        node_class_name          = string
+        consolidation_policy     = optional(string, "WhenEmptyOrUnderutilized")
+        consolidate_after        = optional(string, "60s")
+        expire_after             = optional(string, "720h")
+        termination_grace_period = optional(string, null)
+        weight                   = optional(number, null)
+        labels                   = optional(map(string), {})
+        annotations              = optional(map(string), {})
+
+        budgets = optional(
+          list(
+            object(
+              {
+                nodes    = string
+                schedule = optional(string, null)
+                duration = optional(string, null)
+                reasons  = optional(list(string), null)
+              }
+            )
+          ),
+          [
+            {
+              nodes = "10%"
+            }
+          ]
+        )
+
+        taints = optional(
+          list(
+            object(
+              {
+                key    = string
+                effect = string
+              }
+            )
+        ), [])
+
+        startup_taints = optional(
+          list(
+            object(
+              {
+                key    = string
+                effect = string
+              }
+            )
+        ), [])
+
+        requirements = optional(
+          list(
+            object(
+              {
+                key       = string
+                operator  = string
+                values    = list(string)
+                minValues = optional(number, null)
+              }
+            )
+          ),
+          [
+            {
+              key      = "karpenter.sh/capacity-type"
+              operator = "In"
+              values   = ["on-demand", "spot"]
+            },
+            {
+              key      = "kubernetes.io/arch"
+              operator = "In"
+              values   = ["arm64", "amd64"]
+            }
+          ]
+        )
+
+        limits = optional(
+          object(
+            {
+              cpu    = string
+              memory = string
+            }
+          ),
+          null
         )
       }
     )

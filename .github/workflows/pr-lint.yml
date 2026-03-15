@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint PR
-        uses: amannn/action-semantic-pull-request@v5
+        uses: amannn/action-semantic-pull-request@v6
         with:
           types: |
             build
@@ -31,7 +31,7 @@ jobs:
 
       - name: Comment for PR title conformance
         if: failure()
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: ${{tojson(github.event.number)}}
           body: |
